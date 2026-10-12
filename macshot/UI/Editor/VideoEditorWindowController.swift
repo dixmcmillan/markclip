@@ -11,9 +11,14 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     private var preparationJob: MediaExportCoordinator.Job?
 
     /// The editor window AppKit considers key, or the most recently opened
-    /// one otherwise. Used by File > Export… to reach "the" open editor.
+    /// one otherwise. Used by File > Export… and menu validation to reach
+    /// "the" open editor. Controllers still preparing their video (no
+    /// `playback` yet) are skipped: they sit in `activeControllers` from
+    /// `open(url:)` until `show(prepared:)`, and touching their implicitly
+    /// unwrapped members in that window traps.
     static var frontmostController: VideoEditorWindowController? {
-        activeControllers.first { $0.window?.isKeyWindow == true } ?? activeControllers.last
+        let ready = activeControllers.filter { $0.playback != nil }
+        return ready.first { $0.window?.isKeyWindow == true } ?? ready.last
     }
 
     private(set) var editorDocument: VideoEditorDocument!
@@ -331,6 +336,7 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     /// Current forward speed for the Play Speed menu's checkmark. Paused or
     /// reversing shows no checkmark (menu still opens fine).
     var currentPlaySpeed: Double? {
+        guard let playback else { return nil }
         let rate = playback.shuttle.rate
         return rate > 0 ? rate : nil
     }
