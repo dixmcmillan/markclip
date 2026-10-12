@@ -917,3 +917,52 @@
 "Ease In/Out" = "Atenuare la intrare/ieșire";
 "Hold" = "Menținere";
 "Delete Keyframe" = "Elimină cadrul-cheie";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (pe dispozitiv, îmbunătățit)";
+"Apple (On-Device, Classic)" = "Apple (pe dispozitiv, clasic)";
+"OpenAI-Compatible API" = "API compatibil cu OpenAI";
+"The speech model couldn't be downloaded: %@" = "Modelul de vorbire nu a putut fi descărcat: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Adaugă o cheie API în Setări ▸ Transcriere înainte de a folosi acest furnizor.";
+"The transcription API's base URL isn't valid." = "URL-ul de bază al API-ului de transcriere nu este valid.";
+"The transcription service returned an error (%d)." = "Serviciul de transcriere a returnat o eroare (%d).";
+"The transcription service returned an unexpected response." = "Serviciul de transcriere a returnat un răspuns neașteptat.";
+"Transcription Provider" = "Furnizor de transcriere";
+"Import SRT/VTT…" = "Importă SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Acest furnizor încarcă sunetul înregistrării către API-ul configurat.";
+"Choose an SRT or WebVTT file" = "Alege un fișier SRT sau WebVTT";
+"The caption file could not be read." = "Fișierul de subtitrări nu a putut fi citit.";
+"No captions were found in that file." = "Nu s-au găsit subtitrări în acel fișier.";
+"Replace existing captions?" = "Înlocuiești subtitrările existente?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Acest proiect are deja subtitrări. Le poți înlocui cu cele importate sau poți combina ambele seturi.";
+"Replace" = "Înlocuiește";
+"Merge" = "Combină";
+"Imported %d captions" = "S-au importat %d subtitrări";
+"Transcription" = "Transcriere";
+"Captions Provider" = "Furnizor de subtitrări";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Furnizorii pe dispozitiv păstrează sunetul pe acest Mac. Acest lucru poate fi schimbat și per înregistrare, din secțiunea de subtitrări a editorului video.";
+"Base URL:" = "URL de bază:";
+"Model:" = "Model:";
+"API Key:" = "Cheie API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Funcționează cu OpenAI, Groq sau un server whisper.cpp local — orice expune un endpoint /audio/transcriptions compatibil cu OpenAI. Cheia API este stocată în Keychain, niciodată în setările exportate.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Șterge presetarea";
+"Export complete" = "Export finalizat";
+"Exported %@" = "%@ exportat";
+"Faster" = "Mai rapid";
+"Name this preset:" = "Denumește această presetare:";
+"Play Speed" = "Viteză de redare";
+"Play/Pause" = "Redă/Pauză";
+"Playback" = "Redare";
+"Preset" = "Presetare";
+"Preset name" = "Numele presetării";
+"Quick Export" = "Export rapid";
+"Reverse" = "Inversează";
+"Save Current as Preset" = "Salvează curentul ca presetare";
+"Save Current as Preset…" = "Salvează curentul ca presetare…";
+"Select a custom preset to delete first" = "Selectează mai întâi o presetare personalizată pentru ștergere";
+"Slower" = "Mai lent";
+"Full Quality (source res, High)" = "Calitate Completă (rezoluție sursă, Ridicat)";
+"GIF (small)" = "GIF (mic)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Mediu)";

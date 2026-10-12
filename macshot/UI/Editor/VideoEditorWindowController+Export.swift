@@ -45,14 +45,33 @@ extension VideoEditorWindowController {
         }
         let ext = exportSettings.format == .gif ? "gif" : "mp4"
         let base = editorDocument.source.originalURL.deletingPathExtension().lastPathComponent
-        var destination = directory.appendingPathComponent(base + "." + ext)
         // Never replace an unrelated file silently: pick a free name.
-        var n = 2
-        while FileManager.default.fileExists(atPath: destination.path), destination != savedURL {
-            destination = directory.appendingPathComponent("\(base) \(n).\(ext)")
-            n += 1
+        let destination = FreeDestinationPicker.pick(directory: directory, base: base, ext: ext, keep: savedURL) {
+            FileManager.default.fileExists(atPath: $0.path)
         }
         export(to: destination, directory: directory)
+    }
+
+    /// ⇧⌘E: exports immediately with the last-used settings and destination
+    /// folder, no dialog. Falls back to the regular Export panel once when
+    /// there's no usable last-used destination yet (first run, or the
+    /// destination volume is gone).
+    @objc func quickExportAction() {
+        PopoverHelper.dismiss()
+        guard !isExporting else { return }
+        guard let directory = QuickExportDestination.resolve(lastUsedDirectory: VideoExportSettings.lastDirectory(),
+                                                              isWritable: { FileManager.default.isWritableFile(atPath: $0.path) }) else {
+            showExportPanel(topBar.exportButton)
+            return
+        }
+        let settings = exportSettings
+        let ext = settings.format == .gif ? "gif" : "mp4"
+        let sourceName = editorDocument.source.originalURL.deletingPathExtension().lastPathComponent
+        let stampedBase = QuickExportFilename.build(sourceName: sourceName, date: Date())
+        let destination = FreeDestinationPicker.pick(directory: directory, base: stampedBase, ext: ext) {
+            FileManager.default.fileExists(atPath: $0.path)
+        }
+        export(to: destination, directory: directory, quickExport: true)
     }
 
     func saveVideoAs() {
@@ -69,7 +88,7 @@ extension VideoEditorWindowController {
         }
     }
 
-    private func export(to destination: URL, directory: URL?) {
+    private func export(to destination: URL, directory: URL?, quickExport: Bool = false) {
         let directoryLease = SaveDirectoryLease(alreadyAccessing: directory)
         let settings = exportSettings
         let revision = editorDocument.revision
@@ -86,7 +105,7 @@ extension VideoEditorWindowController {
                     try await GIFExporter.export(request, cancellation: cancellation, progress: progress)
                 }, completion: { [weak self, directoryLease] result in
                     defer { withExtendedLifetime(directoryLease) {} }
-                    self?.finishSave(result, destination: destination, revision: revision, snapshot: snapshot)
+                    self?.finishSave(result, destination: destination, revision: revision, snapshot: snapshot, quickExport: quickExport)
                 })
                 return
             }
@@ -110,20 +129,26 @@ extension VideoEditorWindowController {
                     }
                 }, completion: { [weak self, directoryLease, sourceLease] result in
                     defer { withExtendedLifetime(directoryLease) {}; withExtendedLifetime(sourceLease) {} }
-                    self?.finishSave(result, destination: destination, revision: revision, snapshot: snapshot)
+                    self?.finishSave(result, destination: destination, revision: revision, snapshot: snapshot, quickExport: quickExport)
                 })
         } catch {
             showStatus(L("Export failed") + ": " + error.localizedDescription, isError: true)
         }
     }
 
-    private func finishSave(_ result: Result<Void, Error>, destination: URL, revision: UInt64, snapshot: VideoSourceSnapshot) {
+    private func finishSave(_ result: Result<Void, Error>, destination: URL, revision: UInt64, snapshot: VideoSourceSnapshot,
+                            quickExport: Bool = false) {
         switch result {
         case .success:
             snapshot.didSave(at: destination)
             if editorDocument.revision == revision {
                 savedURL = destination
                 savedRevision = revision
+            }
+            // Quick Export (⇧⌘E) reuses this destination folder next time.
+            VideoExportSettings.setLastDirectory(destination.deletingLastPathComponent())
+            if quickExport {
+                (NSApp.delegate as? AppDelegate)?.showExportCompletedToast(destination)
             }
             showStatus(String(format: L("Saved to %@"), destination.lastPathComponent))
         case .failure(let error):
@@ -334,10 +359,18 @@ final class VideoExportPanel: NSView {
     private weak var controller: VideoEditorWindowController?
     private let summary = VideoEditorStyle.label("", size: 11.5, color: VideoEditorStyle.textSecondary)
     private let stack = NSStackView()
-    private var qualityRow: NSView?
-    private var fpsRow: NSView?
+    private var formatRow: InspectorSegmentRow?
+    private var qualityRow: InspectorSegmentRow?
+    private var fpsRow: InspectorSegmentRow?
     private let resolutionPopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private var scales: [CGFloat] = []
+    private let presetsPopup = NSPopUpButton(frame: .zero, pullsDown: false)
+    private var presets: [VideoExportPreset] = []
+    /// The custom/built-in preset last chosen from the popup (not the
+    /// "Save…"/"Delete" action rows) — tracked separately so "Delete Preset"
+    /// knows which one, even though picking it moves the popup's own
+    /// selection to the action row.
+    private var lastSelectedPresetID: UUID?
 
     init(settings: VideoExportSettings, controller: VideoEditorWindowController) {
         self.settings = settings
@@ -362,10 +395,24 @@ final class VideoExportPanel: NSView {
 
     private func build() {
         stack.addArrangedSubview(VideoEditorStyle.label(L("Export"), size: 14, weight: .semibold))
+
+        let presetsTitle = VideoEditorStyle.label(L("Preset"), size: 12)
+        presetsPopup.translatesAutoresizingMaskIntoConstraints = false
+        presetsPopup.controlSize = .small
+        presetsPopup.target = self
+        presetsPopup.action = #selector(presetChanged)
+        let presetsRow = NSStackView(views: [presetsTitle, presetsPopup])
+        presetsRow.orientation = .vertical
+        presetsRow.alignment = .leading
+        presetsRow.spacing = 6
+        stack.addArrangedSubview(presetsRow)
+        fillPresets()
+
         let format = InspectorSegmentRow(title: L("Format"), labels: ["MP4", "GIF"], selected: settings.format == .gif ? 1 : 0) { [weak self] i in
             self?.settings.format = i == 1 ? .gif : .mp4
             self?.changed()
         }
+        formatRow = format
         stack.addArrangedSubview(format)
 
         let resolutionTitle = VideoEditorStyle.label(L("Resolution"), size: 12)
@@ -428,11 +475,84 @@ final class VideoExportPanel: NSView {
             stack.addArrangedSubview(row)
             row.widthAnchor.constraint(equalTo: stack.widthAnchor, constant: -32).isActive = true
         }
-        for view in [format, resolution, quality, fps] as [NSView] {
+        for view in [presetsRow, format, resolution, quality, fps] as [NSView] {
             view.widthAnchor.constraint(equalTo: stack.widthAnchor, constant: -32).isActive = true
         }
         resolutionPopup.widthAnchor.constraint(equalTo: resolution.widthAnchor).isActive = true
+        presetsPopup.widthAnchor.constraint(equalTo: presetsRow.widthAnchor).isActive = true
         updateVisibility()
+    }
+
+    // MARK: Presets
+
+    private func fillPresets() {
+        presetsPopup.removeAllItems()
+        presets = VideoExportPresetStore.all()
+        for preset in presets { presetsPopup.addItem(withTitle: preset.name) }
+        presetsPopup.menu?.addItem(.separator())
+        presetsPopup.addItem(withTitle: L("Save Current as Preset…"))
+        presetsPopup.addItem(withTitle: L("Delete Preset"))
+        presetsPopup.item(withTitle: L("Delete Preset"))?.isEnabled = presets.contains { $0.id == lastSelectedPresetID && !$0.isBuiltIn }
+        if let id = lastSelectedPresetID, let index = presets.firstIndex(where: { $0.id == id }) {
+            presetsPopup.selectItem(at: index)
+        } else {
+            presetsPopup.select(nil)
+        }
+    }
+
+    @objc private func presetChanged() {
+        let index = presetsPopup.indexOfSelectedItem
+        guard index >= 0 else { return }
+        if index < presets.count { applyPreset(presets[index]); return }
+        if index == presets.count + 1 { saveCurrentAsPreset(); return }
+        if index == presets.count + 2 { deleteSelectedPreset(); return }
+    }
+
+    private func applyPreset(_ preset: VideoExportPreset) {
+        lastSelectedPresetID = preset.id
+        settings = preset.resolvedSettings(nativeSize: controller?.exporter.nativeCanvasSize)
+        formatRow?.control.selectedSegment = settings.format == .gif ? 1 : 0
+        fillResolutions()
+        let qualities: [VideoQuality] = [.high, .medium, .low]
+        qualityRow?.control.selectedSegment = qualities.firstIndex(of: settings.quality) ?? 0
+        let rates = [10, 15, 20, 25, 30]
+        fpsRow?.control.selectedSegment = rates.firstIndex(of: settings.gifFPS) ?? 1
+        presetsPopup.item(withTitle: L("Delete Preset"))?.isEnabled = !preset.isBuiltIn
+        changed()
+    }
+
+    private func saveCurrentAsPreset() {
+        defer { fillPresets() }
+        guard controller != nil else { return }
+        let alert = NSAlert()
+        alert.messageText = L("Save Current as Preset")
+        alert.informativeText = L("Name this preset:")
+        alert.addButton(withTitle: L("Save"))
+        alert.addButton(withTitle: L("Cancel"))
+        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 22))
+        field.placeholderString = L("Preset name")
+        alert.accessoryView = field
+        alert.window.initialFirstResponder = field
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        let name = field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return }
+        let native = controller?.exporter.nativeCanvasSize
+        let longEdge = native.map { max($0.width, $0.height) }
+        let targetLongEdge: Double? = (settings.scale >= 0.999) ? nil : longEdge.map { Double($0) * Double(settings.scale) }
+        let preset = VideoExportPreset(name: name, format: settings.format, targetLongEdge: targetLongEdge,
+                                       quality: settings.quality, gifFPS: settings.gifFPS)
+        VideoExportPresetStore.addOrReplace(preset)
+        lastSelectedPresetID = preset.id
+    }
+
+    private func deleteSelectedPreset() {
+        defer { fillPresets() }
+        guard let id = lastSelectedPresetID, let preset = presets.first(where: { $0.id == id }), !preset.isBuiltIn else {
+            controller?.showStatus(L("Select a custom preset to delete first"), isError: true)
+            return
+        }
+        VideoExportPresetStore.delete(id: id)
+        lastSelectedPresetID = nil
     }
 
     private func fillResolutions() {

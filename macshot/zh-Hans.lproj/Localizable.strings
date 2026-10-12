@@ -919,3 +919,52 @@
 "Ease In/Out" = "缓入/缓出";
 "Hold" = "保持";
 "Delete Keyframe" = "删除关键帧";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple（设备端，增强版）";
+"Apple (On-Device, Classic)" = "Apple（设备端，经典版）";
+"OpenAI-Compatible API" = "OpenAI 兼容 API";
+"The speech model couldn't be downloaded: %@" = "无法下载语音模型: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "使用此服务商前，请在设置 ▸ 转录中添加 API 密钥。";
+"The transcription API's base URL isn't valid." = "转录 API 的基础 URL 无效。";
+"The transcription service returned an error (%d)." = "转录服务返回了错误（%d）。";
+"The transcription service returned an unexpected response." = "转录服务返回了意外的响应。";
+"Transcription Provider" = "转录服务商";
+"Import SRT/VTT…" = "导入 SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "此服务商会将录制的音频上传到已配置的 API。";
+"Choose an SRT or WebVTT file" = "选择 SRT 或 WebVTT 文件";
+"The caption file could not be read." = "无法读取字幕文件。";
+"No captions were found in that file." = "该文件中未找到字幕。";
+"Replace existing captions?" = "替换现有字幕？";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "此项目已有字幕。你可以用导入的字幕替换它们，或将两组字幕合并。";
+"Replace" = "替换";
+"Merge" = "合并";
+"Imported %d captions" = "已导入 %d 条字幕";
+"Transcription" = "转录";
+"Captions Provider" = "字幕服务商";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "设备端服务商会将音频保留在这台 Mac 上。你也可以在视频编辑器的字幕部分按录制内容单独更改。";
+"Base URL:" = "基础 URL:";
+"Model:" = "模型:";
+"API Key:" = "API 密钥:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "适用于 OpenAI、Groq 或本地 whisper.cpp 服务器 — 任何暴露 OpenAI 兼容 /audio/transcriptions 端点的服务。API 密钥保存在 Keychain 中，绝不会出现在导出的设置里。";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "删除预设";
+"Export complete" = "导出完成";
+"Exported %@" = "已导出 %@";
+"Faster" = "加快";
+"Name this preset:" = "为此预设命名:";
+"Play Speed" = "播放速度";
+"Play/Pause" = "播放/暂停";
+"Playback" = "播放";
+"Preset" = "预设";
+"Preset name" = "预设名称";
+"Quick Export" = "快速导出";
+"Reverse" = "反转";
+"Save Current as Preset" = "将当前设置保存为预设";
+"Save Current as Preset…" = "将当前设置保存为预设…";
+"Select a custom preset to delete first" = "请先选择要删除的自定义预设";
+"Slower" = "减慢";
+"Full Quality (source res, High)" = "完整质量（原始分辨率，高）";
+"GIF (small)" = "GIF（小）";
+"Web (1080p H.264 Medium)" = "网页（1080p H.264 中）";

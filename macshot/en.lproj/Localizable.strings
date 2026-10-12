@@ -918,3 +918,52 @@
 "Ease In/Out" = "Ease In/Out";
 "Hold" = "Hold";
 "Delete Keyframe" = "Delete Keyframe";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (On-Device, Enhanced)";
+"Apple (On-Device, Classic)" = "Apple (On-Device, Classic)";
+"OpenAI-Compatible API" = "OpenAI-Compatible API";
+"The speech model couldn't be downloaded: %@" = "The speech model couldn't be downloaded: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Add an API key in Settings ▸ Transcription before using this provider.";
+"The transcription API's base URL isn't valid." = "The transcription API's base URL isn't valid.";
+"The transcription service returned an error (%d)." = "The transcription service returned an error (%d).";
+"The transcription service returned an unexpected response." = "The transcription service returned an unexpected response.";
+"Transcription Provider" = "Transcription Provider";
+"Import SRT/VTT…" = "Import SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "This provider uploads the recording's audio to the configured API.";
+"Choose an SRT or WebVTT file" = "Choose an SRT or WebVTT file";
+"The caption file could not be read." = "The caption file could not be read.";
+"No captions were found in that file." = "No captions were found in that file.";
+"Replace existing captions?" = "Replace existing captions?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "This project already has captions. You can replace them with the imported ones or merge both sets.";
+"Replace" = "Replace";
+"Merge" = "Merge";
+"Imported %d captions" = "Imported %d captions";
+"Transcription" = "Transcription";
+"Captions Provider" = "Captions Provider";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor.";
+"Base URL:" = "Base URL:";
+"Model:" = "Model:";
+"API Key:" = "API Key:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings.";
+
+/* Playback/export (Phase 2, added by the concurrent playback/export work; localized here per phase ownership) */
+"Delete Preset" = "Delete Preset";
+"Export complete" = "Export complete";
+"Exported %@" = "Exported %@";
+"Faster" = "Faster";
+"Name this preset:" = "Name this preset:";
+"Play Speed" = "Play Speed";
+"Play/Pause" = "Play/Pause";
+"Playback" = "Playback";
+"Preset" = "Preset";
+"Preset name" = "Preset name";
+"Quick Export" = "Quick Export";
+"Reverse" = "Reverse";
+"Save Current as Preset" = "Save Current as Preset";
+"Save Current as Preset…" = "Save Current as Preset…";
+"Select a custom preset to delete first" = "Select a custom preset to delete first";
+"Slower" = "Slower";
+"Full Quality (source res, High)" = "Full Quality (source res, High)";
+"GIF (small)" = "GIF (small)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Medium)";

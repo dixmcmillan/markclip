@@ -919,3 +919,52 @@
 "Ease In/Out" = "Ублажавање на почетку/крају";
 "Hold" = "Задржи";
 "Delete Keyframe" = "Уклони кључни кадар";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (на уређају, побољшано)";
+"Apple (On-Device, Classic)" = "Apple (на уређају, класично)";
+"OpenAI-Compatible API" = "OpenAI-компатибилни API";
+"The speech model couldn't be downloaded: %@" = "Говорни модел није могуће преузети: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Додајте API кључ у Подешавања ▸ Транскрипција пре коришћења овог провајдера.";
+"The transcription API's base URL isn't valid." = "Основни URL API-ја за транскрипцију није важећи.";
+"The transcription service returned an error (%d)." = "Услуга транскрипције је вратила грешку (%d).";
+"The transcription service returned an unexpected response." = "Услуга транскрипције је вратила неочекиван одговор.";
+"Transcription Provider" = "Провајдер транскрипције";
+"Import SRT/VTT…" = "Увези SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Овај провајдер отпрема звук снимка на подешени API.";
+"Choose an SRT or WebVTT file" = "Изаберите SRT или WebVTT датотеку";
+"The caption file could not be read." = "Датотеку са титловима није било могуће прочитати.";
+"No captions were found in that file." = "У тој датотеци нису пронађени титлови.";
+"Replace existing captions?" = "Заменити постојеће титлове?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Овај пројекат већ има титлове. Можете их заменити увезеним титловима или спојити оба скупа.";
+"Replace" = "Замени";
+"Merge" = "Споји";
+"Imported %d captions" = "Увезено титлова: %d";
+"Transcription" = "Транскрипција";
+"Captions Provider" = "Провајдер титлова";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Провајдери на уређају задржавају звук на овом Mac-у. Ово се такође може променити по снимку у одељку за титлове видео уређивача.";
+"Base URL:" = "Основни URL:";
+"Model:" = "Модел:";
+"API Key:" = "API кључ:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Ради са OpenAI, Groq или локалним whisper.cpp сервером — било чиме што излаже OpenAI-компатибилну /audio/transcriptions крајњу тачку. API кључ се чува у Keychain-у, никада у извезеним подешавањима.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Обриши пресет";
+"Export complete" = "Извоз завршен";
+"Exported %@" = "Извезено: %@";
+"Faster" = "Брже";
+"Name this preset:" = "Назовите овај пресет:";
+"Play Speed" = "Брзина репродукције";
+"Play/Pause" = "Пусти/Паузирај";
+"Playback" = "Репродукција";
+"Preset" = "Пресет";
+"Preset name" = "Назив пресета";
+"Quick Export" = "Брзи извоз";
+"Reverse" = "Обрни";
+"Save Current as Preset" = "Сачувај тренутно као пресет";
+"Save Current as Preset…" = "Сачувај тренутно као пресет…";
+"Select a custom preset to delete first" = "Прво изаберите прилагођени пресет за брисање";
+"Slower" = "Спорије";
+"Full Quality (source res, High)" = "Пуни квалитет (изворна резолуција, високо)";
+"GIF (small)" = "GIF (мало)";
+"Web (1080p H.264 Medium)" = "Веб (1080p H.264 средње)";

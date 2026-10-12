@@ -917,3 +917,52 @@
 "Ease In/Out" = "Pehmeä alku/loppu";
 "Hold" = "Pito";
 "Delete Keyframe" = "Poista avainkuva";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (laitteessa, parannettu)";
+"Apple (On-Device, Classic)" = "Apple (laitteessa, klassinen)";
+"OpenAI-Compatible API" = "OpenAI-yhteensopiva API";
+"The speech model couldn't be downloaded: %@" = "Puhemallia ei voitu ladata: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Lisää API-avain kohdassa Asetukset ▸ Litterointi ennen tämän palveluntarjoajan käyttöä.";
+"The transcription API's base URL isn't valid." = "Litterointi-API:n perus-URL ei ole kelvollinen.";
+"The transcription service returned an error (%d)." = "Litterointipalvelu palautti virheen (%d).";
+"The transcription service returned an unexpected response." = "Litterointipalvelu palautti odottamattoman vastauksen.";
+"Transcription Provider" = "Litteroinnin palveluntarjoaja";
+"Import SRT/VTT…" = "Tuo SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Tämä palveluntarjoaja lataa nauhoituksen äänen määritettyyn API:iin.";
+"Choose an SRT or WebVTT file" = "Valitse SRT- tai WebVTT-tiedosto";
+"The caption file could not be read." = "Tekstitystiedostoa ei voitu lukea.";
+"No captions were found in that file." = "Tiedostosta ei löytynyt tekstityksiä.";
+"Replace existing captions?" = "Korvataanko olemassa olevat tekstitykset?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Tässä projektissa on jo tekstityksiä. Voit korvata ne tuoduilla tekstityksillä tai yhdistää molemmat joukot.";
+"Replace" = "Korvaa";
+"Merge" = "Yhdistä";
+"Imported %d captions" = "Tuotiin %d tekstitystä";
+"Transcription" = "Litterointi";
+"Captions Provider" = "Tekstitysten palveluntarjoaja";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Laitteella toimivat palveluntarjoajat pitävät äänen tällä Macilla. Tätä voi muuttaa myös nauhoituskohtaisesti videoeditorin tekstitysosiosta.";
+"Base URL:" = "Perus-URL:";
+"Model:" = "Malli:";
+"API Key:" = "API-avain:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Toimii OpenAI:n, Groqin tai paikallisen whisper.cpp-palvelimen kanssa — minkä tahansa palvelun kanssa, joka tarjoaa OpenAI-yhteensopivan /audio/transcriptions-päätepisteen. API-avain tallennetaan Keychainiin, ei koskaan vietyihin asetuksiin.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Poista esiasetus";
+"Export complete" = "Vienti valmis";
+"Exported %@" = "%@ viety";
+"Faster" = "Nopeampi";
+"Name this preset:" = "Nimeä tämä esiasetus:";
+"Play Speed" = "Toistonopeus";
+"Play/Pause" = "Toista/Tauko";
+"Playback" = "Toisto";
+"Preset" = "Esiasetus";
+"Preset name" = "Esiasetuksen nimi";
+"Quick Export" = "Pikavienti";
+"Reverse" = "Taaksepäin";
+"Save Current as Preset" = "Tallenna nykyiset asetukset esiasetuksena";
+"Save Current as Preset…" = "Tallenna nykyiset asetukset esiasetuksena…";
+"Select a custom preset to delete first" = "Valitse ensin mukautettu esiasetus poistettavaksi";
+"Slower" = "Hitaampi";
+"Full Quality (source res, High)" = "Täysi laatu (alkuperäinen tarkkuus, Korkea)";
+"GIF (small)" = "GIF (pieni)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Keskitaso)";

@@ -13,6 +13,20 @@ struct VideoExportSettings: Equatable {
     static let qualityKey = "lastExportQuality"
     static let gifFPSKey = "gifExportFPS"
     static let formatKey = "videoEditorExportFormat"
+    static let lastDirectoryKey = "lastExportDestinationDirectory"
+
+    /// The folder Quick Export (⇧⌘E) writes to without prompting: wherever
+    /// the last successful Save/Save As/Quick Export actually wrote. Sandbox
+    /// is disabled in this fork (see CLAUDE.md), so a plain path is enough —
+    /// no security-scoped bookmark needed.
+    static func lastDirectory(defaults: UserDefaults = .standard) -> URL? {
+        guard let path = defaults.string(forKey: lastDirectoryKey) else { return nil }
+        return URL(fileURLWithPath: path, isDirectory: true)
+    }
+
+    static func setLastDirectory(_ url: URL, defaults: UserDefaults = .standard) {
+        defaults.set(url.path, forKey: lastDirectoryKey)
+    }
 
     static func load(defaults: UserDefaults = .standard) -> VideoExportSettings {
         var settings = VideoExportSettings()
@@ -183,6 +197,36 @@ final class VideoEditorExporter {
                 break
             }
             return elapsed
+        }
+    }
+
+    /// Maps SRT/VTT cues authored against the exported (edited) video back
+    /// onto the source clock — the inverse of `captionsSRT()`'s mapping —
+    /// so imported captions land in sync however the project has been cut,
+    /// sped up, or frozen since the export the cues were transcribed from.
+    func importedCaptions(from cues: [CaptionCue]) -> [VideoCaptionSegment] {
+        let project = document.project
+        let pieces = VideoRenderPlanner.pieces(project: project, from: project.trimStart, to: project.trimEnd)
+        func sourceTime(forOutputTime t: Double) -> Double {
+            guard let lastPiece = pieces.last else { return t + project.trimStart }
+            var elapsed = 0.0
+            for piece in pieces {
+                let pieceDuration = piece.compositionDuration
+                let isLast = piece.srcStart == lastPiece.srcStart && piece.srcEnd == lastPiece.srcEnd
+                if t <= elapsed + pieceDuration || isLast {
+                    if piece.kind == .freeze { return piece.srcStart }
+                    let into = max(0, t - elapsed)
+                    return piece.srcStart + into * max(piece.factor, 0.0001)
+                }
+                elapsed += pieceDuration
+            }
+            return lastPiece.srcEnd
+        }
+        return cues.compactMap { cue in
+            let start = sourceTime(forOutputTime: cue.start)
+            let end = sourceTime(forOutputTime: cue.end)
+            guard end > start else { return nil }
+            return VideoCaptionSegment(startTime: start, endTime: end, text: cue.text)
         }
     }
 }

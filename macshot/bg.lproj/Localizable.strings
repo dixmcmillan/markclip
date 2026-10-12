@@ -917,3 +917,52 @@
 "Ease In/Out" = "Плавно навлизане/излизане";
 "Hold" = "Задържане";
 "Delete Keyframe" = "Изтриване на ключовия кадър";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (на устройството, подобрен)";
+"Apple (On-Device, Classic)" = "Apple (на устройството, класически)";
+"OpenAI-Compatible API" = "API, съвместим с OpenAI";
+"The speech model couldn't be downloaded: %@" = "Говорният модел не можа да бъде изтеглен: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Добавете API ключ в Настройки ▸ Разпознаване, преди да използвате този доставчик.";
+"The transcription API's base URL isn't valid." = "Базовият URL адрес на API за разпознаване не е валиден.";
+"The transcription service returned an error (%d)." = "Услугата за разпознаване върна грешка (%d).";
+"The transcription service returned an unexpected response." = "Услугата за разпознаване върна неочакван отговор.";
+"Transcription Provider" = "Доставчик за разпознаване";
+"Import SRT/VTT…" = "Импортиране на SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Този доставчик качва звука на записа към конфигурирания API.";
+"Choose an SRT or WebVTT file" = "Изберете файл SRT или WebVTT";
+"The caption file could not be read." = "Файлът със субтитри не можа да бъде прочетен.";
+"No captions were found in that file." = "В този файл не бяха намерени субтитри.";
+"Replace existing captions?" = "Заместване на съществуващите субтитри?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Този проект вече има субтитри. Можете да ги замените с импортираните или да обедините двата набора.";
+"Replace" = "Заместване";
+"Merge" = "Обединяване";
+"Imported %d captions" = "Импортирани са %d субтитри";
+"Transcription" = "Разпознаване";
+"Captions Provider" = "Доставчик на субтитри";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Доставчиците на устройството запазват звука на този Mac. Това също може да се променя за отделен запис от секцията за субтитри на видеоредактора.";
+"Base URL:" = "Базов URL:";
+"Model:" = "Модел:";
+"API Key:" = "API ключ:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Работи с OpenAI, Groq или локален сървър whisper.cpp — с всичко, което предоставя съвместима с OpenAI крайна точка /audio/transcriptions. API ключът се съхранява в Keychain, никога в експортираните настройки.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Изтриване на предварителна настройка";
+"Export complete" = "Експортирането завърши";
+"Exported %@" = "Експортирано: %@";
+"Faster" = "По-бързо";
+"Name this preset:" = "Наименувайте тази предварителна настройка:";
+"Play Speed" = "Скорост на възпроизвеждане";
+"Play/Pause" = "Възпроизвеждане/Пауза";
+"Playback" = "Възпроизвеждане";
+"Preset" = "Предварителна настройка";
+"Preset name" = "Име на предварителната настройка";
+"Quick Export" = "Бърз експорт";
+"Reverse" = "Обратно";
+"Save Current as Preset" = "Запиши текущото като предварителна настройка";
+"Save Current as Preset…" = "Запиши текущото като предварителна настройка…";
+"Select a custom preset to delete first" = "Първо изберете персонализирана предварителна настройка за изтриване";
+"Slower" = "По-бавно";
+"Full Quality (source res, High)" = "Пълно качество (резолюция на източника, високо)";
+"GIF (small)" = "GIF (малък)";
+"Web (1080p H.264 Medium)" = "Уеб (1080p H.264 средно)";

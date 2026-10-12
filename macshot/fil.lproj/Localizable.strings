@@ -919,3 +919,52 @@
 "Ease In/Out" = "Ease In/Out";
 "Hold" = "Hold";
 "Delete Keyframe" = "Alisin ang Keyframe";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (Sa Device, Pinahusay)";
+"Apple (On-Device, Classic)" = "Apple (Sa Device, Classic)";
+"OpenAI-Compatible API" = "API na Compatible sa OpenAI";
+"The speech model couldn't be downloaded: %@" = "Hindi ma-download ang speech model: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Magdagdag ng API key sa Settings ▸ Transcription bago gamitin ang tagapagbigay na ito.";
+"The transcription API's base URL isn't valid." = "Hindi wasto ang base URL ng transcription API.";
+"The transcription service returned an error (%d)." = "Nagbalik ng error ang serbisyo ng transcription (%d).";
+"The transcription service returned an unexpected response." = "Nagbalik ng hindi inaasahang tugon ang serbisyo ng transcription.";
+"Transcription Provider" = "Tagapagbigay ng Transcription";
+"Import SRT/VTT…" = "I-import ang SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Ina-upload ng tagapagbigay na ito ang audio ng recording sa naka-configure na API.";
+"Choose an SRT or WebVTT file" = "Pumili ng SRT o WebVTT file";
+"The caption file could not be read." = "Hindi mabasa ang caption file.";
+"No captions were found in that file." = "Walang nahanap na caption sa file na iyon.";
+"Replace existing captions?" = "Palitan ang mga umiiral na caption?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "May mga caption na ang project na ito. Maaari mo itong palitan ng mga na-import o pagsamahin ang dalawang set.";
+"Replace" = "Palitan";
+"Merge" = "Pagsamahin";
+"Imported %d captions" = "Na-import ang %d caption";
+"Transcription" = "Transcription";
+"Captions Provider" = "Tagapagbigay ng Caption";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Pinapanatili ng mga tagapagbigay na sa device ang audio sa Mac na ito. Puwede rin itong baguhin kada recording mula sa seksyon ng caption ng video editor.";
+"Base URL:" = "Base URL:";
+"Model:" = "Modelo:";
+"API Key:" = "API Key:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Gumagana sa OpenAI, Groq, o lokal na whisper.cpp server — anumang naglalantad ng OpenAI-compatible na /audio/transcriptions endpoint. Naka-store ang API key sa Keychain, hindi kailanman sa na-export na mga setting.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Tanggalin ang Preset";
+"Export complete" = "Tapos na ang pag-export";
+"Exported %@" = "Na-export ang %@";
+"Faster" = "Mas Mabilis";
+"Name this preset:" = "Pangalanan ang preset na ito:";
+"Play Speed" = "Bilis ng Playback";
+"Play/Pause" = "I-play/I-pause";
+"Playback" = "Playback";
+"Preset" = "Preset";
+"Preset name" = "Pangalan ng Preset";
+"Quick Export" = "Mabilisang Pag-export";
+"Reverse" = "I-reverse";
+"Save Current as Preset" = "I-save ang Kasalukuyang mga Setting bilang Preset";
+"Save Current as Preset…" = "I-save ang Kasalukuyang mga Setting bilang Preset…";
+"Select a custom preset to delete first" = "Pumili muna ng custom na preset na tatanggalin";
+"Slower" = "Mas Mabagal";
+"Full Quality (source res, High)" = "Ganap na Kalidad (orihinal na resolusyon, Mataas)";
+"GIF (small)" = "GIF (maliit)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Katamtaman)";

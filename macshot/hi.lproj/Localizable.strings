@@ -919,3 +919,52 @@
 "Ease In/Out" = "ईज़ इन/आउट";
 "Hold" = "होल्ड";
 "Delete Keyframe" = "कीफ़्रेम हटाएँ";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (डिवाइस पर, बेहतर)";
+"Apple (On-Device, Classic)" = "Apple (डिवाइस पर, क्लासिक)";
+"OpenAI-Compatible API" = "OpenAI-संगत API";
+"The speech model couldn't be downloaded: %@" = "स्पीच मॉडल डाउनलोड नहीं किया जा सका: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "इस प्रदाता का उपयोग करने से पहले सेटिंग्स ▸ ट्रांसक्रिप्शन में एक API कुंजी जोड़ें।";
+"The transcription API's base URL isn't valid." = "ट्रांसक्रिप्शन API का बेस URL मान्य नहीं है।";
+"The transcription service returned an error (%d)." = "ट्रांसक्रिप्शन सेवा ने एक त्रुटि लौटाई (%d)।";
+"The transcription service returned an unexpected response." = "ट्रांसक्रिप्शन सेवा ने एक अप्रत्याशित प्रतिक्रिया लौटाई।";
+"Transcription Provider" = "ट्रांसक्रिप्शन प्रदाता";
+"Import SRT/VTT…" = "SRT/VTT इम्पोर्ट करें…";
+"This provider uploads the recording's audio to the configured API." = "यह प्रदाता रिकॉर्डिंग का ऑडियो कॉन्फ़िगर किए गए API पर अपलोड करता है।";
+"Choose an SRT or WebVTT file" = "एक SRT या WebVTT फ़ाइल चुनें";
+"The caption file could not be read." = "कैप्शन फ़ाइल को पढ़ा नहीं जा सका।";
+"No captions were found in that file." = "उस फ़ाइल में कोई कैप्शन नहीं मिला।";
+"Replace existing captions?" = "मौजूदा कैप्शन बदलें?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "इस प्रोजेक्ट में पहले से ही कैप्शन हैं। आप उन्हें इम्पोर्ट किए गए कैप्शन से बदल सकते हैं या दोनों सेट को मर्ज कर सकते हैं।";
+"Replace" = "बदलें";
+"Merge" = "मर्ज करें";
+"Imported %d captions" = "%d कैप्शन इम्पोर्ट किए गए";
+"Transcription" = "ट्रांसक्रिप्शन";
+"Captions Provider" = "कैप्शन प्रदाता";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "ऑन-डिवाइस प्रदाता ऑडियो को इसी Mac पर रखते हैं। इसे वीडियो संपादक के कैप्शन सेक्शन से प्रति-रिकॉर्डिंग भी बदला जा सकता है।";
+"Base URL:" = "बेस URL:";
+"Model:" = "मॉडल:";
+"API Key:" = "API कुंजी:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "OpenAI, Groq, या किसी स्थानीय whisper.cpp सर्वर के साथ काम करता है — कोई भी चीज़ जो OpenAI-संगत /audio/transcriptions एंडपॉइंट प्रदान करती है। API कुंजी Keychain में संग्रहीत होती है, कभी भी एक्सपोर्ट की गई सेटिंग्स में नहीं।";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "प्रीसेट हटाएं";
+"Export complete" = "निर्यात पूरा हुआ";
+"Exported %@" = "%@ निर्यात किया गया";
+"Faster" = "तेज़";
+"Name this preset:" = "इस प्रीसेट को नाम दें:";
+"Play Speed" = "प्लेबैक गति";
+"Play/Pause" = "चलाएं/विराम";
+"Playback" = "प्लेबैक";
+"Preset" = "प्रीसेट";
+"Preset name" = "प्रीसेट नाम";
+"Quick Export" = "त्वरित निर्यात";
+"Reverse" = "रिवर्स";
+"Save Current as Preset" = "वर्तमान सेटिंग्स को प्रीसेट के रूप में सहेजें";
+"Save Current as Preset…" = "वर्तमान सेटिंग्स को प्रीसेट के रूप में सहेजें…";
+"Select a custom preset to delete first" = "पहले हटाने के लिए एक कस्टम प्रीसेट चुनें";
+"Slower" = "धीमा";
+"Full Quality (source res, High)" = "पूर्ण गुणवत्ता (स्रोत रिज़ॉल्यूशन, उच्च)";
+"GIF (small)" = "GIF (छोटा)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 मध्यम)";

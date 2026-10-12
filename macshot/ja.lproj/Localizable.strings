@@ -917,3 +917,52 @@
 "Ease In/Out" = "イーズイン/アウト";
 "Hold" = "ホールド";
 "Delete Keyframe" = "キーフレームを削除";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (オンデバイス、高精度)";
+"Apple (On-Device, Classic)" = "Apple (オンデバイス、クラシック)";
+"OpenAI-Compatible API" = "OpenAI 互換 API";
+"The speech model couldn't be downloaded: %@" = "音声モデルをダウンロードできませんでした: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "このプロバイダを使用する前に、設定 ▸ 文字起こしで API キーを追加してください。";
+"The transcription API's base URL isn't valid." = "文字起こし API のベース URL が無効です。";
+"The transcription service returned an error (%d)." = "文字起こしサービスがエラーを返しました (%d)。";
+"The transcription service returned an unexpected response." = "文字起こしサービスが予期しない応答を返しました。";
+"Transcription Provider" = "文字起こしプロバイダ";
+"Import SRT/VTT…" = "SRT/VTT を読み込む…";
+"This provider uploads the recording's audio to the configured API." = "このプロバイダは録画の音声を設定された API にアップロードします。";
+"Choose an SRT or WebVTT file" = "SRT または WebVTT ファイルを選択";
+"The caption file could not be read." = "字幕ファイルを読み込めませんでした。";
+"No captions were found in that file." = "そのファイルに字幕が見つかりませんでした。";
+"Replace existing captions?" = "既存の字幕を置き換えますか？";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "このプロジェクトには既に字幕があります。読み込んだ字幕に置き換えるか、両方を結合できます。";
+"Replace" = "置き換え";
+"Merge" = "結合";
+"Imported %d captions" = "%d 件の字幕を読み込みました";
+"Transcription" = "文字起こし";
+"Captions Provider" = "字幕プロバイダ";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "オンデバイスのプロバイダは音声をこの Mac 上に保持します。これはビデオエディタの字幕セクションから録画ごとに変更することもできます。";
+"Base URL:" = "ベース URL:";
+"Model:" = "モデル:";
+"API Key:" = "API キー:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "OpenAI、Groq、またはローカルの whisper.cpp サーバーなど、OpenAI 互換の /audio/transcriptions エンドポイントを公開しているものであれば動作します。API キーは Keychain に保存され、書き出した設定に含まれることはありません。";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "プリセットを削除";
+"Export complete" = "書き出しが完了しました";
+"Exported %@" = "%@ を書き出しました";
+"Faster" = "速く";
+"Name this preset:" = "このプリセットに名前を付けてください:";
+"Play Speed" = "再生速度";
+"Play/Pause" = "再生/一時停止";
+"Playback" = "再生";
+"Preset" = "プリセット";
+"Preset name" = "プリセット名";
+"Quick Export" = "クイック書き出し";
+"Reverse" = "逆再生";
+"Save Current as Preset" = "現在の設定をプリセットとして保存";
+"Save Current as Preset…" = "現在の設定をプリセットとして保存…";
+"Select a custom preset to delete first" = "先に削除するカスタムプリセットを選択してください";
+"Slower" = "遅く";
+"Full Quality (source res, High)" = "フル品質 (元の解像度, 高)";
+"GIF (small)" = "GIF (小)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 中)";

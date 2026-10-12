@@ -917,3 +917,52 @@
 "Ease In/Out" = "Blødt ind/ud";
 "Hold" = "Hold";
 "Delete Keyframe" = "Slet nøglebillede";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (på enheden, forbedret)";
+"Apple (On-Device, Classic)" = "Apple (på enheden, klassisk)";
+"OpenAI-Compatible API" = "OpenAI-kompatibel API";
+"The speech model couldn't be downloaded: %@" = "Talemodellen kunne ikke downloades: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Tilføj en API-nøgle i Indstillinger ▸ Transskription, før du bruger denne udbyder.";
+"The transcription API's base URL isn't valid." = "Transskriptions-API'ens grundlæggende URL er ikke gyldig.";
+"The transcription service returned an error (%d)." = "Transskriptionstjenesten returnerede en fejl (%d).";
+"The transcription service returned an unexpected response." = "Transskriptionstjenesten returnerede et uventet svar.";
+"Transcription Provider" = "Transskriptionsudbyder";
+"Import SRT/VTT…" = "Importér SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Denne udbyder uploader optagelsens lyd til den konfigurerede API.";
+"Choose an SRT or WebVTT file" = "Vælg en SRT- eller WebVTT-fil";
+"The caption file could not be read." = "Undertekstfilen kunne ikke læses.";
+"No captions were found in that file." = "Der blev ikke fundet undertekster i den fil.";
+"Replace existing captions?" = "Erstat eksisterende undertekster?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Dette projekt har allerede undertekster. Du kan erstatte dem med de importerede eller flette begge sæt.";
+"Replace" = "Erstat";
+"Merge" = "Flet";
+"Imported %d captions" = "%d undertekster importeret";
+"Transcription" = "Transskription";
+"Captions Provider" = "Undertekstudbyder";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Udbydere på enheden holder lyden på denne Mac. Dette kan også ændres pr. optagelse fra undertekstsektionen i videoredigeringsprogrammet.";
+"Base URL:" = "Basis-URL:";
+"Model:" = "Model:";
+"API Key:" = "API-nøgle:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Fungerer med OpenAI, Groq eller en lokal whisper.cpp-server — alt, der eksponerer et OpenAI-kompatibelt /audio/transcriptions-endepunkt. API-nøglen gemmes i Keychain, aldrig i eksporterede indstillinger.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Slet forudindstilling";
+"Export complete" = "Eksport fuldført";
+"Exported %@" = "%@ eksporteret";
+"Faster" = "Hurtigere";
+"Name this preset:" = "Navngiv denne forudindstilling:";
+"Play Speed" = "Afspilningshastighed";
+"Play/Pause" = "Afspil/Pause";
+"Playback" = "Afspilning";
+"Preset" = "Forudindstilling";
+"Preset name" = "Navn på forudindstilling";
+"Quick Export" = "Hurtig eksport";
+"Reverse" = "Omvendt";
+"Save Current as Preset" = "Gem nuværende som forudindstilling";
+"Save Current as Preset…" = "Gem nuværende som forudindstilling…";
+"Select a custom preset to delete first" = "Vælg først en brugerdefineret forudindstilling, der skal slettes";
+"Slower" = "Langsommere";
+"Full Quality (source res, High)" = "Fuld kvalitet (kildeopløsning, høj)";
+"GIF (small)" = "GIF (lille)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 middel)";

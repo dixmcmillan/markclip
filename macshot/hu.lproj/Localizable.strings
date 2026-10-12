@@ -917,3 +917,52 @@
 "Ease In/Out" = "Lágyítás be/ki";
 "Hold" = "Tartás";
 "Delete Keyframe" = "Kulcskocka törlése";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (eszközön, továbbfejlesztett)";
+"Apple (On-Device, Classic)" = "Apple (eszközön, klasszikus)";
+"OpenAI-Compatible API" = "OpenAI-kompatibilis API";
+"The speech model couldn't be downloaded: %@" = "A beszédmodellt nem sikerült letölteni: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Adj hozzá egy API kulcsot a Beállítások ▸ Leírás menüben, mielőtt ezt a szolgáltatót használnád.";
+"The transcription API's base URL isn't valid." = "A leírási API alap URL-je nem érvényes.";
+"The transcription service returned an error (%d)." = "A leírási szolgáltatás hibát adott vissza (%d).";
+"The transcription service returned an unexpected response." = "A leírási szolgáltatás váratlan választ adott vissza.";
+"Transcription Provider" = "Leírás szolgáltatója";
+"Import SRT/VTT…" = "SRT/VTT importálása…";
+"This provider uploads the recording's audio to the configured API." = "Ez a szolgáltató feltölti a felvétel hangját a beállított API-ra.";
+"Choose an SRT or WebVTT file" = "Válassz egy SRT vagy WebVTT fájlt";
+"The caption file could not be read." = "A feliratfájlt nem sikerült beolvasni.";
+"No captions were found in that file." = "Nem található felirat abban a fájlban.";
+"Replace existing captions?" = "Lecseréled a meglévő feliratokat?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Ennek a projektnek már vannak feliratai. Lecserélheted őket az importáltakra, vagy összevonhatod a két készletet.";
+"Replace" = "Csere";
+"Merge" = "Összevonás";
+"Imported %d captions" = "%d felirat importálva";
+"Transcription" = "Leírás";
+"Captions Provider" = "Feliratok szolgáltatója";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Az eszközön futó szolgáltatók a hangot ezen a Macen tartják. Ez felvételenként is módosítható a videószerkesztő feliratok szakaszából.";
+"Base URL:" = "Alap URL:";
+"Model:" = "Modell:";
+"API Key:" = "API kulcs:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Működik az OpenAI-val, a Groq-kal vagy egy helyi whisper.cpp szerverrel — bármivel, ami egy OpenAI-kompatibilis /audio/transcriptions végpontot biztosít. Az API kulcs a Keychainben tárolódik, soha nem az exportált beállításokban.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Előbeállítás törlése";
+"Export complete" = "Exportálás kész";
+"Exported %@" = "%@ exportálva";
+"Faster" = "Gyorsabb";
+"Name this preset:" = "Nevezd el ezt az előbeállítást:";
+"Play Speed" = "Lejátszási sebesség";
+"Play/Pause" = "Lejátszás/Szünet";
+"Playback" = "Lejátszás";
+"Preset" = "Előbeállítás";
+"Preset name" = "Előbeállítás neve";
+"Quick Export" = "Gyors exportálás";
+"Reverse" = "Visszafelé";
+"Save Current as Preset" = "Jelenlegi beállítások mentése előbeállításként";
+"Save Current as Preset…" = "Jelenlegi beállítások mentése előbeállításként…";
+"Select a custom preset to delete first" = "Előbb válassz ki egy egyéni előbeállítást a törléshez";
+"Slower" = "Lassabb";
+"Full Quality (source res, High)" = "Teljes minőség (eredeti felbontás, Magas)";
+"GIF (small)" = "GIF (kicsi)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Közepes)";

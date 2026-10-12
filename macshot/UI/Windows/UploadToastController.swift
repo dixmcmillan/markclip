@@ -10,6 +10,7 @@ class UploadToastController {
     private var spinner: NSProgressIndicator?
     private var dismissTask: DispatchWorkItem?
     private var currentLink: String?
+    private var revealURL: URL?
     var onDismiss: (() -> Void)?
 
     private let toastWidth: CGFloat = 380
@@ -164,6 +165,79 @@ class UploadToastController {
         scheduleDismiss(seconds: 8)
     }
 
+    /// A file finished saving successfully (Quick Export). Same layout as
+    /// `showSuccess`, but the action reveals the file in Finder instead of
+    /// opening a link.
+    func showFileSaved(url: URL) {
+        guard let window = window, let contentView = window.contentView else { return }
+        revealURL = url
+
+        spinner?.stopAnimation(nil)
+        spinner?.removeFromSuperview()
+        spinner = nil
+        iconView?.isHidden = false
+
+        statusLabel?.removeFromSuperview()
+        statusLabel = nil
+        linkLabel?.removeFromSuperview()
+        linkLabel = nil
+
+        let nameFont = NSFont.systemFont(ofSize: 11)
+        let maxNameW = toastWidth - 140
+        let nameTextSize = (url.lastPathComponent as NSString).boundingRect(
+            with: NSSize(width: maxNameW, height: 200), options: [.usesLineFragmentOrigin], attributes: [.font: nameFont]
+        ).size
+        let nameH = max(16, ceil(nameTextSize.height))
+        let toastHeight = max(64, nameH + 42)
+
+        guard let screen = NSScreen.preferred else { return }
+        let visibleFrame = screen.visibleFrame
+        let topPadding: CGFloat = 12
+        let x = screen.frame.midX - toastWidth / 2
+        let y = visibleFrame.maxY - toastHeight - topPadding
+
+        NSAnimationContext.runAnimationGroup { ctx in
+            ctx.duration = 0.15
+            window.animator().setFrame(NSRect(x: x, y: y, width: toastWidth, height: toastHeight), display: true)
+        }
+        contentView.frame = NSRect(origin: .zero, size: NSSize(width: toastWidth, height: toastHeight))
+        contentView.needsDisplay = true
+        iconView?.frame = NSRect(x: 14, y: (toastHeight - 28) / 2, width: 28, height: 28)
+
+        let titleLabel = NSTextField(labelWithString: L("Export complete"))
+        titleLabel.frame = NSRect(x: 50, y: toastHeight - 28, width: toastWidth - 140, height: 18)
+        titleLabel.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
+        titleLabel.textColor = .labelColor
+        titleLabel.lineBreakMode = .byTruncatingTail
+        contentView.addSubview(titleLabel)
+        self.statusLabel = titleLabel
+
+        let nameLabel = NSTextField(wrappingLabelWithString: url.lastPathComponent)
+        nameLabel.frame = NSRect(x: 50, y: 10, width: maxNameW, height: nameH)
+        nameLabel.font = nameFont
+        nameLabel.textColor = .secondaryLabelColor
+        nameLabel.isSelectable = false
+        contentView.addSubview(nameLabel)
+        self.linkLabel = nameLabel
+
+        let btn = NSButton(frame: NSRect(x: toastWidth - 130, y: (toastHeight - 28) / 2, width: 116, height: 28))
+        btn.title = L("Show in Finder")
+        btn.bezelStyle = .rounded
+        btn.font = NSFont.systemFont(ofSize: 12, weight: .medium)
+        btn.target = self
+        btn.action = #selector(revealInFinder)
+        contentView.addSubview(btn)
+        self.openButton = btn
+
+        scheduleDismiss(seconds: 8)
+    }
+
+    @objc private func revealInFinder() {
+        guard let url = revealURL else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+        dismiss()
+    }
+
     /// `asUploadFailure` prefixes the message with "Upload failed:". Failures
     /// that aren't uploads (a save that couldn't be written, a recording that
     /// produced nothing) pass false and supply their own wording.
@@ -239,6 +313,7 @@ class UploadToastController {
         openButton = nil
         iconView = nil
         spinner = nil
+        revealURL = nil
         onDismiss?()
         onDismiss = nil
     }

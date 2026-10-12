@@ -147,6 +147,10 @@ final class VideoTransportBar: NSView {
     let nextButton: VideoIconButton
     let timeLabel = VideoEditorStyle.label("0:00.00", size: 12.5, weight: .medium)
     let durationLabel = VideoEditorStyle.label("/ 0:00.00", size: 12.5, color: VideoEditorStyle.textTertiary)
+    /// Transient rate HUD ("2×", "◀︎ 4×"): shown briefly whenever playback
+    /// isn't paused-or-1x-forward (J/K/L ladder, slow motion, Playback menu
+    /// speeds). Hidden the rest of the time.
+    let rateLabel = VideoEditorStyle.label("", size: 12, weight: .semibold, color: VideoEditorStyle.accent)
     let muteButton: VideoIconButton
     let zoomOutButton: VideoIconButton
     let zoomInButton: VideoIconButton
@@ -185,13 +189,16 @@ final class VideoTransportBar: NSView {
         playButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
         for button in [addButton, autoZoomButton, fitButton] { button.heightAnchor.constraint(equalToConstant: 28).isActive = true }
 
+        rateLabel.isHidden = true
+        rateLabel.setContentHuggingPriority(.required, for: .horizontal)
         let left = NSStackView(views: [addButton, autoZoomButton])
         left.spacing = 8
-        let center = NSStackView(views: [timeLabel, durationLabel, NSBox.verticalDivider(), previousButton, playButton, nextButton])
+        let center = NSStackView(views: [timeLabel, durationLabel, NSBox.verticalDivider(), previousButton, playButton, nextButton, rateLabel])
         center.spacing = 6
         center.setCustomSpacing(4, after: timeLabel)
         center.setCustomSpacing(14, after: durationLabel)
         center.setCustomSpacing(10, after: center.arrangedSubviews[2])
+        center.setCustomSpacing(12, after: nextButton)
         let right = NSStackView(views: [muteButton, NSBox.verticalDivider(), zoomOutButton, fitButton, zoomInButton])
         right.spacing = 4
         for stack in [left, center, right] {
@@ -225,6 +232,24 @@ final class VideoTransportBar: NSView {
         playButton.image = VideoEditorStyle.symbol(playing ? "pause.fill" : "play.fill", size: 16)
         playButton.toolTip = playing ? L("Pause") : L("Play")
         playButton.setAccessibilityLabel(playButton.toolTip)
+    }
+
+    private var rateHUDHideTask: DispatchWorkItem?
+
+    /// Shows "2×" / "◀︎ 4×" briefly when `rate` isn't paused-or-1x-forward,
+    /// then auto-hides after 1.4s (the HUD is transient, not a persistent
+    /// indicator — CLAUDE.md-style: don't make the transport bar noisier
+    /// than plain 1x playback needs).
+    func setRate(_ rate: Double) {
+        rateHUDHideTask?.cancel()
+        guard rate != 0, rate != 1 else { rateLabel.isHidden = true; return }
+        let magnitudeValue = abs(rate)
+        let magnitude = magnitudeValue == magnitudeValue.rounded() ? String(Int(magnitudeValue)) : String(format: "%.2g", magnitudeValue)
+        rateLabel.stringValue = (rate < 0 ? "◀︎ " : "") + magnitude + "×"
+        rateLabel.isHidden = false
+        let task = DispatchWorkItem { [weak self] in self?.rateLabel.isHidden = true }
+        rateHUDHideTask = task
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4, execute: task)
     }
 
     func setMuted(_ muted: Bool) {

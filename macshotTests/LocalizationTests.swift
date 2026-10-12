@@ -215,8 +215,20 @@ final class LocalizationTests: XCTestCase {
     /// ban. A locale that climbs above its budget has almost certainly been
     /// re-damaged; the fix is to repair the strings, not to raise the number.
     private static let diacriticSuspectBudget: [String: Int] = [
-        "ca": 2, "cs": 17, "es": 0, "fr": 6, "hr": 1, "pl": 1,
-        "pt": 1, "pt-BR": 1, "ro": 45, "sk": 3, "sv": 1, "tr": 6, "vi": 33,
+        // cs: +2 (Czech case endings — "souboru"/"poskytovatele" are plain
+        // declined forms of words that appear accented in other cases
+        // elsewhere; see the comment on `diacriticSuspects`).
+        // hr: +1 ("brzi", the definite adjective form of "fast/quick", vs.
+        // unrelated comparative "brži").
+        // ro: +1 ("combina", infinitive "to combine", vs. imperative
+        // "Combină!" — one of Romanian's verb-form collisions, same family
+        // as the definite-article forms already noted below).
+        // vi: +8 (ordinary, very common words — "cung" in "cung cấp"
+        // (provide/supply), "thanh" in "âm thanh" (audio) and "thanh menu"
+        // (menu bar) — colliding with unrelated accented homographs, the
+        // same tonal-collision pattern the existing budget already covers).
+        "ca": 2, "cs": 19, "es": 0, "fr": 6, "hr": 2, "pl": 1,
+        "pt": 1, "pt-BR": 1, "ro": 46, "sk": 3, "sv": 1, "tr": 6, "vi": 41,
     ]
 
     private static func deaccented(_ word: String) -> String {
@@ -252,9 +264,13 @@ final class LocalizationTests: XCTestCase {
         case "vi": validPlainWords = ["trong", "thay"]
         // "esta" (this) and "está" (is) are different words.
         case "es": validPlainWords = ["video", "esta"]
-        case "pt", "pt-BR": validPlainWords = ["esta"]
-        // "copia" (copy, verb) vs "còpia" (a copy).
-        case "ca": validPlainWords = ["copia"]
+        // "audio" here is always the literal, untranslated `/audio/transcriptions`
+        // API path (the transcription provider's endpoint) embedded in a
+        // translated sentence, not damaged text — the real word is "áudio".
+        case "pt", "pt-BR": validPlainWords = ["esta", "audio"]
+        // "copia" (copy, verb) vs "còpia" (a copy). "audio": same
+        // `/audio/transcriptions` API path as above ("àudio" is the real word).
+        case "ca": validPlainWords = ["copia", "audio"]
         // "enregistre" (records) vs "enregistré" (recorded).
         case "fr": validPlainWords = ["enregistre"]
         // "andra" (other) vs "ändra" (change); "fast" (fixed) vs "fäst" (attach).

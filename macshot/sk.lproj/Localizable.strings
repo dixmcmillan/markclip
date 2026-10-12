@@ -917,3 +917,52 @@
 "Ease In/Out" = "Zrýchlenie a spomalenie";
 "Hold" = "Podržať";
 "Delete Keyframe" = "Odstrániť kľúčový snímok";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (v zariadení, vylepšený)";
+"Apple (On-Device, Classic)" = "Apple (v zariadení, klasický)";
+"OpenAI-Compatible API" = "API kompatibilné s OpenAI";
+"The speech model couldn't be downloaded: %@" = "Rečový model sa nepodarilo stiahnuť: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Pred použitím tohto poskytovateľa pridajte API kľúč v Nastaveniach ▸ Prepis.";
+"The transcription API's base URL isn't valid." = "Základná URL API prepisu nie je platná.";
+"The transcription service returned an error (%d)." = "Služba prepisu vrátila chybu (%d).";
+"The transcription service returned an unexpected response." = "Služba prepisu vrátila neočakávanú odpoveď.";
+"Transcription Provider" = "Poskytovateľ prepisu";
+"Import SRT/VTT…" = "Importovať SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Tento poskytovateľ nahráva zvuk nahrávky do nakonfigurovaného API.";
+"Choose an SRT or WebVTT file" = "Vyberte súbor SRT alebo WebVTT";
+"The caption file could not be read." = "Súbor s titulkami sa nepodarilo prečítať.";
+"No captions were found in that file." = "V tomto súbore sa nenašli žiadne titulky.";
+"Replace existing captions?" = "Nahradiť existujúce titulky?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Tento projekt už má titulky. Môžete ich nahradiť importovanými alebo zlúčiť obe sady.";
+"Replace" = "Nahradiť";
+"Merge" = "Zlúčiť";
+"Imported %d captions" = "Importovaných %d titulkov";
+"Transcription" = "Prepis";
+"Captions Provider" = "Poskytovateľ titulkov";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Poskytovatelia v zariadení uchovávajú zvuk na tomto Macu. Toto sa dá zmeniť aj pre jednotlivé nahrávky v časti titulkov vo video editore.";
+"Base URL:" = "Základná URL:";
+"Model:" = "Model:";
+"API Key:" = "API kľúč:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Funguje s OpenAI, Groq alebo lokálnym serverom whisper.cpp — s čímkoľvek, čo poskytuje endpoint /audio/transcriptions kompatibilný s OpenAI. API kľúč sa ukladá v Keychain, nikdy v exportovaných nastaveniach.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Vymazať predvoľbu";
+"Export complete" = "Export dokončený";
+"Exported %@" = "Exportované: %@";
+"Faster" = "Rýchlejšie";
+"Name this preset:" = "Pomenujte túto predvoľbu:";
+"Play Speed" = "Rýchlosť prehrávania";
+"Play/Pause" = "Prehrať/Pozastaviť";
+"Playback" = "Prehrávanie";
+"Preset" = "Predvoľba";
+"Preset name" = "Názov predvoľby";
+"Quick Export" = "Rýchly export";
+"Reverse" = "Obrátiť";
+"Save Current as Preset" = "Uložiť aktuálne ako predvoľbu";
+"Save Current as Preset…" = "Uložiť aktuálne ako predvoľbu…";
+"Select a custom preset to delete first" = "Najprv vyberte vlastnú predvoľbu na vymazanie";
+"Slower" = "Pomalšie";
+"Full Quality (source res, High)" = "Plná kvalita (zdrojové rozlíšenie, Vysoká)";
+"GIF (small)" = "GIF (malý)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Stredný)";

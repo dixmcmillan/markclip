@@ -919,3 +919,52 @@
 "Ease In/Out" = "Ease in/uit";
 "Hold" = "Vasthouden";
 "Delete Keyframe" = "Keyframe verwijderen";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (op het apparaat, verbeterd)";
+"Apple (On-Device, Classic)" = "Apple (op het apparaat, klassiek)";
+"OpenAI-Compatible API" = "OpenAI-compatibele API";
+"The speech model couldn't be downloaded: %@" = "Het spraakmodel kon niet worden gedownload: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Voeg een API-sleutel toe in Instellingen ▸ Transcriptie voordat u deze provider gebruikt.";
+"The transcription API's base URL isn't valid." = "De basis-URL van de transcriptie-API is ongeldig.";
+"The transcription service returned an error (%d)." = "De transcriptieservice gaf een fout terug (%d).";
+"The transcription service returned an unexpected response." = "De transcriptieservice gaf een onverwacht antwoord terug.";
+"Transcription Provider" = "Transcriptieprovider";
+"Import SRT/VTT…" = "SRT/VTT importeren…";
+"This provider uploads the recording's audio to the configured API." = "Deze provider uploadt de audio van de opname naar de geconfigureerde API.";
+"Choose an SRT or WebVTT file" = "Kies een SRT- of WebVTT-bestand";
+"The caption file could not be read." = "Het ondertitelbestand kon niet worden gelezen.";
+"No captions were found in that file." = "Er zijn geen ondertitels gevonden in dat bestand.";
+"Replace existing captions?" = "Bestaande ondertitels vervangen?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Dit project heeft al ondertitels. U kunt ze vervangen door de geïmporteerde ondertitels of beide sets samenvoegen.";
+"Replace" = "Vervangen";
+"Merge" = "Samenvoegen";
+"Imported %d captions" = "%d ondertitels geïmporteerd";
+"Transcription" = "Transcriptie";
+"Captions Provider" = "Ondertitelprovider";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Providers op het apparaat houden audio op deze Mac. Dit kan ook per opname worden gewijzigd vanuit het ondertitelgedeelte van de video-editor.";
+"Base URL:" = "Basis-URL:";
+"Model:" = "Model:";
+"API Key:" = "API-sleutel:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Werkt met OpenAI, Groq of een lokale whisper.cpp-server — alles dat een OpenAI-compatibel /audio/transcriptions-endpoint aanbiedt. De API-sleutel wordt opgeslagen in de Keychain, nooit in geëxporteerde instellingen.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Voorinstelling verwijderen";
+"Export complete" = "Export voltooid";
+"Exported %@" = "%@ geëxporteerd";
+"Faster" = "Sneller";
+"Name this preset:" = "Geef deze voorinstelling een naam:";
+"Play Speed" = "Afspeelsnelheid";
+"Play/Pause" = "Afspelen/Pauzeren";
+"Playback" = "Afspelen";
+"Preset" = "Voorinstelling";
+"Preset name" = "Naam van de voorinstelling";
+"Quick Export" = "Snelle export";
+"Reverse" = "Omkeren";
+"Save Current as Preset" = "Huidige opslaan als voorinstelling";
+"Save Current as Preset…" = "Huidige opslaan als voorinstelling…";
+"Select a custom preset to delete first" = "Selecteer eerst een aangepaste voorinstelling om te verwijderen";
+"Slower" = "Langzamer";
+"Full Quality (source res, High)" = "Volledige kwaliteit (bronresolutie, Hoog)";
+"GIF (small)" = "GIF (klein)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Gemiddeld)";

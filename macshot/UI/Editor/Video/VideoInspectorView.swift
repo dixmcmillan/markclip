@@ -675,14 +675,21 @@ final class VideoInspectorView: NSView {
     // MARK: Captions
 
     private func buildCaptionsPanel() {
+        let providerKinds = CaptionTranscriptionProviderKind.offered
+        add(InspectorPopupRow(title: L("Transcription Provider"), options: providerKinds.map(\.displayName),
+                              selected: providerKinds.firstIndex(of: CaptionTranscriptionProviderKind.current()) ?? 0) { index in
+            guard providerKinds.indices.contains(index) else { return }
+            UserDefaults.standard.set(providerKinds[index].rawValue, forKey: CaptionTranscriptionProviderKind.defaultsKey)
+        })
         if document.audioTrackCount == 0 {
             add(note(L("This recording has no audio to transcribe.")))
-            return
+        } else {
+            let generate = button(document.project.captions.isEmpty ? L("Generate Captions") : L("Regenerate Captions"),
+                                  symbol: "waveform", primary: document.project.captions.isEmpty, action: #selector(generateCaptions))
+            add(generate)
+            add(note(captionsProviderNote(), symbol: "lock.shield"))
         }
-        let generate = button(document.project.captions.isEmpty ? L("Generate Captions") : L("Regenerate Captions"),
-                              symbol: "waveform", primary: document.project.captions.isEmpty, action: #selector(generateCaptions))
-        add(generate)
-        add(note(L("Captions are transcribed on this Mac. Nothing is uploaded."), symbol: "lock.shield"))
+        add(button(L("Import SRT/VTT…"), symbol: "square.and.arrow.down", action: #selector(importCaptions)))
         guard !document.project.captions.isEmpty else { return }
         add(toggle(L("Show captions"), get: { [unowned self] in self.look.captions.show }) { p, on in p.look.captions.show = on })
         add(InspectorCard([
@@ -697,10 +704,76 @@ final class VideoInspectorView: NSView {
         add(button(L("Remove Captions"), symbol: "trash", action: #selector(removeCaptions)))
     }
 
+    /// The configured provider decides whether audio ever leaves the Mac.
+    private func captionsProviderNote() -> String {
+        CaptionTranscriptionProviderKind.current() == .openAICompatible
+            ? L("This provider uploads the recording's audio to the configured API.")
+            : L("Captions are transcribed on this Mac. Nothing is uploaded.")
+    }
+
     @objc private func generateCaptions() { controller?.generateCaptions() }
     @objc private func exportSRT() { controller?.exportSubtitles() }
     @objc private func removeCaptions() {
         document.edit([.render, .segments]) { $0.captions.removeAll() }
+        rebuild()
+    }
+
+    @objc private func importCaptions() {
+        guard let window = self.window else { return }
+        var types: [UTType] = []
+        if let srt = UTType(filenameExtension: "srt") { types.append(srt) }
+        if let vtt = UTType(filenameExtension: "vtt") { types.append(vtt) }
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = types
+        panel.allowsMultipleSelection = false
+        panel.message = L("Choose an SRT or WebVTT file")
+        panel.beginSheetModal(for: window) { [weak self] response in
+            guard let self, response == .OK, let url = panel.urls.first else { return }
+            self.finishImportingCaptions(from: url, presentingIn: window)
+        }
+    }
+
+    private func finishImportingCaptions(from url: URL, presentingIn window: NSWindow) {
+        guard let data = try? Data(contentsOf: url) else {
+            controller?.showStatus(L("The caption file could not be read."), isError: true)
+            return
+        }
+        let cues = CaptionImport.parse(data: data)
+        guard let exporter = controller?.exporter else { return }
+        let segments = exporter.importedCaptions(from: cues)
+        guard !segments.isEmpty else {
+            controller?.showStatus(L("No captions were found in that file."), isError: true)
+            return
+        }
+        guard !document.project.captions.isEmpty else {
+            applyImportedCaptions(segments, merging: false)
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = L("Replace existing captions?")
+        alert.informativeText = L("This project already has captions. You can replace them with the imported ones or merge both sets.")
+        alert.addButton(withTitle: L("Replace"))
+        alert.addButton(withTitle: L("Merge"))
+        alert.addButton(withTitle: L("Cancel"))
+        alert.beginSheetModal(for: window) { [weak self] response in
+            switch response {
+            case .alertFirstButtonReturn: self?.applyImportedCaptions(segments, merging: false)
+            case .alertSecondButtonReturn: self?.applyImportedCaptions(segments, merging: true)
+            default: break
+            }
+        }
+    }
+
+    private func applyImportedCaptions(_ segments: [VideoCaptionSegment], merging: Bool) {
+        document.edit([.render, .segments]) { project in
+            if merging {
+                project.captions = (project.captions + segments).sorted { $0.startTime < $1.startTime }
+            } else {
+                project.captions = segments
+            }
+            project.look.captions.show = true
+        }
+        controller?.showStatus(String(format: L("Imported %d captions"), segments.count))
         rebuild()
     }
 

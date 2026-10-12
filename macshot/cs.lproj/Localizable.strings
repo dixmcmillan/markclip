@@ -917,3 +917,52 @@
 "Ease In/Out" = "Zrychlení a zpomalení";
 "Hold" = "Podržet";
 "Delete Keyframe" = "Odstranit klíčový snímek";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (na zařízení, vylepšený)";
+"Apple (On-Device, Classic)" = "Apple (na zařízení, klasický)";
+"OpenAI-Compatible API" = "Rozhraní API kompatibilní s OpenAI";
+"The speech model couldn't be downloaded: %@" = "Řečový model se nepodařilo stáhnout: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Před použitím tohoto poskytovatele přidejte klíč API v Nastavení ▸ Přepis.";
+"The transcription API's base URL isn't valid." = "Základní URL přepisovacího API není platná.";
+"The transcription service returned an error (%d)." = "Přepisovací služba vrátila chybu (%d).";
+"The transcription service returned an unexpected response." = "Přepisovací služba vrátila neočekávanou odpověď.";
+"Transcription Provider" = "Poskytovatel přepisu";
+"Import SRT/VTT…" = "Importovat SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Tento poskytovatel nahrává zvuk nahrávky na nakonfigurované API.";
+"Choose an SRT or WebVTT file" = "Vyberte soubor SRT nebo WebVTT";
+"The caption file could not be read." = "Soubor s titulky se nepodařilo přečíst.";
+"No captions were found in that file." = "V tomto souboru nebyly nalezeny žádné titulky.";
+"Replace existing captions?" = "Nahradit stávající titulky?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Tento projekt už má titulky. Můžete je nahradit importovanými nebo obě sady sloučit.";
+"Replace" = "Nahradit";
+"Merge" = "Sloučit";
+"Imported %d captions" = "Importováno %d titulků";
+"Transcription" = "Přepis";
+"Captions Provider" = "Poskytovatel titulků";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Poskytovatelé na zařízení uchovávají zvuk v tomto Macu. Toto lze také změnit pro jednotlivé nahrávky v sekci titulků editoru videa.";
+"Base URL:" = "Základní URL:";
+"Model:" = "Model:";
+"API Key:" = "API klíč:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Funguje s OpenAI, Groq nebo místním serverem whisper.cpp — se vším, co poskytuje koncový bod /audio/transcriptions kompatibilní s OpenAI. Klíč API se ukládá do Keychainu, nikdy do exportovaného nastavení.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Odstranit předvolbu";
+"Export complete" = "Export dokončen";
+"Exported %@" = "Exportováno %@";
+"Faster" = "Rychleji";
+"Name this preset:" = "Pojmenujte tuto předvolbu:";
+"Play Speed" = "Rychlost přehrávání";
+"Play/Pause" = "Přehrát/Pozastavit";
+"Playback" = "Přehrávání";
+"Preset" = "Předvolba";
+"Preset name" = "Název předvolby";
+"Quick Export" = "Rychlý export";
+"Reverse" = "Obrátit";
+"Save Current as Preset" = "Uložit aktuální jako předvolbu";
+"Save Current as Preset…" = "Uložit aktuální jako předvolbu…";
+"Select a custom preset to delete first" = "Nejprve vyberte vlastní předvolbu k odstranění";
+"Slower" = "Pomaleji";
+"Full Quality (source res, High)" = "Plná kvalita (rozlišení zdroje, vysoká)";
+"GIF (small)" = "GIF (malý)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 střední)";

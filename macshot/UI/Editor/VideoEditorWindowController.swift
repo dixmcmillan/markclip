@@ -221,6 +221,7 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
             self?.transport.setPlaying(playing)
             self?.stage.isPlaying = playing
         }
+        playback.onRateChange = { [weak self] rate in self?.transport.setRate(rate) }
         playback.onError = { [weak self] message in self?.showStatus(message, isError: true) }
         observerID = editorDocument.observe { [weak self] change in self?.documentChanged(change) }
         topBar.titleLabel.stringValue = window.title
@@ -303,6 +304,36 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     @objc func undoAction() { stage.overlay.endTextEditing(commit: true); editorDocument.undo() }
     @objc func redoAction() { stage.overlay.endTextEditing(commit: true); editorDocument.redo() }
     @objc func togglePlayAction() { playback.togglePlay() }
+
+    // MARK: Playback menu (J/K/L shuttle, speed)
+
+    /// Playback ▸ J / K / L, for discoverability — same effect as the keys.
+    /// No real key equivalent is attached to these menu items: character
+    /// shortcuts in this editor route through `handleKeyDown`/
+    /// `KeyboardShortcutMatcher` (see CLAUDE.md), not raw `NSMenuItem`
+    /// key equivalents, so an unmodified "L"/"K"/"J" equivalent here would
+    /// fight with that and could eat the letter while typing elsewhere.
+    @objc func shuttlePlayAction() { playback.pressL(at: ProcessInfo.processInfo.systemUptime) }
+    @objc func shuttlePauseAction() { playback.pressK(at: ProcessInfo.processInfo.systemUptime) }
+    @objc func shuttleReverseAction() { playback.pressJ(at: ProcessInfo.processInfo.systemUptime) }
+
+    @objc func fasterAction() { playback.faster() }
+    @objc func slowerAction() { playback.slower() }
+
+    /// Playback ▸ Play Speed ▸ (rate). `sender.representedObject` is the
+    /// `Double` rate; `AppDelegate` builds this submenu with one item per
+    /// `VideoPlaybackShuttle.speedSteps` value.
+    @objc func setPlaySpeedAction(_ sender: NSMenuItem) {
+        guard let rate = sender.representedObject as? Double else { return }
+        playback.setDirectRate(rate)
+    }
+
+    /// Current forward speed for the Play Speed menu's checkmark. Paused or
+    /// reversing shows no checkmark (menu still opens fine).
+    var currentPlaySpeed: Double? {
+        let rate = playback.shuttle.rate
+        return rate > 0 ? rate : nil
+    }
 
     @objc func toggleMuteAction() {
         editorDocument.edit([.render]) { $0.muted.toggle() }
@@ -911,9 +942,16 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         if characters.contains("c") { addCut(at: playback.currentSourceTime); return true }
         if characters.contains("t") { addText(at: playback.currentSourceTime); return true }
         if characters.contains("a") { beginAnnotate(); return true }
-        if characters.contains("k") { playback.pause(); return true }
-        if characters.contains("l") { playback.play(); return true }
-        if characters.contains("j") { playback.step(frames: -Int(max(1, 1 / editorDocument.frameDuration.seconds))); return true }
+        // J/K/L shuttle (Premiere/Resolve convention — ROADMAP Phase 2):
+        // K pauses; L plays forward, repeated presses step 1x→2x→4x→8x; J
+        // plays reverse with the same ladder; K+L/K+J (K held) is a fixed
+        // slow-motion rate instead of the ladder. All pure logic lives in
+        // `VideoPlaybackShuttle`; `event.timestamp` (seconds since boot,
+        // same clock repeated key-down events use) drives the K-held
+        // detection — see that type's doc comment.
+        if characters.contains("k") { playback.pressK(at: event.timestamp); return true }
+        if characters.contains("l") { playback.pressL(at: event.timestamp); return true }
+        if characters.contains("j") { playback.pressJ(at: event.timestamp); return true }
         if characters.contains("=") || characters.contains("+") { timelineZoomIn(); return true }
         if characters.contains("-") { timelineZoomOut(); return true }
         return false
@@ -929,6 +967,7 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         if KeyboardShortcutMatcher.matches(event, character: "s", modifiers: [.command]) { saveVideo(); return true }
         if KeyboardShortcutMatcher.matches(event, character: "s", modifiers: [.command, .shift]) { saveVideoAs(); return true }
         if KeyboardShortcutMatcher.matches(event, character: "c", modifiers: [.command]) { copyAction(); return true }
+        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command, .shift]) { quickExportAction(); return true }
         if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command]) { showExportPanel(topBar.exportButton); return true }
         return false
     }

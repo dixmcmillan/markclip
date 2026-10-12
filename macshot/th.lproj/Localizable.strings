@@ -917,3 +917,52 @@
 "Ease In/Out" = "ไล่ระดับเข้า/ออก";
 "Hold" = "คงค้าง";
 "Delete Keyframe" = "ลบคีย์เฟรม";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (บนอุปกรณ์, ขั้นสูง)";
+"Apple (On-Device, Classic)" = "Apple (บนอุปกรณ์, คลาสสิก)";
+"OpenAI-Compatible API" = "API ที่รองรับ OpenAI";
+"The speech model couldn't be downloaded: %@" = "ไม่สามารถดาวน์โหลดโมเดลเสียงพูดได้: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "เพิ่มคีย์ API ในการตั้งค่า ▸ การถอดความ ก่อนใช้ผู้ให้บริการนี้";
+"The transcription API's base URL isn't valid." = "URL พื้นฐานของ API การถอดความไม่ถูกต้อง";
+"The transcription service returned an error (%d)." = "บริการถอดความส่งข้อผิดพลาดกลับมา (%d)";
+"The transcription service returned an unexpected response." = "บริการถอดความส่งการตอบกลับที่ไม่คาดคิดมา";
+"Transcription Provider" = "ผู้ให้บริการถอดความ";
+"Import SRT/VTT…" = "นำเข้า SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "ผู้ให้บริการนี้อัปโหลดเสียงของการบันทึกไปยัง API ที่กำหนดค่าไว้";
+"Choose an SRT or WebVTT file" = "เลือกไฟล์ SRT หรือ WebVTT";
+"The caption file could not be read." = "ไม่สามารถอ่านไฟล์คำบรรยายได้";
+"No captions were found in that file." = "ไม่พบคำบรรยายในไฟล์นั้น";
+"Replace existing captions?" = "แทนที่คำบรรยายที่มีอยู่หรือไม่";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "โปรเจ็กต์นี้มีคำบรรยายอยู่แล้ว คุณสามารถแทนที่ด้วยคำบรรยายที่นำเข้ามาหรือรวมทั้งสองชุดเข้าด้วยกัน";
+"Replace" = "แทนที่";
+"Merge" = "รวม";
+"Imported %d captions" = "นำเข้าคำบรรยาย %d รายการแล้ว";
+"Transcription" = "การถอดความ";
+"Captions Provider" = "ผู้ให้บริการคำบรรยาย";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "ผู้ให้บริการบนอุปกรณ์จะเก็บเสียงไว้บน Mac เครื่องนี้ คุณยังสามารถเปลี่ยนได้ต่อการบันทึกจากส่วนคำบรรยายในตัวแก้ไขวิดีโอ";
+"Base URL:" = "URL พื้นฐาน:";
+"Model:" = "โมเดล:";
+"API Key:" = "คีย์ API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "ใช้งานได้กับ OpenAI, Groq หรือเซิร์ฟเวอร์ whisper.cpp ในเครื่อง — สิ่งใดก็ตามที่เปิดใช้งานเอนด์พอยต์ /audio/transcriptions ที่รองรับ OpenAI คีย์ API จะถูกเก็บไว้ใน Keychain ไม่ใช่ในการตั้งค่าที่ส่งออก";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "ลบค่าที่ตั้งไว้";
+"Export complete" = "ส่งออกสำเร็จ";
+"Exported %@" = "ส่งออก %@ แล้ว";
+"Faster" = "เร็วขึ้น";
+"Name this preset:" = "ตั้งชื่อค่าที่ตั้งไว้นี้:";
+"Play Speed" = "ความเร็วในการเล่น";
+"Play/Pause" = "เล่น/หยุดชั่วคราว";
+"Playback" = "การเล่น";
+"Preset" = "ค่าที่ตั้งไว้";
+"Preset name" = "ชื่อค่าที่ตั้งไว้";
+"Quick Export" = "ส่งออกด่วน";
+"Reverse" = "ย้อนกลับ";
+"Save Current as Preset" = "บันทึกค่าปัจจุบันเป็นค่าที่ตั้งไว้";
+"Save Current as Preset…" = "บันทึกค่าปัจจุบันเป็นค่าที่ตั้งไว้…";
+"Select a custom preset to delete first" = "โปรดเลือกค่าที่ตั้งไว้แบบกำหนดเองที่จะลบก่อน";
+"Slower" = "ช้าลง";
+"Full Quality (source res, High)" = "คุณภาพเต็ม (ความละเอียดต้นฉบับ, สูง)";
+"GIF (small)" = "GIF (เล็ก)";
+"Web (1080p H.264 Medium)" = "เว็บ (1080p H.264 ปานกลาง)";

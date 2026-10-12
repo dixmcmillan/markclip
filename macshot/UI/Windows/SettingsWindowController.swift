@@ -35,6 +35,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         #if !OFFLINE
         tabs.append(TabDef(id: "uploads", label: "Uploads", symbolName: "icloud.and.arrow.up", legacyImageName: NSImage.preferencesGeneralName))
         #endif
+        tabs.append(TabDef(id: "transcription", label: "Transcription", symbolName: "captions.bubble", legacyImageName: NSImage.preferencesGeneralName))
         tabs.append(TabDef(id: "about", label: "About", symbolName: "info.circle", legacyImageName: NSImage.preferencesGeneralName))
         return tabs
     }
@@ -131,6 +132,13 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
     private var s3TestBtn: NSButton!
     private var s3StatusLabel: NSTextField!
     #endif
+    // Transcription tab controls
+    private var transcriptionProviderPopup: NSPopUpButton!
+    #if !OFFLINE
+    private var transcriptionBaseURLField: NSTextField!
+    private var transcriptionModelField: NSTextField!
+    private var transcriptionAPIKeyField: NSSecureTextField!
+    #endif
     // Recording tab controls
     private var recordingFPSPopup: NSPopUpButton!
     private var recordingOnStopPopup: NSPopUpButton!
@@ -208,6 +216,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         #if !OFFLINE
         tabContentViews["uploads"] = makeUploadsTabView()
         #endif
+        tabContentViews["transcription"] = makeTranscriptionTabView()
         tabContentViews["about"]     = makeAboutTabView()
 
         // Container that swaps content views
@@ -2471,6 +2480,117 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         ])
 
         return row
+    }
+    #endif
+
+    // MARK: - Transcription Tab
+
+    private func makeTranscriptionTabView() -> NSView {
+        let scroll = NSScrollView()
+        scroll.hasVerticalScroller = true
+        scroll.autohidesScrollers = true
+        scroll.borderType = .noBorder
+        scroll.drawsBackground = false
+        scroll.autoresizingMask = [.width, .height]
+
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 6
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.edgeInsets = NSEdgeInsets(top: 0, left: 20, bottom: 16, right: 20)
+
+        // ── Provider ──
+        stack.addArrangedSubview(sectionHeader(L("Captions Provider")))
+        stack.setCustomSpacing(10, after: stack.arrangedSubviews.last!)
+
+        let kinds = CaptionTranscriptionProviderKind.offered
+        transcriptionProviderPopup = NSPopUpButton()
+        transcriptionProviderPopup.addItems(withTitles: kinds.map(\.displayName))
+        transcriptionProviderPopup.selectItem(at: kinds.firstIndex(of: CaptionTranscriptionProviderKind.current()) ?? 0)
+        transcriptionProviderPopup.target = self
+        transcriptionProviderPopup.action = #selector(transcriptionProviderChanged(_:))
+        stack.addArrangedSubview(labeledRow(L("Provider:"), controls: [transcriptionProviderPopup]))
+        stack.setCustomSpacing(4, after: stack.arrangedSubviews.last!)
+
+        let providerNote = NSTextField(wrappingLabelWithString:
+            L("On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor."))
+        providerNote.font = NSFont.systemFont(ofSize: 10)
+        providerNote.textColor = .secondaryLabelColor
+        stack.addArrangedSubview(indented(providerNote))
+        stack.setCustomSpacing(16, after: stack.arrangedSubviews.last!)
+
+        #if !OFFLINE
+        // ── OpenAI-Compatible API ──
+        stack.addArrangedSubview(sectionHeader(L("OpenAI-Compatible API")))
+        stack.setCustomSpacing(10, after: stack.arrangedSubviews.last!)
+
+        transcriptionBaseURLField = NSTextField()
+        transcriptionBaseURLField.placeholderString = OpenAISettings.defaultBaseURLString
+        transcriptionBaseURLField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        transcriptionBaseURLField.stringValue = UserDefaults.standard.string(forKey: OpenAISettings.baseURLDefaultsKey) ?? ""
+        transcriptionBaseURLField.target = self
+        transcriptionBaseURLField.action = #selector(transcriptionBaseURLChanged(_:))
+        stack.addArrangedSubview(labeledRow(L("Base URL:"), controls: [transcriptionBaseURLField]))
+
+        transcriptionModelField = NSTextField()
+        transcriptionModelField.placeholderString = OpenAISettings.defaultModel
+        transcriptionModelField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        transcriptionModelField.stringValue = UserDefaults.standard.string(forKey: OpenAISettings.modelDefaultsKey) ?? ""
+        transcriptionModelField.target = self
+        transcriptionModelField.action = #selector(transcriptionModelChanged(_:))
+        stack.addArrangedSubview(labeledRow(L("Model:"), controls: [transcriptionModelField]))
+
+        transcriptionAPIKeyField = NSSecureTextField()
+        transcriptionAPIKeyField.placeholderString = "sk-…"
+        transcriptionAPIKeyField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
+        transcriptionAPIKeyField.stringValue = TranscriptionSecrets.openAIAPIKey ?? ""
+        transcriptionAPIKeyField.target = self
+        transcriptionAPIKeyField.action = #selector(transcriptionAPIKeyChanged(_:))
+        stack.addArrangedSubview(labeledRow(L("API Key:"), controls: [transcriptionAPIKeyField]))
+        stack.setCustomSpacing(4, after: stack.arrangedSubviews.last!)
+
+        let openAINote = NSTextField(wrappingLabelWithString:
+            L("Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings."))
+        openAINote.font = NSFont.systemFont(ofSize: 10)
+        openAINote.textColor = .secondaryLabelColor
+        stack.addArrangedSubview(indented(openAINote))
+        #endif
+
+        scroll.documentView = stack
+        let clipView = scroll.contentView
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: clipView.topAnchor),
+            stack.leadingAnchor.constraint(equalTo: clipView.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: clipView.trailingAnchor),
+            stack.heightAnchor.constraint(greaterThanOrEqualTo: clipView.heightAnchor),
+        ])
+        return scroll
+    }
+
+    @objc private func transcriptionProviderChanged(_ sender: NSPopUpButton) {
+        let kinds = CaptionTranscriptionProviderKind.offered
+        let index = sender.indexOfSelectedItem
+        guard kinds.indices.contains(index) else { return }
+        UserDefaults.standard.set(kinds[index].rawValue, forKey: CaptionTranscriptionProviderKind.defaultsKey)
+    }
+
+    #if !OFFLINE
+    @objc private func transcriptionBaseURLChanged(_ sender: NSTextField) {
+        let value = sender.stringValue.trimmingCharacters(in: .whitespaces)
+        if value.isEmpty { UserDefaults.standard.removeObject(forKey: OpenAISettings.baseURLDefaultsKey) }
+        else { UserDefaults.standard.set(value, forKey: OpenAISettings.baseURLDefaultsKey) }
+    }
+
+    @objc private func transcriptionModelChanged(_ sender: NSTextField) {
+        let value = sender.stringValue.trimmingCharacters(in: .whitespaces)
+        if value.isEmpty { UserDefaults.standard.removeObject(forKey: OpenAISettings.modelDefaultsKey) }
+        else { UserDefaults.standard.set(value, forKey: OpenAISettings.modelDefaultsKey) }
+    }
+
+    @objc private func transcriptionAPIKeyChanged(_ sender: NSSecureTextField) {
+        let value = sender.stringValue.trimmingCharacters(in: .whitespaces)
+        TranscriptionSecrets.openAIAPIKey = value.isEmpty ? nil : value
     }
     #endif
 

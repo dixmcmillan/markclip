@@ -919,3 +919,52 @@
 "Ease In/Out" = "이즈 인/아웃";
 "Hold" = "홀드";
 "Delete Keyframe" = "키프레임 삭제";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (기기 내, 고급)";
+"Apple (On-Device, Classic)" = "Apple (기기 내, 클래식)";
+"OpenAI-Compatible API" = "OpenAI 호환 API";
+"The speech model couldn't be downloaded: %@" = "음성 모델을 다운로드할 수 없습니다: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "이 제공자를 사용하기 전에 설정 ▸ 받아쓰기에서 API 키를 추가하세요.";
+"The transcription API's base URL isn't valid." = "받아쓰기 API의 기본 URL이 올바르지 않습니다.";
+"The transcription service returned an error (%d)." = "받아쓰기 서비스에서 오류를 반환했습니다 (%d).";
+"The transcription service returned an unexpected response." = "받아쓰기 서비스에서 예상치 못한 응답을 반환했습니다.";
+"Transcription Provider" = "받아쓰기 제공자";
+"Import SRT/VTT…" = "SRT/VTT 가져오기…";
+"This provider uploads the recording's audio to the configured API." = "이 제공자는 녹화의 오디오를 구성된 API로 업로드합니다.";
+"Choose an SRT or WebVTT file" = "SRT 또는 WebVTT 파일 선택";
+"The caption file could not be read." = "자막 파일을 읽을 수 없습니다.";
+"No captions were found in that file." = "해당 파일에서 자막을 찾을 수 없습니다.";
+"Replace existing captions?" = "기존 자막을 바꾸시겠습니까?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "이 프로젝트에는 이미 자막이 있습니다. 가져온 자막으로 바꾸거나 두 세트를 병합할 수 있습니다.";
+"Replace" = "바꾸기";
+"Merge" = "병합";
+"Imported %d captions" = "자막 %d개를 가져왔습니다";
+"Transcription" = "받아쓰기";
+"Captions Provider" = "자막 제공자";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "기기 내 제공자는 오디오를 이 Mac에 보관합니다. 이 설정은 비디오 편집기의 자막 섹션에서 녹화별로도 변경할 수 있습니다.";
+"Base URL:" = "기본 URL:";
+"Model:" = "모델:";
+"API Key:" = "API 키:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "OpenAI, Groq 또는 로컬 whisper.cpp 서버 등 OpenAI 호환 /audio/transcriptions 엔드포인트를 제공하는 모든 서비스와 함께 작동합니다. API 키는 Keychain에 저장되며 내보낸 설정에는 포함되지 않습니다.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "프리셋 삭제";
+"Export complete" = "내보내기 완료";
+"Exported %@" = "%@ 내보내기 완료";
+"Faster" = "빠르게";
+"Name this preset:" = "이 프리셋의 이름을 지정하세요:";
+"Play Speed" = "재생 속도";
+"Play/Pause" = "재생/일시정지";
+"Playback" = "재생";
+"Preset" = "프리셋";
+"Preset name" = "프리셋 이름";
+"Quick Export" = "빠른 내보내기";
+"Reverse" = "역재생";
+"Save Current as Preset" = "현재 설정을 프리셋으로 저장";
+"Save Current as Preset…" = "현재 설정을 프리셋으로 저장…";
+"Select a custom preset to delete first" = "먼저 삭제할 사용자 지정 프리셋을 선택하세요";
+"Slower" = "느리게";
+"Full Quality (source res, High)" = "전체 화질 (원본 해상도, 높음)";
+"GIF (small)" = "GIF (작음)";
+"Web (1080p H.264 Medium)" = "웹 (1080p H.264 보통)";

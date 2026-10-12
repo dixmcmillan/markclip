@@ -215,6 +215,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     /// Transient toast for failures that would otherwise be invisible — a save
     /// that couldn't be written, a recording that produced no file.
     private var errorToastController: UploadToastController?
+    /// Transient success toast for Quick Export (⇧⌘E), which has no dialog
+    /// of its own to show a "Saved to…" status line in.
+    private var exportToastController: UploadToastController?
+    private var playbackSpeedMenu: NSMenu?
     private var recordingEngine: RecordingEngine?
     private var terminatingAfterRecording = false
     private let terminationCoordinator = ApplicationTerminationCoordinator()
@@ -746,6 +750,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         exportItem.target = self
         fileMenu.addItem(exportItem)
 
+        let quickExportItem = NSMenuItem(title: L("Quick Export"), action: #selector(quickExportFrontmostVideo), keyEquivalent: "e")
+        quickExportItem.keyEquivalentModifierMask = [.command, .shift]
+        quickExportItem.target = self
+        fileMenu.addItem(quickExportItem)
+
         fileMenuItem.submenu = fileMenu
 
         let editMenuItem = NSMenuItem()
@@ -767,7 +776,81 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         editMenu.addItem(withTitle: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
         editMenuItem.submenu = editMenu
 
+        let playbackMenuItem = NSMenuItem()
+        mainMenu.addItem(playbackMenuItem)
+        playbackMenuItem.submenu = buildPlaybackMenu()
+
         NSApp.mainMenu = mainMenu
+    }
+
+    /// Playback ▸ Play/Pause, Play Speed, Faster/Slower, J/K/L — routes to
+    /// the frontmost video editor window like File > Export… does. A no-op
+    /// with no editor open (items still show; actions just do nothing).
+    private func buildPlaybackMenu() -> NSMenu {
+        let menu = NSMenu(title: L("Playback"))
+
+        let playPauseItem = NSMenuItem(title: L("Play/Pause"), action: #selector(playbackTogglePlay), keyEquivalent: "")
+        playPauseItem.target = self
+        menu.addItem(playPauseItem)
+        menu.addItem(.separator())
+
+        let speedMenu = NSMenu(title: L("Play Speed"))
+        speedMenu.delegate = self
+        playbackSpeedMenu = speedMenu
+        for rate in VideoPlaybackShuttle.speedSteps {
+            let item = NSMenuItem(title: Self.speedTitle(rate), action: #selector(playbackSetSpeed(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = rate
+            speedMenu.addItem(item)
+        }
+        let speedItem = NSMenuItem(title: L("Play Speed"), action: nil, keyEquivalent: "")
+        speedItem.submenu = speedMenu
+        menu.addItem(speedItem)
+
+        let fasterItem = NSMenuItem(title: L("Faster"), action: #selector(playbackFaster), keyEquivalent: "]")
+        fasterItem.keyEquivalentModifierMask = [.command]
+        fasterItem.target = self
+        menu.addItem(fasterItem)
+        let slowerItem = NSMenuItem(title: L("Slower"), action: #selector(playbackSlower), keyEquivalent: "[")
+        slowerItem.keyEquivalentModifierMask = [.command]
+        slowerItem.target = self
+        menu.addItem(slowerItem)
+        menu.addItem(.separator())
+
+        // No real key equivalents here — J/K/L route through the editor's own
+        // character-based key handling (see CLAUDE.md keyboard shortcut
+        // rules); these exist purely for discoverability.
+        let playItem = NSMenuItem(title: L("Play") + " (L)", action: #selector(playbackPressL), keyEquivalent: "")
+        playItem.target = self
+        menu.addItem(playItem)
+        let pauseItem = NSMenuItem(title: L("Pause") + " (K)", action: #selector(playbackPressK), keyEquivalent: "")
+        pauseItem.target = self
+        menu.addItem(pauseItem)
+        let reverseItem = NSMenuItem(title: L("Reverse") + " (J)", action: #selector(playbackPressJ), keyEquivalent: "")
+        reverseItem.target = self
+        menu.addItem(reverseItem)
+        return menu
+    }
+
+    private static func speedTitle(_ rate: Double) -> String {
+        rate == rate.rounded() ? "\(Int(rate))×" : String(format: "%.2g×", rate)
+    }
+
+    @objc private func playbackTogglePlay() { VideoEditorWindowController.frontmostController?.togglePlayAction() }
+    @objc private func playbackFaster() { VideoEditorWindowController.frontmostController?.fasterAction() }
+    @objc private func playbackSlower() { VideoEditorWindowController.frontmostController?.slowerAction() }
+    @objc private func playbackPressL() { VideoEditorWindowController.frontmostController?.shuttlePlayAction() }
+    @objc private func playbackPressK() { VideoEditorWindowController.frontmostController?.shuttlePauseAction() }
+    @objc private func playbackPressJ() { VideoEditorWindowController.frontmostController?.shuttleReverseAction() }
+
+    @objc private func playbackSetSpeed(_ sender: NSMenuItem) {
+        VideoEditorWindowController.frontmostController?.setPlaySpeedAction(sender)
+    }
+
+    /// File > Quick Export (⇧⌘E) routes to the frontmost video editor
+    /// window, same pattern as File > Export….
+    @objc private func quickExportFrontmostVideo() {
+        VideoEditorWindowController.frontmostController?.quickExportAction()
     }
 
     /// Custom About panel (Markclip Phase 1 — identity, ROADMAP.md): adds a
@@ -2255,6 +2338,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         toast.showError(message: message, asUploadFailure: false)
     }
 
+    /// Quick Export (⇧⌘E) has no dialog of its own — this is how it reports
+    /// success, with a "Show in Finder" action.
+    func showExportCompletedToast(_ url: URL) {
+        exportToastController?.dismiss()
+        let toast = UploadToastController()
+        exportToastController = toast
+        toast.onDismiss = { [weak self] in self?.exportToastController = nil }
+        toast.show(status: String(format: L("Exported %@"), url.lastPathComponent))
+        toast.showFileSaved(url: url)
+    }
+
     func showPin(image: NSImage) {
         let pin = PinWindowController(image: image)
         pin.delegate = self
@@ -3566,6 +3660,14 @@ extension AppDelegate: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
         if menu === openRecentMenu {
             rebuildOpenRecentMenu(menu)
+            return
+        }
+        if menu === playbackSpeedMenu {
+            let current = VideoEditorWindowController.frontmostController?.currentPlaySpeed
+            for item in menu.items {
+                guard let rate = item.representedObject as? Double else { continue }
+                item.state = (current != nil && abs(rate - current!) < 0.001) ? .on : .off
+            }
             return
         }
         // Only rebuild the history submenu, not the main status bar menu

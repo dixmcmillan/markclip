@@ -919,3 +919,52 @@
 "Ease In/Out" = "Ομαλή είσοδος/έξοδος";
 "Hold" = "Διατήρηση";
 "Delete Keyframe" = "Διαγραφή βασικού καρέ";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (στη συσκευή, βελτιωμένο)";
+"Apple (On-Device, Classic)" = "Apple (στη συσκευή, κλασικό)";
+"OpenAI-Compatible API" = "API συμβατό με OpenAI";
+"The speech model couldn't be downloaded: %@" = "Δεν ήταν δυνατή η λήψη του μοντέλου ομιλίας: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Προσθέστε ένα κλειδί API στις Ρυθμίσεις ▸ Απομαγνητοφώνηση πριν χρησιμοποιήσετε αυτόν τον πάροχο.";
+"The transcription API's base URL isn't valid." = "Το βασικό URL του API απομαγνητοφώνησης δεν είναι έγκυρο.";
+"The transcription service returned an error (%d)." = "Η υπηρεσία απομαγνητοφώνησης επέστρεψε σφάλμα (%d).";
+"The transcription service returned an unexpected response." = "Η υπηρεσία απομαγνητοφώνησης επέστρεψε μη αναμενόμενη απόκριση.";
+"Transcription Provider" = "Πάροχος απομαγνητοφώνησης";
+"Import SRT/VTT…" = "Εισαγωγή SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Αυτός ο πάροχος μεταφορτώνει τον ήχο της εγγραφής στο διαμορφωμένο API.";
+"Choose an SRT or WebVTT file" = "Επιλέξτε ένα αρχείο SRT ή WebVTT";
+"The caption file could not be read." = "Δεν ήταν δυνατή η ανάγνωση του αρχείου υποτίτλων.";
+"No captions were found in that file." = "Δεν βρέθηκαν υπότιτλοι σε αυτό το αρχείο.";
+"Replace existing captions?" = "Αντικατάσταση υπαρχόντων υποτίτλων;";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Αυτό το έργο έχει ήδη υπότιτλους. Μπορείτε να τους αντικαταστήσετε με τους εισαγόμενους ή να συγχωνεύσετε και τα δύο σύνολα.";
+"Replace" = "Αντικατάσταση";
+"Merge" = "Συγχώνευση";
+"Imported %d captions" = "Έγινε εισαγωγή %d υποτίτλων";
+"Transcription" = "Απομαγνητοφώνηση";
+"Captions Provider" = "Πάροχος υποτίτλων";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Οι πάροχοι στη συσκευή διατηρούν τον ήχο σε αυτό το Mac. Αυτό μπορεί επίσης να αλλάξει ανά εγγραφή από την ενότητα υποτίτλων του επεξεργαστή βίντεο.";
+"Base URL:" = "Βασικό URL:";
+"Model:" = "Μοντέλο:";
+"API Key:" = "Κλειδί API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Λειτουργεί με OpenAI, Groq ή έναν τοπικό διακομιστή whisper.cpp — οτιδήποτε εκθέτει ένα συμβατό με OpenAI τελικό σημείο /audio/transcriptions. Το κλειδί API αποθηκεύεται στο Keychain, ποτέ στις εξαγόμενες ρυθμίσεις.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Διαγραφή προεπιλογής";
+"Export complete" = "Η εξαγωγή ολοκληρώθηκε";
+"Exported %@" = "Έγινε εξαγωγή %@";
+"Faster" = "Πιο γρήγορα";
+"Name this preset:" = "Ονομάστε αυτήν την προεπιλογή:";
+"Play Speed" = "Ταχύτητα αναπαραγωγής";
+"Play/Pause" = "Αναπαραγωγή/Παύση";
+"Playback" = "Αναπαραγωγή";
+"Preset" = "Προεπιλογή";
+"Preset name" = "Όνομα προεπιλογής";
+"Quick Export" = "Γρήγορη εξαγωγή";
+"Reverse" = "Αντιστροφή";
+"Save Current as Preset" = "Αποθήκευση τρέχοντος ως προεπιλογή";
+"Save Current as Preset…" = "Αποθήκευση τρέχοντος ως προεπιλογή…";
+"Select a custom preset to delete first" = "Επιλέξτε πρώτα μια προσαρμοσμένη προεπιλογή για διαγραφή";
+"Slower" = "Πιο αργά";
+"Full Quality (source res, High)" = "Πλήρης ποιότητα (ανάλυση πηγής, υψηλή)";
+"GIF (small)" = "GIF (μικρό)";
+"Web (1080p H.264 Medium)" = "Ιστός (1080p H.264 μεσαία)";

@@ -919,3 +919,52 @@
 "Ease In/Out" = "Yumuşak Giriş/Çıkış";
 "Hold" = "Tut";
 "Delete Keyframe" = "Anahtar Kareyi Kaldır";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (Cihaz Üzerinde, Gelişmiş)";
+"Apple (On-Device, Classic)" = "Apple (Cihaz Üzerinde, Klasik)";
+"OpenAI-Compatible API" = "OpenAI Uyumlu API";
+"The speech model couldn't be downloaded: %@" = "Konuşma modeli indirilemedi: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Bu sağlayıcıyı kullanmadan önce Ayarlar ▸ Yazıya Dökme bölümüne bir API anahtarı ekleyin.";
+"The transcription API's base URL isn't valid." = "Yazıya dökme API'sinin temel URL'si geçerli değil.";
+"The transcription service returned an error (%d)." = "Yazıya dökme hizmeti bir hata döndürdü (%d).";
+"The transcription service returned an unexpected response." = "Yazıya dökme hizmeti beklenmeyen bir yanıt döndürdü.";
+"Transcription Provider" = "Yazıya Dökme Sağlayıcısı";
+"Import SRT/VTT…" = "SRT/VTT İçe Aktar…";
+"This provider uploads the recording's audio to the configured API." = "Bu sağlayıcı, kaydın sesini yapılandırılmış API'ye yükler.";
+"Choose an SRT or WebVTT file" = "Bir SRT veya WebVTT dosyası seçin";
+"The caption file could not be read." = "Altyazı dosyası okunamadı.";
+"No captions were found in that file." = "O dosyada altyazı bulunamadı.";
+"Replace existing captions?" = "Mevcut altyazılar değiştirilsin mi?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Bu projede zaten altyazılar var. Bunları içe aktarılanlarla değiştirebilir veya her iki kümeyi birleştirebilirsiniz.";
+"Replace" = "Değiştir";
+"Merge" = "Birleştir";
+"Imported %d captions" = "%d altyazı içe aktarıldı";
+"Transcription" = "Yazıya Dökme";
+"Captions Provider" = "Altyazı Sağlayıcısı";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Cihaz üzerindeki sağlayıcılar sesi bu Mac'te tutar. Bu ayrıca video düzenleyicinin altyazı bölümünden kayıt başına değiştirilebilir.";
+"Base URL:" = "Temel URL:";
+"Model:" = "Model:";
+"API Key:" = "API Anahtarı:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "OpenAI, Groq veya yerel bir whisper.cpp sunucusuyla çalışır — OpenAI uyumlu bir /audio/transcriptions uç noktası sunan her şeyle. API anahtarı Keychain'de saklanır, dışa aktarılan ayarlarda asla saklanmaz.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Hazır Ayarı Sil";
+"Export complete" = "Dışa aktarma tamamlandı";
+"Exported %@" = "%@ dışa aktarıldı";
+"Faster" = "Daha Hızlı";
+"Name this preset:" = "Bu hazır ayara ad verin:";
+"Play Speed" = "Oynatma Hızı";
+"Play/Pause" = "Oynat/Duraklat";
+"Playback" = "Oynatma";
+"Preset" = "Hazır Ayar";
+"Preset name" = "Hazır ayar adı";
+"Quick Export" = "Hızlı Dışa Aktarma";
+"Reverse" = "Ters Çevir";
+"Save Current as Preset" = "Geçerli Ayarı Hazır Ayar Olarak Kaydet";
+"Save Current as Preset…" = "Geçerli Ayarı Hazır Ayar Olarak Kaydet…";
+"Select a custom preset to delete first" = "Önce silinecek özel bir hazır ayar seçin";
+"Slower" = "Daha Yavaş";
+"Full Quality (source res, High)" = "Tam Kalite (kaynak çözünürlük, Yüksek)";
+"GIF (small)" = "GIF (küçük)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Orta)";

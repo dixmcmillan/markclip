@@ -917,3 +917,52 @@
 "Ease In/Out" = "Mượt Vào/Ra";
 "Hold" = "Giữ";
 "Delete Keyframe" = "Xóa Khung Hình Chính";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (Trên thiết bị, Nâng cao)";
+"Apple (On-Device, Classic)" = "Apple (Trên thiết bị, Cổ điển)";
+"OpenAI-Compatible API" = "API tương thích OpenAI";
+"The speech model couldn't be downloaded: %@" = "Không thể tải mô hình giọng nói: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Thêm khóa API trong Cài đặt ▸ Chép lời trước khi dùng nhà cung cấp này.";
+"The transcription API's base URL isn't valid." = "URL cơ sở của API chép lời không hợp lệ.";
+"The transcription service returned an error (%d)." = "Dịch vụ chép lời đã trả về lỗi (%d).";
+"The transcription service returned an unexpected response." = "Dịch vụ chép lời đã trả về phản hồi không mong muốn.";
+"Transcription Provider" = "Nhà cung cấp chép lời";
+"Import SRT/VTT…" = "Nhập SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Nhà cung cấp này tải âm thanh của bản quay lên API đã cấu hình.";
+"Choose an SRT or WebVTT file" = "Chọn tệp SRT hoặc WebVTT";
+"The caption file could not be read." = "Không thể đọc tệp phụ đề.";
+"No captions were found in that file." = "Không tìm thấy phụ đề nào trong tệp đó.";
+"Replace existing captions?" = "Thay thế phụ đề hiện có?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Dự án này đã có phụ đề. Bạn có thể thay thế chúng bằng phụ đề vừa nhập hoặc gộp cả hai bộ.";
+"Replace" = "Thay thế";
+"Merge" = "Gộp";
+"Imported %d captions" = "Đã nhập %d phụ đề";
+"Transcription" = "Chép lời";
+"Captions Provider" = "Nhà cung cấp phụ đề";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Các nhà cung cấp trên thiết bị giữ âm thanh trên máy Mac này. Bạn cũng có thể đổi theo từng bản quay từ phần phụ đề của trình chỉnh sửa video.";
+"Base URL:" = "URL cơ sở:";
+"Model:" = "Mô hình:";
+"API Key:" = "Khóa API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Hoạt động với OpenAI, Groq hoặc máy chủ whisper.cpp cục bộ — bất kỳ thứ gì cung cấp điểm cuối /audio/transcriptions tương thích OpenAI. Khóa API được lưu trong Keychain, không bao giờ trong cài đặt đã xuất.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Xóa cài sẵn";
+"Export complete" = "Xuất hoàn tất";
+"Exported %@" = "Đã xuất %@";
+"Faster" = "Nhanh hơn";
+"Name this preset:" = "Đặt tên cho cài sẵn này:";
+"Play Speed" = "Tốc độ phát";
+"Play/Pause" = "Phát/Tạm dừng";
+"Playback" = "Phát lại";
+"Preset" = "Cài sẵn";
+"Preset name" = "Tên cài sẵn";
+"Quick Export" = "Xuất nhanh";
+"Reverse" = "Đảo ngược";
+"Save Current as Preset" = "Lưu hiện tại thành cài sẵn";
+"Save Current as Preset…" = "Lưu hiện tại thành cài sẵn…";
+"Select a custom preset to delete first" = "Hãy chọn một cài sẵn tùy chỉnh để xóa trước";
+"Slower" = "Chậm hơn";
+"Full Quality (source res, High)" = "Chất lượng đầy đủ (độ phân giải gốc, Cao)";
+"GIF (small)" = "GIF (nhỏ)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Trung bình)";

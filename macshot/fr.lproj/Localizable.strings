@@ -917,3 +917,52 @@
 "Ease In/Out" = "Entrée/Sortie";
 "Hold" = "Maintien";
 "Delete Keyframe" = "Supprimer l'image clé";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (sur l'appareil, avancée)";
+"Apple (On-Device, Classic)" = "Apple (sur l'appareil, classique)";
+"OpenAI-Compatible API" = "API compatible OpenAI";
+"The speech model couldn't be downloaded: %@" = "Le modèle vocal n'a pas pu être téléchargé : %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Ajoutez une clé API dans Réglages ▸ Transcription avant d'utiliser ce fournisseur.";
+"The transcription API's base URL isn't valid." = "L'URL de base de l'API de transcription n'est pas valide.";
+"The transcription service returned an error (%d)." = "Le service de transcription a renvoyé une erreur (%d).";
+"The transcription service returned an unexpected response." = "Le service de transcription a renvoyé une réponse inattendue.";
+"Transcription Provider" = "Fournisseur de transcription";
+"Import SRT/VTT…" = "Importer SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Ce fournisseur téléverse l'audio de l'enregistrement vers l'API configurée.";
+"Choose an SRT or WebVTT file" = "Choisissez un fichier SRT ou WebVTT";
+"The caption file could not be read." = "Le fichier de sous-titres n'a pas pu être lu.";
+"No captions were found in that file." = "Aucun sous-titre n'a été trouvé dans ce fichier.";
+"Replace existing captions?" = "Remplacer les sous-titres existants ?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Ce projet a déjà des sous-titres. Vous pouvez les remplacer par ceux importés ou fusionner les deux ensembles.";
+"Replace" = "Remplacer";
+"Merge" = "Fusionner";
+"Imported %d captions" = "%d sous-titres importés";
+"Transcription" = "Transcription";
+"Captions Provider" = "Fournisseur de sous-titres";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Les fournisseurs sur l'appareil conservent l'audio sur ce Mac. Cela peut aussi être modifié par enregistrement depuis la section des sous-titres de l'éditeur vidéo.";
+"Base URL:" = "URL de base :";
+"Model:" = "Modèle :";
+"API Key:" = "Clé API :";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Fonctionne avec OpenAI, Groq ou un serveur whisper.cpp local — tout ce qui expose un point d'accès /audio/transcriptions compatible OpenAI. La clé API est stockée dans le Keychain, jamais dans les réglages exportés.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Supprimer le préréglage";
+"Export complete" = "Exportation terminée";
+"Exported %@" = "%@ exporté";
+"Faster" = "Plus rapide";
+"Name this preset:" = "Nommez ce préréglage :";
+"Play Speed" = "Vitesse de lecture";
+"Play/Pause" = "Lecture/Pause";
+"Playback" = "Lecture";
+"Preset" = "Préréglage";
+"Preset name" = "Nom du préréglage";
+"Quick Export" = "Export rapide";
+"Reverse" = "Inverser";
+"Save Current as Preset" = "Enregistrer les réglages actuels comme préréglage";
+"Save Current as Preset…" = "Enregistrer les réglages actuels comme préréglage…";
+"Select a custom preset to delete first" = "Sélectionnez d'abord un préréglage personnalisé à supprimer";
+"Slower" = "Plus lent";
+"Full Quality (source res, High)" = "Qualité complète (résolution d'origine, Élevé)";
+"GIF (small)" = "GIF (petit)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Moyen)";

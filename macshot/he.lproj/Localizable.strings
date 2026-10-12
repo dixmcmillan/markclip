@@ -919,3 +919,52 @@
 "Ease In/Out" = "החלקת כניסה/יציאה";
 "Hold" = "החזקה";
 "Delete Keyframe" = "מחק פריים מפתח";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (על המכשיר, משופר)";
+"Apple (On-Device, Classic)" = "Apple (על המכשיר, קלאסי)";
+"OpenAI-Compatible API" = "API תואם OpenAI";
+"The speech model couldn't be downloaded: %@" = "לא ניתן היה להוריד את מודל הדיבור: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "הוסף מפתח API בהגדרות ▸ תמלול לפני השימוש בספק זה.";
+"The transcription API's base URL isn't valid." = "כתובת ה-URL הבסיסית של API התמלול אינה תקינה.";
+"The transcription service returned an error (%d)." = "שירות התמלול החזיר שגיאה (%d).";
+"The transcription service returned an unexpected response." = "שירות התמלול החזיר תגובה בלתי צפויה.";
+"Transcription Provider" = "ספק תמלול";
+"Import SRT/VTT…" = "ייבוא SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "ספק זה מעלה את השמע של ההקלטה אל ה-API המוגדר.";
+"Choose an SRT or WebVTT file" = "בחר קובץ SRT או WebVTT";
+"The caption file could not be read." = "לא ניתן היה לקרוא את קובץ הכתוביות.";
+"No captions were found in that file." = "לא נמצאו כתוביות בקובץ הזה.";
+"Replace existing captions?" = "להחליף את הכתוביות הקיימות?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "לפרויקט הזה כבר יש כתוביות. ניתן להחליף אותן באלה שיובאו או למזג בין שתי הקבוצות.";
+"Replace" = "החלף";
+"Merge" = "מזג";
+"Imported %d captions" = "יובאו %d כתוביות";
+"Transcription" = "תמלול";
+"Captions Provider" = "ספק כתוביות";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "ספקים על המכשיר שומרים את השמע על ה-Mac הזה. ניתן לשנות זאת גם לכל הקלטה בנפרד מתוך אזור הכתוביות בעורך הווידאו.";
+"Base URL:" = "כתובת URL בסיסית:";
+"Model:" = "מודל:";
+"API Key:" = "מפתח API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "עובד עם OpenAI, Groq או שרת whisper.cpp מקומי — כל דבר שחושף נקודת קצה /audio/transcriptions תואמת OpenAI. מפתח ה-API נשמר ב-Keychain, לעולם לא בהגדרות שיוצאו.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "מחק ערכה";
+"Export complete" = "הייצוא הושלם";
+"Exported %@" = "יוצא: %@";
+"Faster" = "מהיר יותר";
+"Name this preset:" = "תן שם לערכה הזו:";
+"Play Speed" = "מהירות הפעלה";
+"Play/Pause" = "הפעלה/השהיה";
+"Playback" = "הפעלה";
+"Preset" = "ערכה";
+"Preset name" = "שם הערכה";
+"Quick Export" = "ייצוא מהיר";
+"Reverse" = "הפוך";
+"Save Current as Preset" = "שמור את ההגדרות הנוכחיות כערכה";
+"Save Current as Preset…" = "שמור את ההגדרות הנוכחיות כערכה…";
+"Select a custom preset to delete first" = "בחר קודם ערכה מותאמת אישית למחיקה";
+"Slower" = "איטי יותר";
+"Full Quality (source res, High)" = "איכות מלאה (רזולוציית המקור, גבוה)";
+"GIF (small)" = "GIF (קטן)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 בינוני)";

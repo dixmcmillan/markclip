@@ -919,3 +919,52 @@
 "Ease In/Out" = "உள்/வெளி மென்மை";
 "Hold" = "பிடி";
 "Delete Keyframe" = "கீஃப்ரேம் அகற்று";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (சாதனத்தில், மேம்படுத்தப்பட்டது)";
+"Apple (On-Device, Classic)" = "Apple (சாதனத்தில், கிளாசிக்)";
+"OpenAI-Compatible API" = "OpenAI-உடன் இணக்கமான API";
+"The speech model couldn't be downloaded: %@" = "பேச்சு மாதிரியைப் பதிவிறக்க முடியவில்லை: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "இந்த வழங்குநரைப் பயன்படுத்தும் முன் அமைப்புகள் ▸ எழுத்தாக்கத்தில் API விசையைச் சேர்க்கவும்.";
+"The transcription API's base URL isn't valid." = "எழுத்தாக்க API-இன் அடிப்படை URL செல்லுபடியாகாது.";
+"The transcription service returned an error (%d)." = "எழுத்தாக்கச் சேவை பிழையை (%d) திருப்பியனுப்பியது.";
+"The transcription service returned an unexpected response." = "எழுத்தாக்கச் சேவை எதிர்பாராத பதிலைத் திருப்பியனுப்பியது.";
+"Transcription Provider" = "எழுத்தாக்க வழங்குநர்";
+"Import SRT/VTT…" = "SRT/VTT இறக்குமதி செய்…";
+"This provider uploads the recording's audio to the configured API." = "இந்த வழங்குநர் பதிவின் ஒலியை கட்டமைக்கப்பட்ட API-க்குப் பதிவேற்றுகிறது.";
+"Choose an SRT or WebVTT file" = "SRT அல்லது WebVTT கோப்பைத் தேர்வுசெய்யவும்";
+"The caption file could not be read." = "தலைப்புரைக் கோப்பைப் படிக்க முடியவில்லை.";
+"No captions were found in that file." = "அந்தக் கோப்பில் தலைப்புரைகள் எதுவும் கிடைக்கவில்லை.";
+"Replace existing captions?" = "இருக்கும் தலைப்புரைகளை மாற்றவா?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "இந்தத் திட்டத்தில் ஏற்கெனவே தலைப்புரைகள் உள்ளன. அவற்றை இறக்குமதி செய்யப்பட்டவற்றால் மாற்றலாம் அல்லது இரண்டு தொகுப்புகளையும் இணைக்கலாம்.";
+"Replace" = "மாற்று";
+"Merge" = "இணை";
+"Imported %d captions" = "%d தலைப்புரைகள் இறக்குமதி செய்யப்பட்டன";
+"Transcription" = "எழுத்தாக்கம்";
+"Captions Provider" = "தலைப்புரை வழங்குநர்";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "சாதனத்தில் இயங்கும் வழங்குநர்கள் ஒலியை இந்த Mac-இலேயே வைத்திருப்பார்கள். இதை காணொளி திருத்தியின் தலைப்புரைப் பிரிவில் இருந்து ஒவ்வொரு பதிவுக்கும் தனித்தனியாகவும் மாற்றலாம்.";
+"Base URL:" = "அடிப்படை URL:";
+"Model:" = "மாதிரி:";
+"API Key:" = "API விசை:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "OpenAI, Groq அல்லது உள்ளூர் whisper.cpp சேவையகத்துடன் இயங்கும் — OpenAI-உடன் இணக்கமான /audio/transcriptions இறுதிமுனையை வெளிப்படுத்தும் எதுவும் இயங்கும். API விசை Keychain-இல் சேமிக்கப்படும், ஏற்றுமதி செய்யப்பட்ட அமைப்புகளில் ஒருபோதும் இல்லை.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "முன்னமைவை நீக்கு";
+"Export complete" = "ஏற்றுமதி முடிந்தது";
+"Exported %@" = "%@ ஏற்றுமதி செய்யப்பட்டது";
+"Faster" = "வேகமாக";
+"Name this preset:" = "இந்த முன்னமைவுக்குப் பெயரிடவும்:";
+"Play Speed" = "இயக்க வேகம்";
+"Play/Pause" = "இயக்கு/இடைநிறுத்து";
+"Playback" = "மறுஇயக்கம்";
+"Preset" = "முன்னமைவு";
+"Preset name" = "முன்னமைவு பெயர்";
+"Quick Export" = "விரைவு ஏற்றுமதி";
+"Reverse" = "தலைகீழாக்கு";
+"Save Current as Preset" = "தற்போதையதை முன்னமைவாகச் சேமி";
+"Save Current as Preset…" = "தற்போதையதை முன்னமைவாகச் சேமி…";
+"Select a custom preset to delete first" = "நீக்குவதற்கு முதலில் தனிப்பயன் முன்னமைவைத் தேர்வுசெய்யவும்";
+"Slower" = "மெதுவாக";
+"Full Quality (source res, High)" = "முழு தரம் (மூல தீர்மானம், அதிகம்)";
+"GIF (small)" = "GIF (சிறியது)";
+"Web (1080p H.264 Medium)" = "இணையம் (1080p H.264 நடுத்தரம்)";

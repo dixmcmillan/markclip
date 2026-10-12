@@ -23,7 +23,21 @@ enum VideoCaptionTranscriber {
     /// chunk boundary only risks splitting one word.
     static let chunkDuration: Double = 50
 
+    /// Entry point used by the editor's "Generate Captions" button. Routes
+    /// to whichever provider is configured in Settings ▸ Transcription (see
+    /// `CaptionTranscriptionProviderKind`), falling back through Apple's
+    /// on-device paths. This indirection — rather than the video editor
+    /// window controller calling the provider dispatcher directly — is what
+    /// lets the provider setting take effect without editing that
+    /// (concurrently owned) controller: it already calls this exact method.
     static func transcribe(asset: AVAsset, lease: TemporaryMediaLease) async throws -> [CaptionTimeline.Word] {
+        try await CaptionTranscriptionService.transcribe(asset: asset, lease: lease)
+    }
+
+    /// The original on-device `SFSpeechRecognizer` path. Used automatically
+    /// below macOS 26, offered as an explicit "Classic" choice above it, and
+    /// as the fallback when a newer provider can't run.
+    static func transcribeLegacy(asset: AVAsset, lease: TemporaryMediaLease) async throws -> [CaptionTimeline.Word] {
         defer { withExtendedLifetime(lease) {} }
         guard try await authorize() else { throw TranscriptionError.notAuthorized }
         let recognizer = SFSpeechRecognizer(locale: Locale.current) ?? SFSpeechRecognizer()

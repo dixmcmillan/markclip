@@ -919,3 +919,52 @@
 "Ease In/Out" = "Easing Masuk/Keluar";
 "Hold" = "Tahan";
 "Delete Keyframe" = "Alih Keluar Bingkai Kunci";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (Pada Peranti, Dipertingkat)";
+"Apple (On-Device, Classic)" = "Apple (Pada Peranti, Klasik)";
+"OpenAI-Compatible API" = "API Serasi OpenAI";
+"The speech model couldn't be downloaded: %@" = "Model pertuturan tidak dapat dimuat turun: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "Tambah kunci API dalam Tetapan ▸ Transkripsi sebelum menggunakan pembekal ini.";
+"The transcription API's base URL isn't valid." = "URL asas API transkripsi tidak sah.";
+"The transcription service returned an error (%d)." = "Perkhidmatan transkripsi mengembalikan ralat (%d).";
+"The transcription service returned an unexpected response." = "Perkhidmatan transkripsi mengembalikan respons yang tidak dijangka.";
+"Transcription Provider" = "Pembekal Transkripsi";
+"Import SRT/VTT…" = "Import SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "Pembekal ini memuat naik audio rakaman ke API yang dikonfigurasikan.";
+"Choose an SRT or WebVTT file" = "Pilih fail SRT atau WebVTT";
+"The caption file could not be read." = "Fail kapsyen tidak dapat dibaca.";
+"No captions were found in that file." = "Tiada kapsyen ditemui dalam fail itu.";
+"Replace existing captions?" = "Gantikan kapsyen sedia ada?";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "Projek ini sudah mempunyai kapsyen. Anda boleh menggantikannya dengan yang diimport atau menggabungkan kedua-dua set.";
+"Replace" = "Ganti";
+"Merge" = "Gabung";
+"Imported %d captions" = "%d kapsyen diimport";
+"Transcription" = "Transkripsi";
+"Captions Provider" = "Pembekal Kapsyen";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "Pembekal pada peranti menyimpan audio pada Mac ini. Ini juga boleh diubah bagi setiap rakaman daripada bahagian kapsyen dalam editor video.";
+"Base URL:" = "URL Asas:";
+"Model:" = "Model:";
+"API Key:" = "Kunci API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "Berfungsi dengan OpenAI, Groq, atau pelayan whisper.cpp tempatan — apa-apa yang mendedahkan endpoint /audio/transcriptions yang serasi dengan OpenAI. Kunci API disimpan dalam Keychain, tidak pernah dalam tetapan yang dieksport.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "Padam Pratetap";
+"Export complete" = "Eksport selesai";
+"Exported %@" = "%@ dieksport";
+"Faster" = "Lebih Pantas";
+"Name this preset:" = "Namakan pratetap ini:";
+"Play Speed" = "Kelajuan Main Balik";
+"Play/Pause" = "Mainkan/Jeda";
+"Playback" = "Main Balik";
+"Preset" = "Pratetap";
+"Preset name" = "Nama Pratetap";
+"Quick Export" = "Eksport Pantas";
+"Reverse" = "Songsang";
+"Save Current as Preset" = "Simpan Semasa sebagai Pratetap";
+"Save Current as Preset…" = "Simpan Semasa sebagai Pratetap…";
+"Select a custom preset to delete first" = "Pilih pratetap tersuai untuk dipadam dahulu";
+"Slower" = "Lebih Perlahan";
+"Full Quality (source res, High)" = "Kualiti Penuh (resolusi sumber, Tinggi)";
+"GIF (small)" = "GIF (kecil)";
+"Web (1080p H.264 Medium)" = "Web (1080p H.264 Sederhana)";

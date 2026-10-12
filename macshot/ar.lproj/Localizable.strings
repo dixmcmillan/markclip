@@ -919,3 +919,52 @@
 "Ease In/Out" = "تسارع الدخول والخروج";
 "Hold" = "ثبات";
 "Delete Keyframe" = "حذف الإطار الرئيسي";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (على الجهاز، محسّن)";
+"Apple (On-Device, Classic)" = "Apple (على الجهاز، كلاسيكي)";
+"OpenAI-Compatible API" = "API متوافق مع OpenAI";
+"The speech model couldn't be downloaded: %@" = "تعذّر تنزيل نموذج الكلام: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "أضف مفتاح API في الإعدادات ▸ التفريغ قبل استخدام هذا المزود.";
+"The transcription API's base URL isn't valid." = "رابط API الأساسي للتفريغ غير صالح.";
+"The transcription service returned an error (%d)." = "أرجعت خدمة التفريغ خطأ (%d).";
+"The transcription service returned an unexpected response." = "أرجعت خدمة التفريغ استجابة غير متوقعة.";
+"Transcription Provider" = "مزود التفريغ";
+"Import SRT/VTT…" = "استيراد SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "يقوم هذا المزود برفع صوت التسجيل إلى API المُهيأ.";
+"Choose an SRT or WebVTT file" = "اختر ملف SRT أو WebVTT";
+"The caption file could not be read." = "تعذّرت قراءة ملف الترجمة النصية.";
+"No captions were found in that file." = "لم يُعثر على ترجمات نصية في ذلك الملف.";
+"Replace existing captions?" = "استبدال الترجمات النصية الحالية؟";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "يحتوي هذا المشروع بالفعل على ترجمات نصية. يمكنك استبدالها بالمستوردة أو دمج المجموعتين.";
+"Replace" = "استبدال";
+"Merge" = "دمج";
+"Imported %d captions" = "تم استيراد %d ترجمة نصية";
+"Transcription" = "التفريغ";
+"Captions Provider" = "مزود الترجمة النصية";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "تحتفظ المزودات التي تعمل على الجهاز بالصوت على هذا الـMac. يمكن أيضًا تغيير هذا لكل تسجيل من قسم الترجمة النصية في محرر الفيديو.";
+"Base URL:" = "الرابط الأساسي:";
+"Model:" = "النموذج:";
+"API Key:" = "مفتاح API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "يعمل مع OpenAI أو Groq أو خادم whisper.cpp محلي — أي شيء يوفر نقطة نهاية /audio/transcriptions متوافقة مع OpenAI. يُخزَّن مفتاح API في Keychain، ولا يُدرج أبدًا ضمن الإعدادات المصدَّرة.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "حذف الإعداد المسبق";
+"Export complete" = "اكتمل التصدير";
+"Exported %@" = "تم تصدير %@";
+"Faster" = "أسرع";
+"Name this preset:" = "سمِّ هذا الإعداد المسبق:";
+"Play Speed" = "سرعة التشغيل";
+"Play/Pause" = "تشغيل/إيقاف مؤقت";
+"Playback" = "التشغيل";
+"Preset" = "إعداد مسبق";
+"Preset name" = "اسم الإعداد المسبق";
+"Quick Export" = "تصدير سريع";
+"Reverse" = "عكس";
+"Save Current as Preset" = "حفظ الحالي كإعداد مسبق";
+"Save Current as Preset…" = "حفظ الحالي كإعداد مسبق…";
+"Select a custom preset to delete first" = "اختر إعدادًا مسبقًا مخصصًا لحذفه أولاً";
+"Slower" = "أبطأ";
+"Full Quality (source res, High)" = "الجودة الكاملة (دقة المصدر، عالية)";
+"GIF (small)" = "GIF (صغير)";
+"Web (1080p H.264 Medium)" = "ويب (1080p H.264 متوسط)";

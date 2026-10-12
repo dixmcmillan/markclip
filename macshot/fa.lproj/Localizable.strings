@@ -919,3 +919,52 @@
 "Ease In/Out" = "شتاب ورود/خروج";
 "Hold" = "نگه‌داشتن";
 "Delete Keyframe" = "حذف فریم کلیدی";
+
+/* Transcription providers + captions import (video editor, Settings) */
+"Apple (On-Device, Enhanced)" = "Apple (روی دستگاه، پیشرفته)";
+"Apple (On-Device, Classic)" = "Apple (روی دستگاه، کلاسیک)";
+"OpenAI-Compatible API" = "API سازگار با OpenAI";
+"The speech model couldn't be downloaded: %@" = "مدل گفتار دانلود نشد: %@";
+"Add an API key in Settings ▸ Transcription before using this provider." = "پیش از استفاده از این ارائه‌دهنده، کلید API را در تنظیمات ▸ رونویسی اضافه کنید.";
+"The transcription API's base URL isn't valid." = "آدرس پایه API رونویسی معتبر نیست.";
+"The transcription service returned an error (%d)." = "سرویس رونویسی خطایی بازگرداند (%d).";
+"The transcription service returned an unexpected response." = "سرویس رونویسی پاسخ غیرمنتظره‌ای بازگرداند.";
+"Transcription Provider" = "ارائه‌دهنده رونویسی";
+"Import SRT/VTT…" = "درون‌ریزی SRT/VTT…";
+"This provider uploads the recording's audio to the configured API." = "این ارائه‌دهنده صدای ضبط را در API پیکربندی‌شده بارگذاری می‌کند.";
+"Choose an SRT or WebVTT file" = "یک فایل SRT یا WebVTT انتخاب کنید";
+"The caption file could not be read." = "فایل زیرنویس خوانده نشد.";
+"No captions were found in that file." = "هیچ زیرنویسی در آن فایل یافت نشد.";
+"Replace existing captions?" = "زیرنویس‌های موجود جایگزین شوند؟";
+"This project already has captions. You can replace them with the imported ones or merge both sets." = "این پروژه از قبل زیرنویس دارد. می‌توانید آن‌ها را با موارد درون‌ریزی‌شده جایگزین کنید یا هر دو مجموعه را ادغام کنید.";
+"Replace" = "جایگزینی";
+"Merge" = "ادغام";
+"Imported %d captions" = "%d زیرنویس درون‌ریزی شد";
+"Transcription" = "رونویسی";
+"Captions Provider" = "ارائه‌دهنده زیرنویس";
+"On-device providers keep audio on this Mac. This can also be changed per-recording from the captions section of the video editor." = "ارائه‌دهندگان روی دستگاه صدا را روی این Mac نگه می‌دارند. این تنظیم را می‌توان برای هر ضبط به‌طور جداگانه از بخش زیرنویس ویرایشگر ویدیو تغییر داد.";
+"Base URL:" = "آدرس پایه:";
+"Model:" = "مدل:";
+"API Key:" = "کلید API:";
+"Works with OpenAI, Groq, or a local whisper.cpp server — anything exposing an OpenAI-compatible /audio/transcriptions endpoint. The API key is stored in the Keychain, never in exported settings." = "با OpenAI، Groq یا یک سرور محلی whisper.cpp کار می‌کند — با هر چیزی که نقطه پایانی /audio/transcriptions سازگار با OpenAI را در معرض دید قرار دهد. کلید API در Keychain ذخیره می‌شود، هرگز در تنظیمات صادرشده.";
+
+/* Playback/export (added by a concurrent agent; localized here per phase ownership) */
+"Delete Preset" = "حذف پیش‌تنظیم";
+"Export complete" = "خروجی کامل شد";
+"Exported %@" = "%@ خروجی گرفته شد";
+"Faster" = "سریع‌تر";
+"Name this preset:" = "نامی برای این پیش‌تنظیم انتخاب کنید:";
+"Play Speed" = "سرعت پخش";
+"Play/Pause" = "پخش/مکث";
+"Playback" = "پخش";
+"Preset" = "پیش‌تنظیم";
+"Preset name" = "نام پیش‌تنظیم";
+"Quick Export" = "خروجی سریع";
+"Reverse" = "معکوس";
+"Save Current as Preset" = "ذخیره حالت فعلی به عنوان پیش‌تنظیم";
+"Save Current as Preset…" = "ذخیره حالت فعلی به عنوان پیش‌تنظیم…";
+"Select a custom preset to delete first" = "ابتدا یک پیش‌تنظیم سفارشی را برای حذف انتخاب کنید";
+"Slower" = "کندتر";
+"Full Quality (source res, High)" = "کیفیت کامل (وضوح اصلی، بالا)";
+"GIF (small)" = "GIF (کوچک)";
+"Web (1080p H.264 Medium)" = "وب (1080p H.264 متوسط)";
