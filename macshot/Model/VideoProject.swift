@@ -509,11 +509,15 @@ final class VideoProject: Codable {
     func copy() -> VideoProject? { VideoProject.decode(encoded()) }
 
     /// Whether the project changes the output relative to the source file.
-    var hasEdits: Bool {
+    var hasEdits: Bool { hasEdits(burningCaptions: true) }
+
+    /// `burningCaptions: false` is for exports that deliver captions as a
+    /// sidecar (or not at all): captions then leave the video pixels alone.
+    func hasEdits(burningCaptions: Bool) -> Bool {
         trimStart > 0.01 || sourceDuration - trimEnd > 0.01 || muted
             || crop != CGRect(x: 0, y: 0, width: 1, height: 1)
             || look.frame.drawsBackground
             || !zooms.isEmpty || !censors.isEmpty || !texts.isEmpty || !cuts.isEmpty
-            || !speeds.isEmpty || !freezes.isEmpty || !captions.isEmpty || !annotations.isEmpty || !overlays.isEmpty
+            || !speeds.isEmpty || !freezes.isEmpty || (burningCaptions && !captions.isEmpty) || !annotations.isEmpty || !overlays.isEmpty
     }
 }

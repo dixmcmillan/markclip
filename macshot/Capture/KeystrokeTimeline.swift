@@ -135,18 +135,46 @@ nonisolated enum CaptionTimeline {
         return (caption, CGFloat(max(0, min(appear, vanish))))
     }
 
+    /// `HH:MM:SS<separator>mmm`, with the clock clamped at zero.
+    private static func stamp(_ seconds: Double, separator: String) -> String {
+        let ms = Int((max(0, seconds) * 1000).rounded())
+        return String(format: "%02d:%02d:%02d", ms / 3_600_000, (ms / 60_000) % 60, (ms / 1000) % 60)
+            + separator + String(format: "%03d", ms % 1000)
+    }
+
     /// SubRip text for the captions, on the edited (output) clock.
     static func srt(_ captions: [VideoCaptionSegment], mapTime: (Double) -> Double) -> String {
-        func stamp(_ seconds: Double) -> String {
-            let ms = Int((max(0, seconds) * 1000).rounded())
-            return String(format: "%02d:%02d:%02d,%03d", ms / 3_600_000, (ms / 60_000) % 60, (ms / 1000) % 60, ms % 1000)
-        }
         var lines: [String] = []
         for (index, caption) in captions.sorted(by: { $0.startTime < $1.startTime }).enumerated() {
             let start = mapTime(caption.startTime), end = mapTime(caption.endTime)
             guard end > start else { continue }
-            lines.append("\(index + 1)\n\(stamp(start)) --> \(stamp(end))\n\(caption.text)\n")
+            lines.append("\(index + 1)\n\(stamp(start, separator: ",")) --> \(stamp(end, separator: ","))\n\(caption.text)\n")
         }
         return lines.joined(separator: "\n")
+    }
+
+    /// WebVTT text for the captions, on the edited (output) clock; nil when no
+    /// caption survives the mapping (so callers don't write an empty file).
+    /// Cue text is escaped for WebVTT: `&` and `<` become entities, `-->`
+    /// can't appear in a cue, and a blank line would end the cue early.
+    static func vtt(_ captions: [VideoCaptionSegment], mapTime: (Double) -> Double) -> String? {
+        var cues: [String] = []
+        for caption in captions.sorted(by: { $0.startTime < $1.startTime }) {
+            let start = max(0, mapTime(caption.startTime)), end = max(0, mapTime(caption.endTime))
+            guard end > start else { continue }
+            let text = caption.text
+                .replacingOccurrences(of: "\r\n", with: "\n")
+                .replacingOccurrences(of: "&", with: "&amp;")
+                .replacingOccurrences(of: "<", with: "&lt;")
+                .replacingOccurrences(of: "-->", with: "--&gt;")
+                .split(separator: "\n", omittingEmptySubsequences: true)
+                .map { $0.trimmingCharacters(in: .whitespaces) }
+                .filter { !$0.isEmpty }
+                .joined(separator: "\n")
+            guard !text.isEmpty else { continue }
+            cues.append("\(stamp(start, separator: ".")) --> \(stamp(end, separator: "."))\n\(text)\n")
+        }
+        guard !cues.isEmpty else { return nil }
+        return "WEBVTT\n\n" + cues.joined(separator: "\n")
     }
 }
