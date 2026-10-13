@@ -1,6 +1,8 @@
 import AVFoundation
 
-/// Export preferences. Persisted across sessions (existing keys).
+/// Resolved export settings for one run. The legacy fields (format, scale,
+/// quality, gifFPS) still persist through the loose keys below until Phase 6;
+/// the preset-derived fields are per-run only.
 struct VideoExportSettings: Equatable {
     enum Format: String { case mp4, gif }
     var format: Format = .mp4
@@ -8,6 +10,19 @@ struct VideoExportSettings: Equatable {
     var scale: CGFloat = 1
     var quality: VideoQuality = .high
     var gifFPS: Int = 15
+
+    // Resolved per-run fields, built from an `ExportPreset` (+ overrides) by
+    // `ExportPreset.resolvedSettings`. Not persisted, and not yet read by the
+    // encoder: Phase 1 wires codec/fpsCap/explicitBitrate/captions/muted in,
+    // Phase 2 wires gifFit.
+    var codec: VideoCodec = .h264
+    /// Frame-rate cap for video; nil keeps the source rate.
+    var fpsCap: Int?
+    /// Bits per second; overrides `quality` when set.
+    var explicitBitrate: Int?
+    var captions: ExportCaptionsMode = .burned
+    var muted: Bool = false
+    var gifFit: GIFFitSettings = .default
 
     static let scaleKey = "lastExportScale"
     static let qualityKey = "lastExportQuality"
