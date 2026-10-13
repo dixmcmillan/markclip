@@ -184,6 +184,24 @@ final class LegacyDecodingTests: XCTestCase {
         XCTAssertEqual(rows[0].fileExtension, "png", "a row with no extension falls back to the original format")
     }
 
+    // MARK: - Export presets
+
+    func testPreV2ExportPresetJSONLoadsAsAV2PresetWithDefaults() throws {
+        // A v2-shaped row from a hypothetical early build: only some keys.
+        let json = """
+        [{"id":"00000000-0000-0000-0000-0000000000A1","name":"Partial","format":"hevc","captions":"soft"},
+         {"nope":[1,2,3],"destination":7},
+         {"id":"00000000-0000-0000-0000-0000000000A2","name":"Extra","futureField":{"x":1},"destination":{"kind":"stream"}}]
+        """
+        let presets = try XCTUnwrap(LenientArrayDecoder.decode(ExportPreset.self, from: Data(json.utf8)))
+        XCTAssertEqual(presets.count, 3, "a row with only unreadable values still decodes to defaults")
+        XCTAssertEqual(presets[0].format, .hevc)
+        XCTAssertEqual(presets[0].captions, .soft)
+        XCTAssertEqual(presets[0].quality, .high)
+        XCTAssertEqual(presets[2].destination, .stream)
+        XCTAssertEqual(presets[2].gifFit, .default)
+    }
+
     // MARK: - LenientArrayDecoder itself
 
     func testLenientArrayDecoderReturnsNilForNonArrayData() {
