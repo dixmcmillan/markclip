@@ -3,6 +3,10 @@ import XCTest
 
 @MainActor
 final class VideoExportEncodingPlanTests: XCTestCase {
+    override func setUpWithError() throws {
+        try MediaTests.require()
+    }
+
     private func source(rate: Double = 2_000_000, codec: CMVideoCodecType? = kCMVideoCodecType_H264,
                         fps: Double = 30, period: Double = 1.0 / 30,
                         size: CGSize = CGSize(width: 1920, height: 1080)) -> VideoExportEncodingPlan.Source {

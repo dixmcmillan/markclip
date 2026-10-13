@@ -81,3 +81,47 @@ After the mitigation:
 - **Service exits cleanly:** no `VTEncoderXPCService` remained 30 seconds after each run.
 - **Hardware tests pass:** the hardware-gated tests passed in one serial run after a reboot, and no encoder service remained afterwards.
 - **Logs can't confirm either way:** on this machine the unified log did not persist `VTEncoderXPCService` messages during these runs, including the hardware run. A count of zero `AVE ERR` or `AVE_Session` lines is therefore not evidence.
+
+## Second occurrence, same day (11:50 CDT)
+
+Panic file: `/Library/Logs/DiagnosticReports/Retired/panic-full-2026-10-13-115041.0002.panic`
+
+```
+panic(cpu 1 caller 0xfffffe0037b05dcc): "dart-ave (0xfffffe25184f0000): DART(CPUDART) error: SID 0 PTE invalid
+exception on write of DVA 0x10000d53240 (CTE 0x10 SEG 0 PTE 0x354) ERROR_STATUS 0x90000008 TIME 0 TTE 0 AXI_ID 0xc0"
+@AppleT8110DART.cpp:2265
+```
+
+The panic was the same `dart-ave` PTE-invalid write as the first occurrence, at an almost identical device virtual address (`0x10000d53240` vs `0x10000d53180`). The backtrace again contained only AppleT8110DART and IODARTFamily frames.
+
+**Observed timeline**
+- **10:25:** boot.
+- **10:26–10:27:** the hardware-gated tests ran once, serially, and finished without incident.
+- **11:14–11:15:** the system slept and woke.
+- **11:30:05:** a `VTEncoderXPCService` (pid 21017) started. Its client was not identified. It never had an `AppleAVE2UserClient` while it was sampled.
+- **11:38–11:49:** one test run, in software-encoder mode only. It did heavy HEVC encoding through `AVAssetWriter` with `EnableHardwareAcceleratedVideoEncoder = false`. Export-session tests were skipped.
+- **11:50:02:** panic, about 20–40 seconds after that run's test host exited.
+
+**Running at the time (from the stackshot)**
+- No `xctest` or `xcodebuild` process.
+- Two `VTEncoderXPCService` instances: pids 21017 and 28149.
+- The OBS virtual-camera system extension.
+- `avconferenced` and `replayd`.
+- `com.apple.photos.ImageConversionService`, with about 12,000 page-ins.
+
+**The software encoders really are software.** `VTCopyVideoEncoderList` lists them as follows:
+- `com.apple.videotoolbox.videoencoder.h264`: Apple H.264 (SW), `IsHardwareAccelerated` absent.
+- `com.apple.videotoolbox.videoencoder.hevc.vcp`: Apple HEVC (SW), `IsHardwareAccelerated` absent.
+- The hardware encoders are `…ave.avc` and `…ave.hevc`, with `IsHardwareAccelerated` true.
+
+```swift
+var list: CFArray?
+VTCopyVideoEncoderList(nil, &list)   // lists encoders without creating a session
+for e in list as! [[String: Any]] {
+    print(e[kVTVideoEncoderList_EncoderID as String]!, e[kVTVideoEncoderList_IsHardwareAccelerated as String] ?? "nil")
+}
+```
+
+**Inference (not verified):** both panics followed about a minute after a test host that did heavy encoding exited, which suggests encoder-service teardown is involved. In the second case, though, the test used only software encoders. Other clients of the encoder or media engine were also active: the OBS virtual camera, conferencing, screen capture and Photos conversions. So the trigger may not be limited to hardware sessions created by our process.
+
+**Further mitigation:** all video-encoding test classes now run only on CI (`MACSHOT_MEDIA_TESTS=1`), never on this Mac.

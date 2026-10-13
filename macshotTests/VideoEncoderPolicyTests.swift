@@ -4,6 +4,10 @@ import XCTest
 
 /// The suite must encode in software (docs/feedback/2026-10-13-ave-dart-panic.md).
 final class VideoEncoderPolicyTests: XCTestCase {
+    override func setUpWithError() throws {
+        try MediaTests.require()
+    }
+
     func testTheTestRunnerRequestsSoftwareEncoding() throws {
         try XCTSkipIf(HardwareEncoderTests.isEnabled, "Hardware encoder test mode uses the hardware encoder")
         XCTAssertTrue(VideoEncoderPolicy.forcesSoftware,

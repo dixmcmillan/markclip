@@ -22,6 +22,8 @@ jobs:
       # disposable VMs, so they also run the AVAssetExportSession tests that are
       # skipped locally (docs/feedback/2026-10-13-ave-dart-panic.md).
       TEST_RUNNER_MACSHOT_HARDWARE_ENCODER_TESTS: "1"
+      # Video-encoding test classes run only here, never on a development Mac.
+      TEST_RUNNER_MACSHOT_MEDIA_TESTS: "1"
 
     steps:
       - name: Checkout
