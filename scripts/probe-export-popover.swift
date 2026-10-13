@@ -45,6 +45,7 @@ final class WaitingRenderer: ExportRenderer {
                           backing: .buffered, defer: false)
         window.appearance = NSAppearance(named: .darkAqua)
         window.backgroundColor = VideoEditorStyle.window
+        window.isReleasedWhenClosed = false
         window.title = "Export popover probe"
         split = ExportSplitButton(target: self, runAction: #selector(runLast), menuAction: #selector(openPopover))
         split.setLastUsed(name: "Archive")
@@ -155,10 +156,15 @@ final class WaitingRenderer: ExportRenderer {
             return write(content, name: args.first ?? "window")
         case "settings":
             // Settings > Export in a 720 x 520 window, pinned like SettingsWindowController.showTab does.
-            let view = ExportSettingsTabView(model: ExportSettingsModel(defaults: defaults, offline: args.first == "offline"))
+            // settings [light|dark] [offline]: the window follows the chosen system appearance.
+            let view = ExportSettingsTabView(model: ExportSettingsModel(defaults: defaults, offline: args.contains("offline")))
+            settingsWindow?.close()
             let w = NSWindow(contentRect: NSRect(x: 150, y: 150, width: 720, height: 520), styleMask: [.titled, .closable],
                              backing: .buffered, defer: false)
+            w.isReleasedWhenClosed = false
             w.title = "Settings · Export"
+            if args.contains("dark") { w.appearance = NSAppearance(named: .darkAqua) }
+            else if args.contains("light") { w.appearance = NSAppearance(named: .aqua) }
             let container = NSView()
             w.contentView = container
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -196,11 +202,17 @@ final class WaitingRenderer: ExportRenderer {
         // The popover material is the window's, not the view's, so a snapshot
         // of the view alone would be light text on nothing. Give the content a
         // dark backdrop of about that brightness for the snapshot only.
+        let isSettings = view.window === settingsWindow && settingsWindow != nil
         let target = popoverView.flatMap { view.window === PopoverHelper.activeContentWindow ? $0 : nil } ?? view
         let wasLayered = target.wantsLayer
         let previous = target.layer?.backgroundColor
         target.wantsLayer = true
-        target.layer?.backgroundColor = (view.window === window ? VideoEditorStyle.window : NSColor(white: 0.2, alpha: 1)).cgColor
+        var backdrop = (view.window === window ? VideoEditorStyle.window : NSColor(white: 0.2, alpha: 1)).cgColor
+        if isSettings, let appearance = view.window?.effectiveAppearance {
+            // The real window background for the chosen appearance, not a fixed dark.
+            appearance.performAsCurrentDrawingAppearance { backdrop = NSColor.windowBackgroundColor.cgColor }
+        }
+        target.layer?.backgroundColor = backdrop
         defer {
             target.layer?.backgroundColor = previous
             target.wantsLayer = wasLayered

@@ -76,13 +76,20 @@ final class ExportSettingsTabView: NSView, NSTableViewDataSource, NSTableViewDel
         table.dataSource = self
         table.delegate = self
         table.setAccessibilityLabel(L("Export presets"))
-        table.style = .sourceList
+        // System colors throughout: the list follows the window's appearance
+        // (Settings is not a dark toolbar/popover context) and selection uses
+        // the standard emphasized colors.
+        table.style = .inset
+        table.backgroundColor = .clear
+        table.selectionHighlightStyle = .regular
 
         let scroll = NSScrollView()
         scroll.documentView = table
         scroll.hasVerticalScroller = true
         scroll.autohidesScrollers = true
         scroll.borderType = .bezelBorder
+        scroll.drawsBackground = true
+        scroll.backgroundColor = .controlBackgroundColor
         scroll.translatesAutoresizingMaskIntoConstraints = false
 
         configure(addButton, symbol: "plus", tooltip: L("New preset"), action: #selector(addPreset))
@@ -676,6 +683,7 @@ private final class ExportPresetCell: NSTableCellView {
         nameField.isBordered = false
         nameField.drawsBackground = false
         nameField.isEditable = true
+        nameField.textColor = .labelColor
         nameField.lineBreakMode = .byTruncatingTail
         nameField.translatesAutoresizingMaskIntoConstraints = false
         hintField.font = .monospacedDigitSystemFont(ofSize: 11, weight: .regular)
@@ -696,6 +704,15 @@ private final class ExportPresetCell: NSTableCellView {
     }
 
     required init?(coder: NSCoder) { fatalError() }
+
+    /// Selected rows use light-on-accent text; the shortcut hint follows.
+    override var backgroundStyle: NSView.BackgroundStyle {
+        didSet {
+            let selected = backgroundStyle == .emphasized
+            nameField.textColor = selected ? .alternateSelectedControlTextColor : .labelColor
+            hintField.textColor = selected ? .alternateSelectedControlTextColor : .secondaryLabelColor
+        }
+    }
 }
 
 /// Top-pinned vertical stack for the scrolling form.
