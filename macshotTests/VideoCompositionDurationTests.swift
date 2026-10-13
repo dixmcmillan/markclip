@@ -4,6 +4,10 @@ import XCTest
 
 @MainActor
 final class VideoCompositionDurationTests: XCTestCase {
+    override func setUpWithError() throws {
+        try MediaTests.require()
+    }
+
     func testFractionalSecondRecordingRendersEffectsAndExportsThroughItsLastFrame() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

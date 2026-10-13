@@ -1,8 +1,9 @@
 #!/bin/bash
 # Run headless tests. Failures retain the full log and xcresult for inspection.
 # Usage: scripts/run-tests.sh [--offline] [ClassName[/testName] ...]
-# Env: MACSHOT_HARDWARE_ENCODER_TESTS=1 runs the hardware-encoder tests (see the
-# "Video encoder tests" section of CLAUDE.md before using it).
+# Env: MACSHOT_MEDIA_TESTS=1 runs the video-encoding test classes (CI only), and
+# MACSHOT_HARDWARE_ENCODER_TESTS=1 the hardware-encoder tests. Read the "Video
+# encoder tests" section of CLAUDE.md before setting either locally.
 set -uo pipefail
 
 cd "$(dirname "$0")/.." || exit 1
@@ -15,6 +16,9 @@ cd "$(dirname "$0")/.." || exit 1
 # MACSHOT_HARDWARE_ENCODER_TESTS=1.
 export TEST_RUNNER_MACSHOT_SOFTWARE_ENCODER="${MACSHOT_SOFTWARE_ENCODER:-1}"
 export TEST_RUNNER_MACSHOT_HARDWARE_ENCODER_TESTS="${MACSHOT_HARDWARE_ENCODER_TESTS:-0}"
+# Test classes that encode video skip themselves unless MACSHOT_MEDIA_TESTS=1.
+# Only CI sets it: the development Mac panicked even after a software run.
+export TEST_RUNNER_MACSHOT_MEDIA_TESTS="${MACSHOT_MEDIA_TESTS:-0}"
 
 test_directory=$(mktemp -d "${TMPDIR:-/tmp}/macshot-tests.XXXXXX") || exit 1
 test_result="$test_directory/results.xcresult"
@@ -58,7 +62,11 @@ for failure in result.get("testFailures", []):
     for line in (failure.get("failureText") or "").strip().splitlines():
         print("     " + line)
 if passed + failed == 0:
-    print("No tests ran; check the selected test filter.", file=sys.stderr)
+    if skipped:
+        print("Every selected test was skipped. Video-encoding test classes run on CI only "
+              "(MACSHOT_MEDIA_TESTS=1); see the Video encoder tests section of CLAUDE.md.", file=sys.stderr)
+    else:
+        print("No tests ran; check the selected test filter.", file=sys.stderr)
     sys.exit(1)
 sys.exit(1 if failed or result.get("testFailures") else 0)
 '

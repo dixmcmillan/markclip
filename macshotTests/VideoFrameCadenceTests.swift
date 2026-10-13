@@ -2,6 +2,10 @@ import AVFoundation
 import XCTest
 
 final class VideoFrameCadenceTests: XCTestCase {
+    override func setUpWithError() throws {
+        try MediaTests.require()
+    }
+
     func testIsolatedShortSamplesDoNotMultiplyExportFrameRate() {
         let motion = [CMTime](repeating: CMTime(value: 1, timescale: 30), count: 300)
         let idle = [CMTime](repeating: CMTime(value: 105, timescale: 100), count: 300)

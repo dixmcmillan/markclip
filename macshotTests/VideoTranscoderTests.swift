@@ -6,6 +6,8 @@ final class VideoTranscoderTests: XCTestCase {
     override func setUpWithError() throws {
         directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        // Last, so tearDown always has a directory to remove.
+        try MediaTests.require()
     }
     override func tearDownWithError() throws { try FileManager.default.removeItem(at: directory) }
 
