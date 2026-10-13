@@ -5,7 +5,7 @@ import Cocoa
 /// File ▸ Export Preset menu follows through `.exportPresetsChanged`.
 @MainActor
 final class ExportSettingsTabView: NSView, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate {
-    private static let labelWidth: CGFloat = 150
+    private static let labelWidth: CGFloat = 170
     private static let listWidth: CGFloat = 190
 
     let model: ExportSettingsModel
@@ -172,6 +172,10 @@ final class ExportSettingsTabView: NSView, NSTableViewDataSource, NSTableViewDel
         bitrateField.action = #selector(bitrateCommitted)
         bitrateField.widthAnchor.constraint(equalToConstant: 80).isActive = true
         let bitrateHint = hint(L("Mbps. Overrides quality; empty uses the quality tier."))
+        bitrateHint.lineBreakMode = .byWordWrapping
+        bitrateHint.maximumNumberOfLines = 3
+        bitrateHint.cell?.wraps = true
+        bitrateHint.preferredMaxLayoutWidth = 200
         addRow("bitrate", L("Bitrate:"), [bitrateField, bitrateHint])
 
         audioControl.target = self

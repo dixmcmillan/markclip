@@ -26,8 +26,10 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     /// shortcuts and menu items act on this one, so they do nothing while
     /// Settings or another window has focus.
     static var keyController: VideoEditorWindowController? {
-        guard let key = NSApp.keyWindow else { return nil }
-        return activeControllers.first { $0.playback != nil && ($0.window === key || $0.window === key.parent) }
+        activeControllers.first { controller in
+            guard controller.playback != nil, let window = controller.window else { return false }
+            return window.isKeyWindow || window.childWindows?.contains { $0.isKeyWindow } == true
+        }
     }
 
     private(set) var editorDocument: VideoEditorDocument!
@@ -994,7 +996,9 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command, .shift]) { runLastExportAction(); return true }
         if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command]) { showExportPopover(topBar.exportControl.menuButton); return true }
         // Per-preset shortcuts (⌃⌘1–3 by default), matched by character.
-        if let preset = ExportPresetShortcutStore.preset(for: event, among: ExportPresetStore.visiblePresets()) {
+        let modifiers = KeyboardShortcutMatcher.modifiers(in: event)
+        if modifiers.contains(.command) || modifiers.contains(.control),
+           let preset = ExportPresetShortcutStore.preset(for: event, among: ExportPresetStore.visiblePresets()) {
             runExportPreset(preset)
             return true
         }

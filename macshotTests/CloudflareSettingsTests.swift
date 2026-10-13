@@ -106,6 +106,21 @@ final class CloudflareSettingsTests: XCTestCase {
 
     // MARK: View
 
+    func testViewLaysOutInsideTheSettingsWindow() {
+        let (model, _, _) = make()
+        let view = CloudflareSettingsView(model: model)
+        view.frame = NSRect(x: 0, y: 0, width: 720, height: 520)
+        view.layoutSubtreeIfNeeded()
+        let bounds = view.bounds
+        for control in [view.fields.account, view.fields.token, view.buttons.save, view.buttons.clear, view.buttons.test] as [NSView] {
+            let frame = control.convert(control.bounds, to: view)
+            XCTAssertTrue(bounds.contains(frame), "\(control) at \(frame) leaves the tab")
+            XCTAssertGreaterThan(frame.width, 40)
+        }
+        XCTAssertGreaterThanOrEqual(view.fields.account.frame.width, 280)
+        XCTAssertFalse(view.buttons.clear.isEnabled, "nothing to clear yet")
+    }
+
     func testViewSavesAndClearsThroughItsButtons() {
         let (model, account, _) = make()
         let view = CloudflareSettingsView(model: model)

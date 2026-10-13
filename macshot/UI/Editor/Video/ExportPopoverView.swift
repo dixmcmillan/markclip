@@ -62,17 +62,17 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
     private let setupStack = NSStackView()
     private let adjustButton = NSButton()
     private let adjustStack = NSStackView()
-    private var formatRow: InspectorSegmentRow!
+    private var formatRow: InlineSegmentRow!
     private let sizePopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let fpsPopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private var sizeRow: NSStackView!
     private var fpsRow: NSStackView!
-    private var qualityRow: InspectorSegmentRow!
+    private var qualityRow: InlineSegmentRow!
     private let bitrateField = NSTextField()
     private var bitrateRow: NSStackView!
     private let bitrateError = ExportPopoverView.wrapping("", size: 11, color: NSColor(srgbRed: 1, green: 0.55, blue: 0.55, alpha: 1))
-    private var audioRow: InspectorSegmentRow!
-    private var captionsRow: InspectorSegmentRow!
+    private var audioRow: InlineSegmentRow!
+    private var captionsRow: InlineSegmentRow!
     private let resetButton = NSButton()
     private let savePresetButton = NSButton()
     private let busyStack = NSStackView()
@@ -245,12 +245,11 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
     private func buildAdjust() {
         adjustStack.orientation = .vertical
         adjustStack.alignment = .leading
-        adjustStack.spacing = 10
+        adjustStack.spacing = 8
         adjustStack.translatesAutoresizingMaskIntoConstraints = false
 
         let formats: [ExportFormat] = [.h264, .hevc, .gif]
-        formatRow = InspectorSegmentRow(title: L("Format"), labels: formats.map(ExportPresetDescription.formatName),
-                                        selected: 0) { [model] i in
+        formatRow = InlineSegmentRow(title: L("Format"), labels: formats.map(ExportPresetDescription.formatName)) { [model] i in
             model.updateAdjust { $0.format = formats[i] }
         }
 
@@ -264,7 +263,7 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
         fpsRow = Self.titled(L("Frame rate"), fpsPopup)
 
         let qualities: [VideoQuality] = [.high, .medium, .low]
-        qualityRow = InspectorSegmentRow(title: L("Quality"), labels: [L("High"), L("Medium"), L("Low")], selected: 0) { [model] i in
+        qualityRow = InlineSegmentRow(title: L("Quality"), labels: [L("High"), L("Medium"), L("Low")]) { [model] i in
             model.updateAdjust { $0.quality = qualities[i] }
         }
 
@@ -283,11 +282,11 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
         bitrateError.preferredMaxLayoutWidth = Self.contentWidth
 
         let audio: [ExportAudioMode] = [.keep, .mute]
-        audioRow = InspectorSegmentRow(title: L("Audio"), labels: [L("Keep"), L("Mute")], selected: 0) { [model] i in
+        audioRow = InlineSegmentRow(title: L("Audio"), labels: [L("Keep"), L("Mute")]) { [model] i in
             model.updateAdjust { $0.audio = audio[i] }
         }
         let captions: [ExportCaptionsMode] = [.burned, .soft, .off]
-        captionsRow = InspectorSegmentRow(title: L("Captions"), labels: [L("Burned in"), L("Soft"), L("Off")], selected: 0) { [model] i in
+        captionsRow = InlineSegmentRow(title: L("Captions"), labels: [L("Burned in"), L("Soft"), L("Off")]) { [model] i in
             model.updateAdjust { $0.captions = captions[i] }
         }
 
@@ -626,4 +625,38 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
         row.alignment = .centerY
         return row
     }
+}
+
+/// "Title  [ segment | segment | segment ]" on one line.
+private final class InlineSegmentRow: NSStackView {
+    let control: NSSegmentedControl
+    private let onSelect: (Int) -> Void
+
+    init(title: String, labels: [String], onSelect: @escaping (Int) -> Void) {
+        control = NSSegmentedControl(labels: labels, trackingMode: .selectOne, target: nil, action: nil)
+        self.onSelect = onSelect
+        super.init(frame: .zero)
+        orientation = .horizontal
+        alignment = .centerY
+        distribution = .fill
+        spacing = 8
+        let label = VideoEditorStyle.label(title, size: 12)
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        label.widthAnchor.constraint(equalToConstant: 64).isActive = true
+        control.selectedSegment = 0
+        control.segmentStyle = .rounded
+        control.controlSize = .small
+        control.segmentDistribution = .fillEqually
+        control.translatesAutoresizingMaskIntoConstraints = false
+        control.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        control.setAccessibilityLabel(title)
+        control.target = self
+        control.action = #selector(changed)
+        addArrangedSubview(label)
+        addArrangedSubview(control)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    @objc private func changed() { onSelect(control.selectedSegment) }
 }
