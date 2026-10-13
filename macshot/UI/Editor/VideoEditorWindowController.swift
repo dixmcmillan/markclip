@@ -40,6 +40,9 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     var isExporting = false
     var activeExportJob: MediaExportCoordinator.Job?
     var activeExportToken: UUID?
+    /// The preset export queue (Phase 4). Created on first use; the old
+    /// popover path above keeps its own `isExporting` until Phase 6 removes it.
+    var exportQueueStorage: ExportQueue?
     var savedURL: URL?
     var savedRevision: UInt64?
     private var statusTimer: Timer?
