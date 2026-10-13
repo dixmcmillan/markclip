@@ -159,6 +159,18 @@ final class VideoEditorExporter {
         return request
     }
 
+    /// GIF export at an explicit cadence and canvas long edge (in pixels), for
+    /// GIF auto-fit rungs. Independent of the persisted `VideoExportSettings`;
+    /// the long edge is clamped to the native canvas (never upscaled).
+    func gifRequest(fps: Int, longEdge: Int, outputURL: URL) throws -> GIFExporter.Request {
+        guard let native = nativeCanvasSize, native.width > 0, native.height > 0 else { throw ExportError.invalidSetup }
+        var settings = VideoExportSettings()
+        settings.format = .gif
+        settings.scale = min(1, max(0.01, CGFloat(longEdge) / max(native.width, native.height)))
+        settings.gifFPS = fps
+        return try gifRequest(settings, outputURL: outputURL)
+    }
+
     /// Every track beyond the main video track the custom compositor may
     /// fetch a source frame from (`request.sourceFrame(byTrackID:)`): the
     /// webcam and any placed video overlay. The manual reader path (medium/

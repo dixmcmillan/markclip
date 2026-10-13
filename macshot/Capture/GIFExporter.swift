@@ -14,6 +14,10 @@ enum GIFExporter {
         let sourceLease: TemporaryMediaLease?
         /// Extra video tracks the composition reads (a separately recorded camera).
         nonisolated(unsafe) var additionalVideoTracks: [AVAssetTrack] = []
+        /// Abort with `GIFEncoder.EncodingError.overByteBudget` as soon as the
+        /// written file exceeds this size. Nothing is published and an existing
+        /// destination is left untouched (the staging file is removed).
+        var maxBytes: Int64?
     }
 
     enum ExportError: LocalizedError {
@@ -51,7 +55,7 @@ enum GIFExporter {
             throw ExportError.invalidSetup
         }
         let save = try AtomicMediaSave(destinationURL: request.outputURL)
-        let encoder = try GIFEncoder(url: save.stagingURL)
+        let encoder = try GIFEncoder(url: save.stagingURL, maxBytes: request.maxBytes)
         let reader = try AVAssetReader(asset: request.asset)
         reader.timeRange = request.timeRange
         let output = AVAssetReaderVideoCompositionOutput(videoTracks: [request.videoTrack] + request.additionalVideoTracks, videoSettings: [
