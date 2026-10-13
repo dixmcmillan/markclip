@@ -173,7 +173,7 @@ Phases 1–3 are independent once Phase 0 lands and can run in parallel. Phase 4
   - Size estimates stay H.264-only, per `CLAUDE.md`.
 - **Routing:**
   - Any explicit bitrate or fps cap goes through `VideoTranscoder`, whatever the quality tier.
-  - Archive (HEVC, High, no bitrate) first tries `AVAssetExportPresetHEVCHighestQuality` with the custom compositor. If that combination fails or is unsupported, fall back to `VideoTranscoder` with HEVC at a high bits-per-pixel. Settle which path to use with a decodability test, not by assumption.
+  - Archive (HEVC, High, no bitrate) goes through `VideoTranscoder` with HEVC at the High bits-per-pixel budget, not `AVAssetExportPresetHEVCHighestQuality`. A session ignores `VideoEncoderPolicy` and can only be tested on the hardware encoder, which the suite must not drive (`docs/feedback/2026-10-13-ave-dart-panic.md`). Only H.264 + High + no bitrate/cap still uses the `HighestQuality` session.
   - The direct source copy remains only when nothing is edited and the preset is H.264/HEVC-compatible with the source.
   - `needsRender` must treat "captions soft or off on a project with captions" as unedited video, so it can't rely on `hasEdits` alone.
 - **Captions mode:** for soft or off, `prepare()` sets `look.captions.show = false` on its project copy.
