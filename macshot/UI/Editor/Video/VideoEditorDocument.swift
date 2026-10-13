@@ -52,6 +52,9 @@ final class VideoEditorDocument {
     /// Folder for the project file and any imported background image.
     let projectDirectory: URL?
     private let projectURL: URL?
+    /// `<take>.exports.json`, beside the project file. Export bookkeeping
+    /// lives here, not in `VideoProject`, so it never enters undo or dirty state.
+    var exportRecordsURL: URL? { projectURL.map(ExportRecordStore.sidecarURL(forProjectURL:)) }
 
     private(set) var project: VideoProject
     private(set) var selection: VideoSelection? {

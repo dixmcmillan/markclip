@@ -31,6 +31,39 @@ extension VideoEditorWindowController {
         return parts.joined(separator: "  ·  ")
     }
 
+    // MARK: Preset export queue
+
+    /// This editor's serial preset export queue. UI observes
+    /// `exportQueue.state` / `observe(_:)`; see `ExportQueue`.
+    var exportQueue: ExportQueue {
+        if let existing = exportQueueStorage { return existing }
+        let records: ExportRecordStore = editorDocument.exportRecordsURL.map { ExportRecordStore.store(for: $0) }
+            ?? ExportRecordStore(url: nil)
+        let environment = ExportEnvironment(
+            projectName: editorDocument.source.originalURL.deletingPathExtension().lastPathComponent,
+            renderer: EditorExportRenderer(exporter: exporter, document: editorDocument),
+            records: records,
+            remote: {
+                #if OFFLINE
+                return nil
+                #else
+                return CloudflareExportService.make()
+                #endif
+            },
+            localFolderForUploads: { ExportEnvironment.defaultLocalFolderForUploads() })
+        let queue = ExportQueue(environment: environment)
+        exportQueueStorage = queue
+        return queue
+    }
+
+    /// Runs `preset` (with optional one-off Adjust overrides), or queues it
+    /// behind the running export, and remembers it as the last-used preset.
+    @discardableResult
+    func runExportPreset(_ preset: ExportPreset, overrides: ExportOverrides = ExportOverrides()) -> UUID {
+        ExportPresetStore.setLastUsedID(preset.id)
+        return exportQueue.enqueue(preset, overrides: overrides)
+    }
+
     // MARK: Save
 
     @objc func saveAction() { PopoverHelper.dismiss(); saveVideo() }
@@ -271,7 +304,8 @@ extension VideoEditorWindowController {
     func startExport(status: String, title: String,
                      operation: @escaping @MainActor (MediaExportCancellation, @escaping @Sendable (Double) -> Void) async throws -> Void,
                      completion: @escaping @MainActor (Result<Void, Error>) -> Void) {
-        guard !isExporting else { completion(.failure(CancellationError())); return }
+        // The old path and the preset queue never render at the same time.
+        guard !isExporting, exportQueueStorage?.isBusy != true else { completion(.failure(CancellationError())); return }
         isExporting = true
         topBar.exportButton.isEnabled = false
         topBar.copyButton.isEnabled = false
