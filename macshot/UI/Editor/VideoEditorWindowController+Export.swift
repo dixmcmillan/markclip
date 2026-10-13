@@ -365,7 +365,7 @@ final class VideoExportPanel: NSView {
     private let resolutionPopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private var scales: [CGFloat] = []
     private let presetsPopup = NSPopUpButton(frame: .zero, pullsDown: false)
-    private var presets: [VideoExportPreset] = []
+    private var presets: [ExportPreset] = []
     /// The custom/built-in preset last chosen from the popup (not the
     /// "Save…"/"Delete" action rows) — tracked separately so "Delete Preset"
     /// knows which one, even though picking it moves the popup's own
@@ -487,7 +487,7 @@ final class VideoExportPanel: NSView {
 
     private func fillPresets() {
         presetsPopup.removeAllItems()
-        presets = VideoExportPresetStore.all()
+        presets = ExportPresetStore.visiblePresets()
         for preset in presets { presetsPopup.addItem(withTitle: preset.name) }
         presetsPopup.menu?.addItem(.separator())
         presetsPopup.addItem(withTitle: L("Save Current as Preset…"))
@@ -508,7 +508,7 @@ final class VideoExportPanel: NSView {
         if index == presets.count + 2 { deleteSelectedPreset(); return }
     }
 
-    private func applyPreset(_ preset: VideoExportPreset) {
+    private func applyPreset(_ preset: ExportPreset) {
         lastSelectedPresetID = preset.id
         settings = preset.resolvedSettings(nativeSize: controller?.exporter.nativeCanvasSize)
         formatRow?.control.selectedSegment = settings.format == .gif ? 1 : 0
@@ -538,10 +538,13 @@ final class VideoExportPanel: NSView {
         guard !name.isEmpty else { return }
         let native = controller?.exporter.nativeCanvasSize
         let longEdge = native.map { max($0.width, $0.height) }
-        let targetLongEdge: Double? = (settings.scale >= 0.999) ? nil : longEdge.map { Double($0) * Double(settings.scale) }
-        let preset = VideoExportPreset(name: name, format: settings.format, targetLongEdge: targetLongEdge,
-                                       quality: settings.quality, gifFPS: settings.gifFPS)
-        VideoExportPresetStore.addOrReplace(preset)
+        let longEdgeCap: Int? = (settings.scale >= 0.999) ? nil : longEdge.map { Int(($0 * settings.scale).rounded()) }
+        let isGIF = settings.format == .gif
+        // Legacy panel: a saved preset is a plain folder preset (no upload).
+        let preset = ExportPreset(name: name, format: isGIF ? .gif : .h264, longEdgeCap: longEdgeCap,
+                                  fpsCap: isGIF ? settings.gifFPS : nil, quality: settings.quality,
+                                  audio: isGIF ? .mute : .keep)
+        ExportPresetStore.addOrReplace(preset)
         lastSelectedPresetID = preset.id
     }
 
@@ -551,7 +554,7 @@ final class VideoExportPanel: NSView {
             controller?.showStatus(L("Select a custom preset to delete first"), isError: true)
             return
         }
-        VideoExportPresetStore.delete(id: id)
+        ExportPresetStore.delete(id: id)
         lastSelectedPresetID = nil
     }
 
