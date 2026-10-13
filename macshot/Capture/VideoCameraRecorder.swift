@@ -95,13 +95,14 @@ final class VideoCameraRecorder: @unchecked Sendable {
             let height = max(2, Int(Double(dims.height) * scale) / 2 * 2)
             do {
                 let writer = try AVAssetWriter(outputURL: url, fileType: .mp4)
+                EncoderSessionTracker.track(writer, "VideoCameraRecorder")
                 writer.movieFragmentInterval = CMTime(value: 10, timescale: 1)
-                let input = AVAssetWriterInput(mediaType: .video, outputSettings: [
+                let input = AVAssetWriterInput(mediaType: .video, outputSettings: VideoEncoderPolicy.applying(to: [
                     AVVideoCodecKey: AVVideoCodecType.h264, AVVideoWidthKey: width, AVVideoHeightKey: height,
                     AVVideoScalingModeKey: AVVideoScalingModeResizeAspectFill,
                     AVVideoCompressionPropertiesKey: [AVVideoAverageBitRateKey: 4_000_000,
                                                       AVVideoAllowFrameReorderingKey: false],
-                ])
+                ]))
                 input.expectsMediaDataInRealTime = true
                 guard writer.canAdd(input) else { markFailed(); return }
                 writer.add(input)
@@ -151,7 +152,9 @@ final class VideoCameraRecorder: @unchecked Sendable {
                     if input.isReadyForMoreMediaData { self.write(held, at: time, to: input) }
                 }
                 guard let writer = self.writer, writer.status == .writing, self.frameCount > 0 else {
-                    self.writer?.cancelWriting()
+                    // Only a writer that is still writing can be cancelled; a
+                    // failed one is already stopped and must not be stopped twice.
+                    if let writer = self.writer, writer.status == .writing { writer.cancelWriting() }
                     if let url = self.url, self.frameCount == 0 { try? FileManager.default.removeItem(at: url) }
                     continuation.resume()
                     return

@@ -33,7 +33,7 @@ final class VideoExportJobTests: XCTestCase {
     }
 
     func testBothBackendsRetainSourceAcrossDestinationSetupAndAreSingleUse() async throws {
-        for high in [false, true] {
+        for high in [false, true] where !high || HardwareEncoderTests.isEnabled {
             let source = try await RecordingMediaFixture.mixedMovie(in: directory)
             let cleanup = DispatchQueue(label: "VideoExportJobTests.cleanup")
             var lease: TemporaryMediaLease? = TemporaryMediaLease(url: source, cleanupQueue: cleanup)
@@ -82,7 +82,7 @@ final class VideoExportJobTests: XCTestCase {
         let output = directory.appendingPathComponent("existing.mp4")
         let original = Data("Existing user's file".utf8)
         try original.write(to: output)
-        for high in [false, true] {
+        for high in [false, true] where !high || HardwareEncoderTests.isEnabled {
             let job = try prepare(source: source, high: high)
             do { try await job.export(to: output); XCTFail("An existing file was replaced") } catch {}
             XCTAssertEqual(try Data(contentsOf: output), original)
@@ -92,7 +92,7 @@ final class VideoExportJobTests: XCTestCase {
 
     func testBothBackendsHonorCancellationBeforeCreatingOutput() async throws {
         let source = try await RecordingMediaFixture.mixedMovie(in: directory)
-        for high in [false, true] {
+        for high in [false, true] where !high || HardwareEncoderTests.isEnabled {
             let job = try prepare(source: source, high: high)
             let output = directory.appendingPathComponent(UUID().uuidString + ".mp4")
             let task = Task {

@@ -45,12 +45,15 @@ final class VideoFrameCadenceTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: directory) }
         let url = directory.appendingPathComponent("unmarked-vfr.mp4")
         let writer = try AVAssetWriter(outputURL: url, fileType: .mp4)
+        EncoderSessionTracker.track(writer, "VideoFrameCadenceTests")
         let input = AVAssetWriterInput(mediaType: .video, outputSettings:
             VideoEncodingSettings.outputSettings(width: 64, height: 64, fps: 30, codec: .h264, quality: .high))
         input.mediaTimeScale = 60_000
         let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: nil)
         writer.add(input)
         XCTAssertTrue(writer.startWriting())
+        // A thrown timeout must not leave the encoder session running.
+        defer { if writer.status == .writing { writer.cancelWriting() } }
         writer.startSession(atSourceTime: .zero)
         let pixels = try RecordingMediaFixture.pixels()
         let times = (0..<60).map { CMTime(value: Int64($0 * 2000), timescale: 60_000) }

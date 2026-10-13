@@ -43,6 +43,8 @@ final class VideoCompositionDurationTests: XCTestCase {
                     try checkFrame(image, censored: censored)
                 }
 
+                // The export half drives AVAssetExportSession (hardware only).
+                guard HardwareEncoderTests.isEnabled else { continue }
                 let output = directory.appendingPathComponent(UUID().uuidString + ".mp4")
                 let session = try XCTUnwrap(AVAssetExportSession(asset: asset,
                     presetName: AVAssetExportPresetHighestQuality))

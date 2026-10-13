@@ -1,9 +1,20 @@
 #!/bin/bash
 # Run headless tests. Failures retain the full log and xcresult for inspection.
 # Usage: scripts/run-tests.sh [--offline] [ClassName[/testName] ...]
+# Env: MACSHOT_HARDWARE_ENCODER_TESTS=1 runs the hardware-encoder tests (see the
+# "Video encoder tests" section of CLAUDE.md before using it).
 set -uo pipefail
 
 cd "$(dirname "$0")/.." || exit 1
+
+# Encode video in software (VideoEncoderPolicy). Rapid hardware encoder
+# sessions from this suite triggered a kernel panic; see
+# docs/feedback/2026-10-13-ave-dart-panic.md. xcodebuild forwards TEST_RUNNER_*
+# variables to the test process without the prefix. Tests that can only use the
+# hardware encoder (AVAssetExportSession) are skipped unless
+# MACSHOT_HARDWARE_ENCODER_TESTS=1.
+export TEST_RUNNER_MACSHOT_SOFTWARE_ENCODER="${MACSHOT_SOFTWARE_ENCODER:-1}"
+export TEST_RUNNER_MACSHOT_HARDWARE_ENCODER_TESTS="${MACSHOT_HARDWARE_ENCODER_TESTS:-0}"
 
 test_directory=$(mktemp -d "${TMPDIR:-/tmp}/macshot-tests.XXXXXX") || exit 1
 test_result="$test_directory/results.xcresult"
@@ -13,7 +24,8 @@ test_args=(
   -configuration "${CONFIGURATION:-Debug}"
   -destination 'platform=macOS'
   -resultBundlePath "$test_result"
-  # Tests temporarily change preferences in the same xctest domain.
+  # Tests temporarily change preferences in the same xctest domain, and
+  # encoder tests must not overlap (one encoder session at a time).
   -parallel-testing-enabled NO
   CODE_SIGNING_ALLOWED=NO
 )

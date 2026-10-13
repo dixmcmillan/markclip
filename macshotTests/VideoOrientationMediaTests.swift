@@ -102,7 +102,8 @@ final class VideoOrientationMediaTests: XCTestCase {
                     composition = try VideoCompositionRendering.scaleComposition(track: built.videoTrack,
                         renderSize: size, duration: built.composition.duration, frameDuration: built.frameDuration)
                 }
-                for backend in [0, 1, 2] {
+                // Backend 1 is AVAssetExportSession, which only uses the hardware encoder.
+                for backend in [0, 1, 2] where backend != 1 || HardwareEncoderTests.isEnabled {
                     let destination = directory.appendingPathComponent(UUID().uuidString + (backend == 2 ? ".gif" : ".mp4"))
                     let range = CMTimeRange(start: .zero, duration: CMTime(value: 2, timescale: 5))
                     if backend == 2 {

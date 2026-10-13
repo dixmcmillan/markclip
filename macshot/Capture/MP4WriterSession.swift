@@ -92,6 +92,7 @@ final class MP4WriterSession: @unchecked Sendable {
         dispatchPrecondition(condition: .onQueue(queue))
 
         let writer = try AVAssetWriter(outputURL: url, fileType: .mp4)
+        EncoderSessionTracker.track(writer, "MP4WriterSession")
         writer.metadata = VideoFrameCadence.metadata(for: frameDuration)
         // Flush self-contained movie fragments during capture. A crash can
         // retain completed fragments, and finalization need not build one
@@ -228,7 +229,7 @@ final class MP4WriterSession: @unchecked Sendable {
                     self.complete(.failure(self.firstError ?? WriterError.appendFailed)); return
                 }
                 guard self.sessionStarted, self.frameCount > 0 else {
-                    writer.cancelWriting()
+                    if writer.status == .writing { writer.cancelWriting() }
                     self.complete(.failure(self.firstError ?? WriterError.noFrames)); return
                 }
                 guard writer.status == .writing else {
@@ -297,7 +298,11 @@ final class MP4WriterSession: @unchecked Sendable {
         queue.asyncAfter(deadline: .now() + 15) { [weak self, weak writer] in
             guard let self = self, let writer = writer, self.finalResult == nil else { return }
             let error = self.firstError ?? writer.error ?? WriterError.finalizationTimedOut
-            writer.cancelWriting()
+            // Cancelling a writer whose finishWriting is already under way stops
+            // the encoder session twice; let finishWriting reach its terminal
+            // state instead. Its completion handler retains the writer and
+            // finds the result already reported.
+            if !self.finishWritingStarted, writer.status == .writing { writer.cancelWriting() }
             self.complete(.failure(error))
         }
     }

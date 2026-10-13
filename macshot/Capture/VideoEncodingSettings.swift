@@ -142,7 +142,7 @@ enum VideoEncodingSettings {
             compression[AVVideoProfileLevelKey] = quality.h264ProfileLevel
             compression[AVVideoH264EntropyModeKey] = AVVideoH264EntropyModeCABAC
         }
-        return [
+        return VideoEncoderPolicy.applying(to: [
             AVVideoCodecKey: codec.avCodec,
             AVVideoWidthKey: width,
             AVVideoHeightKey: height,
@@ -152,7 +152,7 @@ enum VideoEncodingSettings {
                 AVVideoYCbCrMatrixKey: AVVideoYCbCrMatrix_ITU_R_709_2,
             ],
             AVVideoCompressionPropertiesKey: compression,
-        ]
+        ])
     }
 
     /// Ensures width and height are even — H.264/HEVC both require this.

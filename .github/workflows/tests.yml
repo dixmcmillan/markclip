@@ -17,6 +17,11 @@ jobs:
   test:
     runs-on: macos-26
     timeout-minutes: 30
+    env:
+      # The macshotTests scheme encodes video in software. CI runners are
+      # disposable VMs, so they also run the AVAssetExportSession tests that are
+      # skipped locally (docs/feedback/2026-10-13-ave-dart-panic.md).
+      TEST_RUNNER_MACSHOT_HARDWARE_ENCODER_TESTS: "1"
 
     steps:
       - name: Checkout

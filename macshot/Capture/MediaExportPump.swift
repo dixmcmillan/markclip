@@ -23,6 +23,8 @@ final class MediaExportPump: @unchecked Sendable {
     nonisolated(unsafe) private var waiters: [CheckedContinuation<Void, Error>] = []
     nonisolated(unsafe) private var started = false
     nonisolated(unsafe) private var finishing = false
+    /// `finishWriting` has called back; the writer is in a terminal state.
+    nonisolated(unsafe) private var writerFinished = false
     nonisolated(unsafe) private var watchdog: DispatchSourceTimer?
     nonisolated(unsafe) private var lastActivity = ProcessInfo.processInfo.systemUptime
     nonisolated(unsafe) private var lastProgress = -Double.infinity
@@ -53,7 +55,9 @@ final class MediaExportPump: @unchecked Sendable {
     nonisolated func run() async throws {
         try await withCheckedThrowingContinuation { continuation in
             queue.async {
-                if let result = self.result { continuation.resume(with: result); return }
+                if let result = self.result, self.writerIsSettled {
+                    continuation.resume(with: result); return
+                }
                 self.waiters.append(continuation)
                 guard !self.started else { return }
                 self.started = true
@@ -150,9 +154,12 @@ final class MediaExportPump: @unchecked Sendable {
         finishing = true
         lastActivity = ProcessInfo.processInfo.systemUptime
         writer.endSession(atSourceTime: CMTimeRangeGetEnd(timeRange))
-        writer.finishWriting { [weak self] in
-            guard let self = self else { return }
+        // Strong capture: the pump must stay alive until the writer is terminal,
+        // even if a cancellation already reported a result.
+        writer.finishWriting {
             self.queue.async {
+                self.writerFinished = true
+                guard self.result == nil else { self.resumeWaiters(); return }
                 if self.writer.status == .completed {
                     self.progress(1)
                     self.complete(.success(()))
@@ -171,8 +178,24 @@ final class MediaExportPump: @unchecked Sendable {
         watchdog = nil
         if case .failure = result {
             if reader.status == .reading { reader.cancelReading() }
-            if writer.status == .writing { writer.cancelWriting() }
+            // Never cancel once finishWriting has started: that stops the encoder
+            // session a second time. Wait for finishWriting's own terminal state.
+            if !finishing, writer.status == .writing { writer.cancelWriting() }
         }
+        guard writerIsSettled else {
+            // finishWriting is in flight; its completion resumes the waiters. If it
+            // never calls back, report anyway rather than hang the caller.
+            queue.asyncAfter(deadline: .now() + 30) { [weak self] in self?.resumeWaiters() }
+            return
+        }
+        resumeWaiters()
+    }
+
+    nonisolated private var writerIsSettled: Bool { !finishing || writerFinished }
+
+    nonisolated private func resumeWaiters() {
+        dispatchPrecondition(condition: .onQueue(queue))
+        guard let result else { return }
         let callbacks = waiters
         waiters.removeAll()
         for callback in callbacks { callback.resume(with: result) }
