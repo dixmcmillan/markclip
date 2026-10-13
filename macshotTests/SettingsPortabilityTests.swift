@@ -9,8 +9,7 @@ final class SettingsPortabilityTests: XCTestCase {
 
     func testKnownCredentialKeysAreNeverPortable() {
         let credentials = [
-            "imgbbAPIKey", "googleDriveRefreshToken", "googleDriveAccessToken",
-            "s3AccessKey", "s3SecretKey", "s3Bucket", "s3Endpoint", "s3Region",
+            "transcriptionApiKey", "providerRefreshToken", "providerAccessToken",
             "saveDirectoryBookmark", "recordingSaveDirectoryBookmark",
             "translationApiKey", "userPassword", "someCredential",
         ]
@@ -50,9 +49,9 @@ final class SettingsPortabilityTests: XCTestCase {
         }
     }
 
-    func testUploadHistoryAndAccountEmailStayLocal() {
-        XCTAssertFalse(SettingsPortability.isPortable("imgbbUploads"), "upload history includes delete URLs")
-        XCTAssertFalse(SettingsPortability.isPortable("gdriveUserEmail"), "account email is PII")
+    func testLegacyUploadCleanupFlagStaysLocal() {
+        XCTAssertFalse(SettingsPortability.isPortable(LegacyUploadCleanup.doneKey),
+                       "the one-time cleanup flag is per-machine bookkeeping")
     }
 
     // MARK: - System keys are filtered out
@@ -177,14 +176,14 @@ final class SettingsPortabilityTests: XCTestCase {
 
     func testExportedSecretKeysAreAbsentEvenWhenSet() throws {
         try withDefaults([
-            "imgbbAPIKey": "secret-value-1234",
-            "s3SecretKey": "another-secret",
+            "transcriptionApiKey": "secret-value-1234",
+            "providerSecretKey": "another-secret",
             "imageFormat": "png",
         ]) {
             let result = try SettingsPortability.exportData()
             let text = String(decoding: result.data, as: UTF8.self)
             XCTAssertFalse(text.contains("secret-value-1234"), "an API key reached the export file")
-            XCTAssertFalse(text.contains("another-secret"), "an S3 secret reached the export file")
+            XCTAssertFalse(text.contains("another-secret"), "a secret-named key reached the export file")
         }
     }
 }

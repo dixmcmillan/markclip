@@ -12,12 +12,12 @@ protocol SecretStore: Sendable {
 }
 
 /// Real Keychain-backed store (`kSecClassGenericPassword`) — the first use
-/// of Keychain in this app. Existing credentials (Google Drive's OAuth
-/// tokens, S3's access/secret keys) predate this requirement and
-/// deliberately avoid Keychain ACL prompts (see `GoogleDriveUploader`); a
-/// *new* secret introduced for transcription (an OpenAI-compatible API key)
-/// must never touch `UserDefaults` or the settings-export JSON, which is
-/// why it gets the real thing instead of following that precedent.
+/// of Keychain in this app. The earlier uploaders (Google Drive, S3) kept
+/// their credentials in `UserDefaults`/a token file to avoid Keychain ACL
+/// prompts; they've since been removed (`LegacyUploadCleanup`). A secret
+/// introduced for transcription (an OpenAI-compatible API key) must never
+/// touch `UserDefaults` or the settings-export JSON, which is why it gets
+/// the real thing instead of following that precedent.
 struct KeychainSecretStore: SecretStore {
     static let shared = KeychainSecretStore()
 

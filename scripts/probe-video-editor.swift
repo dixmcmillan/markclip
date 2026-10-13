@@ -18,21 +18,6 @@ enum SaveDirectoryAccess {
     static func recordingDirectoryHint() -> URL? { resolveRecordingDirectoryIfAccessible() }
     static func stopAccessing(url: URL) {}
 }
-#if !OFFLINE
-// Normal toolbar layout, with all network operations deliberately unavailable.
-// Provider wire behavior is tested separately with injected local URLProtocol fixtures.
-final class DisabledProbeUploader {
-    static let shared = DisabledProbeUploader()
-    let isSignedIn = false
-    let isConfigured = false
-    func uploadVideo(url: URL, progress: @escaping @MainActor @Sendable (Double) -> Void,
-                     completion: @escaping (Result<String, Error>) -> Void) {
-        completion(.failure(CocoaError(.featureUnsupported)))
-    }
-}
-typealias GoogleDriveUploader = DisabledProbeUploader
-typealias S3Uploader = DisabledProbeUploader
-#endif
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
     private let termination = ApplicationTerminationCoordinator()
     private var audioMerge: AudioMergeController?

@@ -6,7 +6,7 @@ import Foundation
 /// changes the bundle ID. Every on-disk path this app uses under
 /// Application Support is a fixed literal string ("com.sw33tlie.macshot/…"),
 /// not derived from the bundle ID — see `RecordingSessionStore.rootURL`,
-/// `ScreenshotHistory`, `GoogleDriveUploader`. That's what normally keeps old
+/// and `ScreenshotHistory`. That's what normally keeps old
 /// data reachable across a bundle ID change without any migration at all.
 ///
 /// But a *sandboxed* build (the app's previous configuration) wrote that
