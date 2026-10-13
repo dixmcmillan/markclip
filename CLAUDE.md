@@ -362,6 +362,40 @@ Copy to clipboard, Save to file (PNG/JPEG/HEIC/WebP), Pin (floating always-on-to
 - Logic that is worth testing but buried in a permission-gated class should be extracted rather than left untested — see `ScrollFrameAnalyzer` and `RecordingEngine.cropRect(for:displayBounds:)`.
 - `.github/workflows/tests.yml` runs the suite plus a Release build of both variants on every push and PR. The Release build is what catches strict-concurrency errors that Debug builds let through.
 
+### Video encoder tests (kernel panic guard)
+
+Rapid hardware encoder sessions from this suite kernel-panicked a Mac in the Apple Video Encoder's IOMMU (`dart-ave`). See `docs/feedback/2026-10-13-ave-dart-panic.md`.
+
+- **Tests encode in software.** The shared `macshotTests` scheme and `scripts/run-tests.sh` set `MACSHOT_SOFTWARE_ENCODER=1`. Every compressing `AVAssetWriterInput` then goes through `VideoEncoderPolicy` (via `VideoEncodingSettings.outputSettings`, or `VideoEncoderPolicy.applying(to:)` for hand-built settings). New encoder code and test fixtures must do the same. Users always get hardware encoding.
+- **Hardware tests are opt-in.** Tests that need the hardware encoder call `try HardwareEncoderTests.require()` (`macshotTests/EncoderTestSupport.swift`). That covers anything through `AVAssetExportSession`, which has no encoder-specification hook, and assertions calibrated on hardware behavior. They run only with `MACSHOT_HARDWARE_ENCODER_TESTS=1`, which also turns off the software override. CI sets it, since its runners are disposable VMs.
+- **No test may return while encoding.** Await `finishWriting` / export completion, and cancel any writer you started on early exits. The bundle's principal class, `EncoderTestObserver`, fails a test that leaves a tracked `AVAssetWriter` writing or an export session exporting. Production code must never call `cancelWriting()` after `finishWriting` has started.
+- **Commands:**
+  ```sh
+  # Everyday: software encoding, serial (the lock serializes runs across worktrees/agents)
+  /usr/bin/lockf -k /tmp/markclip-tests.lock scripts/run-tests.sh            # or --offline, or ClassName[/test]
+
+  # Hardware-gated tests: once, serially, on their own, never in a loop
+  pgrep -l VTEncoderXPCService   # must print nothing; a leftover service (e.g. from OBS/a call) means reboot first
+  MACSHOT_HARDWARE_ENCODER_TESTS=1 /usr/bin/lockf -k /tmp/markclip-tests.lock scripts/run-tests.sh \
+    VideoExportJobTests \
+    RecordingWriterTests/testTrimStartingAfterTheAudioEndsStillExports \
+    RecordingWriterTests/testStaticScreenHeartbeatsKeepAudioAndRecoveryFragmentsAdvancing \
+    VideoTimelineMediaTests/testFractionalFrameRateAndExactSourceEndSurviveReencoding \
+    VideoCompositionDurationTests/testFractionalSecondRecordingRendersEffectsAndExportsThroughItsLastFrame \
+    VideoOrientationMediaTests/testRotationsAndMirroringMatchAVFoundationInBothRenderersAfterScaling \
+    VideoOverlayAlphaSpikeTests/testProRes4444OverlayCompositesOverOpaqueSourceWithoutFringing \
+    VideoEncoderPolicyTests
+
+  # After any encoder run: within 30 s this must print nothing
+  pgrep -l VTEncoderXPCService
+
+  # To check whether a run touched the hardware encoder, sample AVE user clients while it runs.
+  # (The unified log may not persist VTEncoderXPCService messages, so zero log hits prove nothing.
+  # AVAssetWriter starts VTEncoderXPCService even for software encoders.)
+  while :; do ioreg -r -c AppleAVE2UserClient -l -w0 | grep IOUserClientCreator; sleep 0.2; done
+  ```
+- **Stop signs.** If `VTEncoderXPCService` outlives a run by more than 30 s, or `log show --last 10m --predicate 'process == "VTEncoderXPCService" AND eventMessage CONTAINS "AVE ERR"'` prints anything, the encoder is already in the bad state. Run no more hardware encoder work until the Mac reboots. Don't run hardware encoder tests while webcams or the OBS virtual camera are in use.
+
 ## Build & Run
 
 - Open `macshot.xcodeproj` in Xcode
