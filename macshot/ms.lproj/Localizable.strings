@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -154,7 +154,6 @@
 "PII" = "PII";
 "Faces" = "Muka";
 "People" = "Orang";
-"Confirm before upload" = "Sahkan sebelum muat naik";
 "Flip" = "Balik";
 "Smooth" = "Lembut";
 "Refined" = "Diperhalusi";
@@ -217,7 +216,6 @@
 "Recording" = "Rakaman";
 "About" = "Perihal";
 "Shortcuts" = "Pintasan";
-"Uploads" = "Muat Naik";
 "Language" = "Bahasa";
 "Language:" = "Bahasa:";
 "Restart the app to fully apply the new language." = "Mulakan semula aplikasi untuk menerapkan bahasa baharu sepenuhnya.";
@@ -332,44 +330,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Perkhidmatan Muat Naik";
-"Upload Provider" = "Pembekal Muat Naik";
+/* Preferences - Transcription */
 "Provider:" = "Pembekal:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (imej + video)";
-"imgbb (images only)" = "imgbb (imej sahaja)";
-"S3-Compatible (images + videos)" = "S3-Compatible (imej + video)";
-"S3-Compatible Storage" = "Storan S3-Compatible";
-"Sign In with Google" = "Log Masuk dengan Google";
-"Sign Out" = "Log Keluar";
-"Signed in" = "Sudah log masuk";
-"Not signed in" = "Belum log masuk";
-"Account:" = "Akaun:";
-"Folder:" = "Folder:";
-"Test Connection" = "Uji Sambungan";
-"Fill in endpoint, bucket, and credentials first" = "Isi endpoint, bucket, dan kelayakan dahulu";
-"Testing..." = "Menguji...";
-"Connection successful!" = "Sambungan berjaya!";
-"Leave empty to use default" = "Biarkan kosong untuk gunakan lalai";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Rantau:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Kunci Akses:";
-"Secret Key:" = "Kunci Rahsia:";
-"Public URL:" = "URL Awam:";
-"Path Prefix:" = "Awalan Laluan:";
-"Make uploads publicly readable" = "Jadikan muat naik boleh dibaca secara awam";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Menghantar ACL public-read supaya fail yang dimuat naik boleh dilihat oleh sesiapa yang mempunyai pautan. Diperlukan untuk AWS S3, DigitalOcean Spaces, MinIO dan Backblaze B2 yang menyimpan objek secara peribadi secara lalai. Matikan untuk Cloudflare R2 yang tiada ACL dan menolak header ini.";
-"API key:" = "Kunci API:";
-"Upload History" = "Sejarah Muat Naik";
-"No uploads yet." = "Belum ada muat naik.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "URL asas untuk akses awam. Jika kosong, URL endpoint S3 digunakan (mungkin tidak boleh diakses secara awam).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Kunci dikongsi disertakan, dapatkan kunci percuma anda sendiri di imgbb.com/api jika anda terkena had kadar. Imej sahaja (tiada sokongan video).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Berfungsi dengan AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, dan perkhidmatan serasi S3 yang lain. Menyokong imej dan video.";
-"Configure S3 in Preferences" = "Konfigurasi S3 dalam Keutamaan";
-"Sign in to Google Drive in Preferences" = "Log masuk ke Google Drive dalam Keutamaan";
-"Video upload requires Google Drive or S3" = "Muat naik video memerlukan Google Drive atau S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "Batal";
 "Microphone Access Required" = "Akses Mikrofon Diperlukan";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot memerlukan kebenaran mikrofon untuk merakam audio suara. Buka Tetapan Sistem untuk memberikan akses.";
-"Upload to Google Drive?" = "Muat naik ke Google Drive?";
-"Upload to S3?" = "Muat naik ke S3?";
-"Upload to imgbb.com?" = "Muat naik ke imgbb.com?";
-"Your screenshot will be uploaded." = "Tangkapan skrin anda akan dimuat naik.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Selamat datang ke macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "URL disalin ke papan keratan";
 "Uploading... %d%%" = "Memuat naik... %d%%";
 "Upload failed: %@" = "Muat naik gagal: %@";
-"Uploaded! Link copied." = "Dimuat naik! Pautan disalin.";
-"Uploading to %@... %d%%" = "Memuat naik ke %@... %d%%";
 "Open" = "Buka";
 
 /* Recording Toast */
@@ -562,8 +518,6 @@
 "Apple (on-device)" = "Apple (pada peranti)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Terjemahan Apple lebih pantas dan berfungsi luar talian. Google Translate menyokong lebih banyak bahasa.";
 "Download language packs in System Settings…" = "Muat turun pek bahasa dalam Tetapan Sistem…";
-"Configure S3 in Settings" = "Konfigurasi S3 dalam Tetapan";
-"Sign in to Google Drive in Settings" = "Log masuk ke Google Drive dalam Tetapan";
 "Position:" = "Kedudukan:";
 "  Position:" = "  Kedudukan:";
 "Size:" = "Saiz:";
@@ -577,7 +531,6 @@
 "Clear History?" = "Kosongkan Sejarah?";
 "This will permanently delete all screenshots from history." = "Ini akan memadamkan semua tangkapan skrin daripada sejarah secara kekal.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klik \"Tetapkan\" dan tekan kombinasi kekunci dengan sekurang-kurangnya satu pengubah suai (⌘, ⌥, ⌃, ⇧) untuk menetapkan pintasan.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Fail dimuat naik ke folder ini dalam Google Drive anda. Biarkan kosong untuk menggunakan \"macshot\". macshot hanya boleh menggunakan folder yang diciptakannya sendiri, jadi folder dengan nama yang sama yang anda cipta dalam Drive tidak akan digunakan semula, folder baharu akan dicipta sebaliknya. Semua maklumat kekal peribadi, tiada apa yang dikongsi secara awam.";
 
 "Pressure" = "Tekanan";
 

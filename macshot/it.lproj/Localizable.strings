@@ -140,7 +140,6 @@
 "PII" = "PII";
 "Faces" = "Volti";
 "People" = "Persone";
-"Confirm before upload" = "Conferma prima del caricamento";
 "Flip" = "Capovolgi";
 "Smooth" = "Smussato";
 "Refined" = "Raffinato";
@@ -198,7 +197,6 @@
 "Recording" = "Registrazione";
 "About" = "Informazioni";
 "Shortcuts" = "Scorciatoie";
-"Uploads" = "Caricamenti";
 "Language" = "Lingua";
 "Language:" = "Lingua:";
 "Restart the app to fully apply the new language." = "Riavvia l'app per applicare completamente la nuova lingua.";
@@ -315,44 +313,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Servizio di caricamento";
-"Upload Provider" = "Provider di caricamento";
+/* Preferences - Transcription */
 "Provider:" = "Provider:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (immagini + video)";
-"imgbb (images only)" = "imgbb (solo immagini)";
-"S3-Compatible (images + videos)" = "S3-Compatibile (immagini + video)";
-"S3-Compatible Storage" = "Archiviazione S3-Compatibile";
-"Sign In with Google" = "Accedi con Google";
-"Sign Out" = "Disconnetti";
-"Signed in" = "Connesso";
-"Not signed in" = "Non connesso";
-"Account:" = "Account:";
-"Folder:" = "Cartella:";
-"Test Connection" = "Testa connessione";
-"Fill in endpoint, bucket, and credentials first" = "Compila prima endpoint, bucket e credenziali";
-"Testing..." = "Test in corso...";
-"Connection successful!" = "Connessione riuscita!";
-"Leave empty to use default" = "Lascia vuoto per usare il valore predefinito";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Regione:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Chiave di accesso:";
-"Secret Key:" = "Chiave segreta:";
-"Public URL:" = "URL pubblico:";
-"Path Prefix:" = "Prefisso percorso:";
-"Make uploads publicly readable" = "Rendi i caricamenti leggibili pubblicamente";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Invia l'ACL public-read in modo che i file caricati siano visibili da chiunque abbia il link. Necessario per AWS S3, DigitalOcean Spaces, MinIO e Backblaze B2, che archiviano gli oggetti in modo privato per impostazione predefinita. Lasciare disattivato per Cloudflare R2, che non supporta le ACL e rifiuta l'intestazione.";
-"API key:" = "Chiave API:";
-"Upload History" = "Cronologia caricamenti";
-"No uploads yet." = "Nessun caricamento.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "URL base per l'accesso pubblico. Se vuoto, viene usato l'URL dell'endpoint S3 (potrebbe non essere accessibile pubblicamente).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Una chiave condivisa è inclusa, ottieni la tua chiave gratuita su imgbb.com/api se raggiungi i limiti. Solo immagini (nessun supporto video).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Funziona con AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 e altri servizi S3-compatibili. Supporta immagini e video.";
-"Configure S3 in Preferences" = "Configura S3 nelle Preferenze";
-"Sign in to Google Drive in Preferences" = "Accedi a Google Drive nelle Preferenze";
-"Video upload requires Google Drive or S3" = "Il caricamento video richiede Google Drive o S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -374,10 +336,6 @@
 "Cancel" = "Annulla";
 "Microphone Access Required" = "Accesso al microfono richiesto";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot ha bisogno del permesso microfono per registrare l'audio vocale. Apri le Impostazioni di Sistema per concedere l'accesso.";
-"Upload to Google Drive?" = "Caricare su Google Drive?";
-"Upload to S3?" = "Caricare su S3?";
-"Upload to imgbb.com?" = "Caricare su imgbb.com?";
-"Your screenshot will be uploaded." = "Il tuo screenshot verrà caricato.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Benvenuto in macshot";
@@ -406,8 +364,6 @@
 "URL copied to the clipboard" = "URL copiato negli appunti";
 "Uploading... %d%%" = "Caricamento... %d%%";
 "Upload failed: %@" = "Caricamento fallito: %@";
-"Uploaded! Link copied." = "Caricato! Link copiato.";
-"Uploading to %@... %d%%" = "Caricamento su %@... %d%%";
 "Open" = "Apri";
 
 /* Recording Toast */
@@ -541,8 +497,6 @@
 "Apple (on-device)" = "Apple (sul dispositivo)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "La traduzione Apple è più veloce e funziona offline. Google Translate supporta più lingue.";
 "Download language packs in System Settings…" = "Scarica i pacchetti lingua nelle Impostazioni di Sistema…";
-"Configure S3 in Settings" = "Configura S3 nelle Impostazioni";
-"Sign in to Google Drive in Settings" = "Accedi a Google Drive nelle Impostazioni";
 "Position:" = "Posizione:";
 "Size:" = "Dimensione:";
 "Shape:" = "Forma:";
@@ -555,7 +509,6 @@
 "Clear History?" = "Cancellare la cronologia?";
 "This will permanently delete all screenshots from history." = "Tutti gli screenshot verranno eliminati definitivamente dalla cronologia.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Fai clic su \"Imposta\" e premi una combinazione di tasti con almeno un modificatore (⌘, ⌥, ⌃, ⇧) per impostare una scorciatoia.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "I file vengono caricati in questa cartella nel tuo Google Drive. Lascia vuoto per usare \"macshot\". macshot può usare solo le cartelle che ha creato, quindi una cartella con lo stesso nome creata da te in Drive non verrà riutilizzata, ne verrà creata una nuova. Tutto rimane privato, nulla viene condiviso pubblicamente.";
 
 "Pressure" = "Pressione";
 

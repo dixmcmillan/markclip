@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -153,7 +153,6 @@
 "PII" = "個資";
 "Faces" = "臉孔";
 "People" = "人物";
-"Confirm before upload" = "上傳前確認";
 "Flip" = "翻轉";
 "Smooth" = "平滑";
 "Refined" = "精細";
@@ -216,7 +215,6 @@
 "Recording" = "錄製";
 "About" = "關於";
 "Shortcuts" = "快捷鍵";
-"Uploads" = "上傳";
 "Language" = "語言";
 "Language:" = "語言：";
 "Restart the app to fully apply the new language." = "重新啟動 App 以完整套用新語言。";
@@ -331,44 +329,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "上傳服務";
-"Upload Provider" = "上傳供應商";
+/* Preferences - Transcription */
 "Provider:" = "供應商：";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive（影像 + 影片）";
-"imgbb (images only)" = "imgbb（僅影像）";
-"S3-Compatible (images + videos)" = "S3 相容（影像 + 影片）";
-"S3-Compatible Storage" = "S3 相容儲存空間";
-"Sign In with Google" = "使用 Google 登入";
-"Sign Out" = "登出";
-"Signed in" = "已登入";
-"Not signed in" = "未登入";
-"Account:" = "帳號：";
-"Folder:" = "資料夾：";
-"Test Connection" = "測試連線";
-"Fill in endpoint, bucket, and credentials first" = "請先填寫端點、儲存貯體及憑證";
-"Testing..." = "測試中⋯";
-"Connection successful!" = "連線成功！";
-"Leave empty to use default" = "留空以使用預設值";
-"Endpoint:" = "端點：";
-"Region:" = "區域：";
-"Bucket:" = "儲存貯體：";
-"Access Key:" = "存取金鑰：";
-"Secret Key:" = "秘密金鑰：";
-"Public URL:" = "公開 URL：";
-"Path Prefix:" = "路徑前綴：";
-"Make uploads publicly readable" = "將上傳檔案設為公開可讀";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "傳送 public-read ACL，讓上傳的檔案可被任何擁有連結的人檢視。AWS S3、DigitalOcean Spaces、MinIO 和 Backblaze B2 預設以私有方式儲存物件，需要啟用此選項。Cloudflare R2 不支援 ACL 且會拒絕此標頭，請保持關閉。";
-"API key:" = "API 金鑰：";
-"Upload History" = "上傳歷史記錄";
-"No uploads yet." = "尚無上傳記錄。";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "用於公開存取的基礎 URL。若為空，將使用 S3 端點 URL（可能無法公開存取）。";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "已包含共用金鑰, 如遇到速率限制，請至 imgbb.com/api 取得您自己的免費金鑰。僅支援影像（不支援影片）。";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "支援 AWS S3、Cloudflare R2、MinIO、DigitalOcean Spaces、Backblaze B2 及其他 S3 相容服務。支援影像和影片。";
-"Configure S3 in Preferences" = "在偏好設定中設定 S3";
-"Sign in to Google Drive in Preferences" = "在偏好設定中登入 Google Drive";
-"Video upload requires Google Drive or S3" = "影片上傳需要 Google Drive 或 S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -390,10 +352,6 @@
 "Cancel" = "取消";
 "Microphone Access Required" = "需要麥克風權限";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot 需要麥克風權限才能錄製語音。請打開系統設定以授予權限。";
-"Upload to Google Drive?" = "上傳至 Google Drive？";
-"Upload to S3?" = "上傳至 S3？";
-"Upload to imgbb.com?" = "上傳至 imgbb.com？";
-"Your screenshot will be uploaded." = "您的螢幕截圖將被上傳。";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "歡迎使用 macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "URL 已拷貝至剪貼簿";
 "Uploading... %d%%" = "上傳中⋯ %d%%";
 "Upload failed: %@" = "上傳失敗：%@";
-"Uploaded! Link copied." = "上傳完成！連結已拷貝。";
-"Uploading to %@... %d%%" = "上傳至 %@⋯ %d%%";
 "Open" = "開啟";
 
 /* Recording Toast */
@@ -561,8 +517,6 @@
 "Apple (on-device)" = "Apple（裝置端）";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple 翻譯更快且支援離線使用。Google Translate 支援更多語言。";
 "Download language packs in System Settings…" = "在系統設定中下載語言套件⋯";
-"Configure S3 in Settings" = "在設定中設定 S3";
-"Sign in to Google Drive in Settings" = "在設定中登入 Google Drive";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "離線版本：已移除上傳和雲端儲存整合。檢查更新時可能仍會連接到 MacShot 的更新伺服器。除非你自行分享或儲存，否則截圖和錄製內容只會保留在本機。";
 "Position:" = "位置：";
 "  Position:" = "  位置：";
@@ -577,7 +531,6 @@
 "Clear History?" = "清除歷史記錄？";
 "This will permanently delete all screenshots from history." = "這將從歷史記錄中永久刪除所有截圖。";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "點擊\"設定\"，然後按下包含至少一個修飾鍵（⌘、⌥、⌃、⇧）的組合鍵來設定快捷鍵。";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "檔案將上傳至您 Google Drive 中的此資料夾。留空則使用\"macshot\"。macshot 只能使用由它自己建立的資料夾，因此您在 Drive 中自行建立的同名資料夾不會被重複使用，而是會建立新的資料夾。所有內容均保持私密, , 不會公開分享任何內容。";
 
 "Pressure" = "壓感";
 

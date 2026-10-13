@@ -11,7 +11,7 @@ macshot is a free, open-source screenshot and screen recording tool for macOS. I
 - **No telemetry or analytics** — macshot does not phone home, track usage, or send any data to us.
 - **No data collection** — we do not collect personal information, usage statistics, crash reports, or any other data.
 - **No server-side storage** — we do not operate any servers. All screenshots, recordings, and settings are stored locally on your Mac.
-- **No access to your uploads** — when you upload to Google Drive, files go directly to your own Google Drive account. We cannot see, access, or download your files. When you upload to imgbb, files go directly to imgbb's servers under their privacy policy.
+- **No access to your files** — we cannot see, access, or download your screenshots or recordings. Upload integrations (Google Drive, S3-compatible storage, imgbb) have been removed; Cloudflare Stream/Images upload from the video exporter is planned; this policy will be updated when it ships.
 
 ## Data stored on your device
 
@@ -20,23 +20,10 @@ macshot stores the following data locally on your Mac:
 - **Screenshots and recordings** — saved to your chosen folder (default: Pictures).
 - **Screenshot history** — recent captures stored in `~/Library/Application Support/com.sw33tlie.macshot/history/`. You control the history size in Preferences (set to 0 to disable).
 - **Preferences** — settings stored in macOS UserDefaults.
-- **Google Drive OAuth tokens** — if you sign in to Google Drive, authentication tokens are stored in `~/Library/Application Support/com.sw33tlie.macshot/gdrive_tokens.json` with owner-only permissions (0600). Tokens are used solely to upload files to your own Google Drive. You can sign out at any time in Preferences, which deletes the token file.
 
 ## Third-party services
 
-macshot integrates with the following optional third-party services. Use of these services is entirely opt-in:
-
-### Google Drive
-- **Purpose:** Upload screenshots and recordings to your own Google Drive.
-- **Scope:** `drive.file` — macshot can only access files it created in your Drive. It cannot read, list, or modify any other files in your Drive.
-- **Data sent:** The image or video file you choose to upload, plus a filename.
-- **Authentication:** OAuth 2.0. You sign in via Google's login page in your browser. macshot stores a refresh token locally (see above) to avoid repeated sign-ins.
-- **Revoking access:** You can sign out in macshot Preferences, or revoke access at any time from [Google Account Permissions](https://myaccount.google.com/permissions).
-
-### imgbb
-- **Purpose:** Upload screenshots to imgbb for shareable image links.
-- **Data sent:** The image file you choose to upload.
-- **imgbb's privacy policy:** [https://imgbb.com/privacy](https://imgbb.com/privacy)
+macshot integrates with the following third-party services:
 
 ### Sparkle (auto-updates)
 - **Purpose:** Check for and install macshot updates.

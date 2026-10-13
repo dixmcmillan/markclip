@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -162,7 +162,6 @@
 "PII" = "PII";
 "Faces" = "Faces";
 "People" = "People";
-"Confirm before upload" = "Confirm before upload";
 "Flip" = "Flip";
 "Smooth" = "Smooth";
 "Refined" = "Refined";
@@ -209,7 +208,6 @@
 "Recording" = "Recording";
 "About" = "About";
 "Shortcuts" = "Shortcuts";
-"Uploads" = "Uploads";
 "Language" = "Language";
 "Language:" = "Language:";
 "Restart the app to fully apply the new language." = "Restart the app to fully apply the new language.";
@@ -340,44 +338,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Upload Service";
-"Upload Provider" = "Upload Provider";
+/* Preferences - Transcription */
 "Provider:" = "Provider:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (images + videos)";
-"imgbb (images only)" = "imgbb (images only)";
-"S3-Compatible (images + videos)" = "S3-Compatible (images + videos)";
-"S3-Compatible Storage" = "S3-Compatible Storage";
-"Sign In with Google" = "Sign In with Google";
-"Sign Out" = "Sign Out";
-"Signed in" = "Signed in";
-"Not signed in" = "Not signed in";
-"Folder:" = "Folder:";
-"Account:" = "Account:";
-"Test Connection" = "Test Connection";
-"Fill in endpoint, bucket, and credentials first" = "Fill in endpoint, bucket, and credentials first";
-"Testing..." = "Testing...";
-"Connection successful!" = "Connection successful!";
-"Leave empty to use default" = "Leave empty to use default";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Region:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Access Key:";
-"Secret Key:" = "Secret Key:";
-"Public URL:" = "Public URL:";
-"Path Prefix:" = "Path Prefix:";
-"Make uploads publicly readable" = "Make uploads publicly readable";
-"API key:" = "API key:";
-"Upload History" = "Upload History";
-"No uploads yet." = "No uploads yet.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible).";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header.";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos.";
-"Configure S3 in Preferences" = "Configure S3 in Preferences";
-"Sign in to Google Drive in Preferences" = "Sign in to Google Drive in Preferences";
-"Video upload requires Google Drive or S3" = "Video upload requires Google Drive or S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -399,10 +361,6 @@
 "Cancel" = "Cancel";
 "Microphone Access Required" = "Microphone Access Required";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot needs microphone permission to record voice audio. Open System Settings to grant access.";
-"Upload to Google Drive?" = "Upload to Google Drive?";
-"Upload to S3?" = "Upload to S3?";
-"Upload to imgbb.com?" = "Upload to imgbb.com?";
-"Your screenshot will be uploaded." = "Your screenshot will be uploaded.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Welcome to macshot";
@@ -435,8 +393,6 @@
 "URL copied to the clipboard" = "URL copied to the clipboard";
 "Uploading... %d%%" = "Uploading... %d%%";
 "Upload failed: %@" = "Upload failed: %@";
-"Uploaded! Link copied." = "Uploaded! Link copied.";
-"Uploading to %@... %d%%" = "Uploading to %@... %d%%";
 "Open" = "Open";
 
 /* Recording Toast */
@@ -549,8 +505,6 @@
 "Apple (on-device)" = "Apple (on-device)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple translation is faster and works offline. Google Translate supports more languages.";
 "Download language packs in System Settings…" = "Download language packs in System Settings…";
-"Configure S3 in Settings" = "Configure S3 in Settings";
-"Sign in to Google Drive in Settings" = "Sign in to Google Drive in Settings";
 "Position:" = "Position:";
 "Size:" = "Size:";
 "Shape:" = "Shape:";
@@ -562,7 +516,6 @@
 "Clear History?" = "Clear History?";
 "This will permanently delete all screenshots from history." = "This will permanently delete all screenshots from history.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly.";
 
 "Pressure" = "Pressure";
 

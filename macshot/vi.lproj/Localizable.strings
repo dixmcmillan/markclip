@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -153,7 +153,6 @@
 "PII" = "PII";
 "Faces" = "Khuôn mặt";
 "People" = "Người";
-"Confirm before upload" = "Xác nhận trước khi tải lên";
 "Flip" = "Lật";
 "Smooth" = "Mượt";
 "Refined" = "Tinh chỉnh";
@@ -216,7 +215,6 @@
 "Recording" = "Quay phim";
 "About" = "Giới thiệu";
 "Shortcuts" = "Phím tắt";
-"Uploads" = "Tải lên";
 "Language" = "Ngôn ngữ";
 "Language:" = "Ngôn ngữ:";
 "Restart the app to fully apply the new language." = "Khởi động lại ứng dụng để áp dụng đầy đủ ngôn ngữ mới.";
@@ -331,44 +329,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Dịch vụ tải lên";
-"Upload Provider" = "Nhà cung cấp tải lên";
+/* Preferences - Transcription */
 "Provider:" = "Nhà cung cấp:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (ảnh + video)";
-"imgbb (images only)" = "imgbb (chỉ ảnh)";
-"S3-Compatible (images + videos)" = "S3-Compatible (ảnh + video)";
-"S3-Compatible Storage" = "Lưu trữ tương thích S3";
-"Sign In with Google" = "Đăng nhập bằng Google";
-"Sign Out" = "Đăng xuất";
-"Signed in" = "Đã đăng nhập";
-"Not signed in" = "Chưa đăng nhập";
-"Account:" = "Tài khoản:";
-"Folder:" = "Thư mục:";
-"Test Connection" = "Kiểm tra kết nối";
-"Fill in endpoint, bucket, and credentials first" = "Điền endpoint, bucket và thông tin xác thực trước";
-"Testing..." = "Đang kiểm tra...";
-"Connection successful!" = "Kết nối thành công!";
-"Leave empty to use default" = "Để trống để dùng mặc định";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Vùng:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Khóa truy cập:";
-"Secret Key:" = "Khóa bí mật:";
-"Public URL:" = "URL công khai:";
-"Path Prefix:" = "Tiền tố đường dẫn:";
-"Make uploads publicly readable" = "Cho phép đọc công khai các tệp tải lên";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Gửi ACL public-read để các tệp đã tải lên có thể xem được bởi bất kỳ ai có liên kết. Cần thiết cho AWS S3, DigitalOcean Spaces, MinIO và Backblaze B2 vì các dịch vụ này lưu trữ đối tượng ở chế độ riêng tư theo mặc định. Tắt cho Cloudflare R2 vì không hỗ trợ ACL và sẽ từ chối header.";
-"API key:" = "Khóa API:";
-"Upload History" = "Lịch sử tải lên";
-"No uploads yet." = "Chưa có tải lên nào.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "URL cơ sở để truy cập công khai. Nếu để trống, URL endpoint S3 sẽ được sử dụng (có thể không truy cập được công khai).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Đã bao gồm khóa dùng chung, lấy khóa miễn phí riêng tại imgbb.com/api nếu bạn bị giới hạn tốc độ. Chỉ hỗ trợ ảnh (không hỗ trợ video).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Hoạt động với AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 và các dịch vụ tương thích S3 khác. Hỗ trợ ảnh và video.";
-"Configure S3 in Preferences" = "Cấu hình S3 trong Tùy chọn";
-"Sign in to Google Drive in Preferences" = "Đăng nhập Google Drive trong Tùy chọn";
-"Video upload requires Google Drive or S3" = "Tải video lên yêu cầu Google Drive hoặc S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -390,10 +352,6 @@
 "Cancel" = "Hủy";
 "Microphone Access Required" = "Yêu cầu quyền Micro";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot cần quyền micro để ghi âm giọng nói. Mở Cài đặt hệ thống để cấp quyền.";
-"Upload to Google Drive?" = "Tải lên Google Drive?";
-"Upload to S3?" = "Tải lên S3?";
-"Upload to imgbb.com?" = "Tải lên imgbb.com?";
-"Your screenshot will be uploaded." = "Ảnh chụp của bạn sẽ được tải lên.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Chào mừng đến với macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "Đã sao chép URL vào bộ nhớ tạm";
 "Uploading... %d%%" = "Đang tải lên... %d%%";
 "Upload failed: %@" = "Tải lên thất bại: %@";
-"Uploaded! Link copied." = "Đã tải lên! Đã sao chép liên kết.";
-"Uploading to %@... %d%%" = "Đang tải lên %@... %d%%";
 "Open" = "Mở";
 
 /* Recording Toast */
@@ -559,8 +515,6 @@
 "Apple (on-device)" = "Apple (trên thiết bị)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Bản dịch Apple nhanh hơn và hoạt động ngoại tuyến. Google Translate hỗ trợ nhiều ngôn ngữ hơn.";
 "Download language packs in System Settings…" = "Tải gói ngôn ngữ trong Cài đặt hệ thống…";
-"Configure S3 in Settings" = "Cấu hình S3 trong Cài đặt";
-"Sign in to Google Drive in Settings" = "Đăng nhập Google Drive trong Cài đặt";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Bản dựng ngoại tuyến: các tích hợp tải lên và lưu trữ đám mây đã bị loại bỏ. Việc kiểm tra cập nhật vẫn có thể kết nối đến máy chủ cập nhật của MacShot. Ảnh chụp màn hình và bản ghi vẫn được lưu cục bộ trừ khi bạn tự chia sẻ hoặc lưu chúng.";
 "Position:" = "Vị trí:";
 "  Position:" = "  Vị trí:";
@@ -575,7 +529,6 @@
 "Clear History?" = "Xóa lịch sử?";
 "This will permanently delete all screenshots from history." = "Thao tác này sẽ xóa vĩnh viễn tất cả ảnh chụp màn hình khỏi lịch sử.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Nhấp vào \"Đặt\" và nhấn tổ hợp phím có ít nhất một phím bổ trợ (⌘, ⌥, ⌃, ⇧) để đặt phím tắt.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Các tệp được tải lên thư mục này trong Google Drive của bạn. Để trống để dùng \"macshot\". macshot chỉ có thể dùng các thư mục do chính nó tạo ra, vì vậy thư mục cùng tên mà bạn tự tạo trong Drive sẽ không được dùng lại, thay vào đó một thư mục mới sẽ được tạo. Mọi thứ đều được giữ bí mật, không có gì được chia sẻ công khai.";
 
 "Pressure" = "Lực nhấn";
 

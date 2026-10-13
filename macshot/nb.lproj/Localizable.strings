@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -158,7 +158,6 @@
 "PII" = "PII";
 "Faces" = "Ansikter";
 "People" = "Personer";
-"Confirm before upload" = "Bekreft f\U00F8r opplasting";
 "Flip" = "Speilvend";
 "Smooth" = "Jevn";
 "Refined" = "Forfinet";
@@ -213,7 +212,6 @@
 "Recording" = "Opptak";
 "About" = "Om";
 "Shortcuts" = "Snarveier";
-"Uploads" = "Opplastinger";
 "Language" = "Spr\U00E5k";
 "Language:" = "Spr\U00E5k:";
 "Restart the app to fully apply the new language." = "Start appen p\U00E5 nytt for \U00E5 bruke det nye spr\U00E5ket.";
@@ -330,44 +328,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Opplastingstjeneste";
-"Upload Provider" = "Opplastingsleverand\U00F8r";
+/* Preferences - Transcription */
 "Provider:" = "Leverand\U00F8r:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (bilder + videoer)";
-"imgbb (images only)" = "imgbb (kun bilder)";
-"S3-Compatible (images + videos)" = "S3-kompatibel (bilder + videoer)";
-"S3-Compatible Storage" = "S3-kompatibel lagring";
-"Sign In with Google" = "Logg inn med Google";
-"Sign Out" = "Logg ut";
-"Signed in" = "Innlogget";
-"Not signed in" = "Ikke innlogget";
-"Account:" = "Konto:";
-"Folder:" = "Mappe:";
-"Test Connection" = "Test tilkobling";
-"Fill in endpoint, bucket, and credentials first" = "Fyll inn endepunkt, beholder og legitimasjon f\U00F8rst";
-"Testing..." = "Tester\U2026";
-"Connection successful!" = "Tilkobling vellykket!";
-"Leave empty to use default" = "La st\U00E5 tom for \U00E5 bruke standard";
-"Endpoint:" = "Endepunkt:";
-"Region:" = "Region:";
-"Bucket:" = "Beholder:";
-"Access Key:" = "Tilgangsn\U00F8kkel:";
-"Secret Key:" = "Hemmelig n\U00F8kkel:";
-"Public URL:" = "Offentlig URL:";
-"Path Prefix:" = "Sti-prefiks:";
-"Make uploads publicly readable" = "Gj\U00F8r opplastinger offentlig lesbare";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Sender public-read ACL slik at opplastede filer kan ses av alle med lenken. N\U00F8dvendig for AWS S3, DigitalOcean Spaces, MinIO og Backblaze B2, som lagrer objekter privat som standard. La st\U00E5 av for Cloudflare R2, som ikke har ACL og avviser headeren.";
-"API key:" = "API-n\U00F8kkel:";
-"Upload History" = "Opplastingshistorikk";
-"No uploads yet." = "Ingen opplastinger enn\U00E5.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Basis-URL for offentlig tilgang. Hvis tom, brukes S3-endepunktets URL (som kanskje ikke er offentlig tilgjengelig).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "En delt nøkkel er inkludert, få din egen gratis nøkkel på imgbb.com/api hvis du når hastighetsgrenser. Kun bilder (ingen støtte for video).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Fungerer med AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 og andre S3-kompatible tjenester. St\U00F8tter bilder og videoer.";
-"Configure S3 in Preferences" = "Konfigurer S3 i innstillingene";
-"Sign in to Google Drive in Preferences" = "Logg inn p\U00E5 Google Drive i innstillingene";
-"Video upload requires Google Drive or S3" = "Videoopplasting krever Google Drive eller S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -389,10 +351,6 @@
 "Cancel" = "Avbryt";
 "Microphone Access Required" = "Mikrofontilgang p\U00E5krevd";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot trenger mikrofontillatelse for \U00E5 ta opp lyd. \U00C5pne Systeminnstillinger for \U00E5 gi tilgang.";
-"Upload to Google Drive?" = "Laste opp til Google Drive?";
-"Upload to S3?" = "Laste opp til S3?";
-"Upload to imgbb.com?" = "Laste opp til imgbb.com?";
-"Your screenshot will be uploaded." = "Skjermbildet ditt vil bli lastet opp.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Velkommen til macshot";
@@ -421,8 +379,6 @@
 "URL copied to the clipboard" = "URL kopiert til utklippstavlen";
 "Uploading... %d%%" = "Laster opp\U2026 %d%%";
 "Upload failed: %@" = "Opplasting mislyktes: %@";
-"Uploaded! Link copied." = "Lastet opp! Lenke kopiert.";
-"Uploading to %@... %d%%" = "Laster opp til %@\U2026 %d%%";
 "Open" = "\U00C5pne";
 
 /* Recording Toast */
@@ -561,8 +517,6 @@
 "Apple (on-device)" = "Apple (p\U00E5 enheten)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-oversettelse er raskere og fungerer uten nett. Google Translate st\U00F8tter flere spr\U00E5k.";
 "Download language packs in System Settings\U2026" = "Last ned spr\U00E5kpakker i Systeminnstillinger\U2026";
-"Configure S3 in Settings" = "Konfigurer S3 i innstillingene";
-"Sign in to Google Drive in Settings" = "Logg inn p\U00E5 Google Drive i innstillingene";
 "Position:" = "Posisjon:";
 "Size:" = "St\U00F8rrelse:";
 "Shape:" = "Form:";
@@ -575,7 +529,6 @@
 "Clear History?" = "Tøm historikk?";
 "This will permanently delete all screenshots from history." = "Dette vil slette alle skjermbilder fra historikken permanent.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klikk \"Angi\" og trykk en tastekombinasjon med minst én modifikatortast (⌘, ⌥, ⌃, ⇧) for å angi en snarvei.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Filer lastes opp til denne mappen i Google Disk. La feltet stå tomt for å bruke \"macshot\". macshot kan bare bruke mapper det har opprettet selv, så en mappe med samme navn som du har laget i Disk, blir ikke gjenbrukt, det opprettes en ny i stedet. Alt forblir privat, ingenting deles offentlig.";
 
 "Pressure" = "Trykk";
 

@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -167,7 +167,6 @@
 "PII" = "Персональні дані";
 "Faces" = "Обличчя";
 "People" = "Люди";
-"Confirm before upload" = "Підтвердити перед завантаженням";
 "Flip" = "Відбити";
 "Smooth" = "Згладжування";
 "Refined" = "Точний";
@@ -219,7 +218,6 @@
 "Recording" = "Запис";
 "About" = "Про програму";
 "Shortcuts" = "Скорочення";
-"Uploads" = "Завантаження";
 "Language" = "Мова";
 "Language:" = "Мова:";
 "Restart the app to fully apply the new language." = "Перезапустіть програму, щоб повністю застосувати нову мову.";
@@ -332,44 +330,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Сервіс завантаження";
-"Upload Provider" = "Провайдер завантаження";
+/* Preferences - Transcription */
 "Provider:" = "Провайдер:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (зображення + відео)";
-"imgbb (images only)" = "imgbb (лише зображення)";
-"S3-Compatible (images + videos)" = "S3-сумісне (зображення + відео)";
-"S3-Compatible Storage" = "S3-сумісне сховище";
-"Sign In with Google" = "Увійти через Google";
-"Sign Out" = "Вийти";
-"Signed in" = "Увійдено";
-"Not signed in" = "Не увійдено";
-"Account:" = "Обліковий запис:";
-"Folder:" = "Папка:";
-"Test Connection" = "Перевірити з'єднання";
-"Fill in endpoint, bucket, and credentials first" = "Спочатку заповніть адресу, бакет та облікові дані";
-"Testing..." = "Перевірка...";
-"Connection successful!" = "З'єднання успішне!";
-"Leave empty to use default" = "Залиште порожнім для використання за замовчуванням";
-"Endpoint:" = "Адреса:";
-"Region:" = "Регіон:";
-"Bucket:" = "Бакет:";
-"Access Key:" = "Ключ доступу:";
-"Secret Key:" = "Секретний ключ:";
-"Public URL:" = "Публічна URL-адреса:";
-"Path Prefix:" = "Префікс шляху:";
-"Make uploads publicly readable" = "Зробити завантаження публічно доступними для читання";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Надсилає ACL public-read, щоб завантажені файли були доступні всім за посиланням. Потрібно для AWS S3, DigitalOcean Spaces, MinIO та Backblaze B2, які за замовчуванням зберігають об'єкти приватно. Вимкніть для Cloudflare R2, який не підтримує ACL і відхиляє цей заголовок.";
-"API key:" = "API-ключ:";
-"Upload History" = "Історія завантажень";
-"No uploads yet." = "Завантажень ще немає.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Базова URL-адреса для публічного доступу. Якщо порожня, використовується URL-адреса S3 (може бути недоступною публічно).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Спільний ключ вже включено, отримайте власний безкоштовний ключ на imgbb.com/api, якщо досягнете обмежень. Лише зображення (без підтримки відео).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Працює з AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 та іншими S3-сумісними сервісами. Підтримує зображення та відео.";
-"Configure S3 in Preferences" = "Налаштуйте S3 у Параметрах";
-"Sign in to Google Drive in Preferences" = "Увійдіть до Google Drive у Параметрах";
-"Video upload requires Google Drive or S3" = "Завантаження відео потребує Google Drive або S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "Скасувати";
 "Microphone Access Required" = "Потрібен доступ до мікрофона";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot потребує дозволу мікрофона для запису голосового аудіо. Відкрийте Системні параметри, щоб надати доступ.";
-"Upload to Google Drive?" = "Завантажити на Google Drive?";
-"Upload to S3?" = "Завантажити на S3?";
-"Upload to imgbb.com?" = "Завантажити на imgbb.com?";
-"Your screenshot will be uploaded." = "Ваш знімок екрана буде завантажено.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Ласкаво просимо до macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "URL скопійовано до буфера обміну";
 "Uploading... %d%%" = "Завантаження... %d%%";
 "Upload failed: %@" = "Помилка завантаження: %@";
-"Uploaded! Link copied." = "Завантажено! Посилання скопійовано.";
-"Uploading to %@... %d%%" = "Завантаження на %@... %d%%";
 "Open" = "Відкрити";
 
 /* Recording Toast */
@@ -559,8 +515,6 @@
 "Apple (on-device)" = "Apple (на пристрої)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Переклад Apple швидший і працює офлайн. Google Translate підтримує більше мов.";
 "Download language packs in System Settings…" = "Завантажте мовні пакети в Системних параметрах…";
-"Configure S3 in Settings" = "Налаштуйте S3 у Налаштуваннях";
-"Sign in to Google Drive in Settings" = "Увійдіть до Google Drive у Налаштуваннях";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Офлайн-збірка: інтеграції завантаження та хмарного сховища вилучено. Перевірка оновлень усе ще може з'єднуватися із сервером оновлень MacShot. Знімки екрана та записи залишаються локальними, доки ви самі ними не поділитеся або не збережете їх.";
 "Position:" = "Позиція:";
 "  Position:" = "  Позиція:";
@@ -575,7 +529,6 @@
 "Clear History?" = "Очистити історію?";
 "This will permanently delete all screenshots from history." = "Це назавжди видалить усі знімки екрана з історії.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Натисніть \"Встановити\" та введіть комбінацію клавіш з принаймні одним модифікатором (⌘, ⌥, ⌃, ⇧), щоб призначити ярлик.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Файли завантажуються до цієї папки на вашому Google Диску. Залиште поле порожнім, щоб використовувати \"macshot\". macshot може використовувати лише папки, які створив сам, тому папку з такою ж назвою, створену вами на Диску, не буде використано, натомість буде створено нову. Все залишається приватним, нічого не публікується у відкритому доступі.";
 
 "Pressure" = "Тиск";
 

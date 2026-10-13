@@ -223,12 +223,13 @@ final class LocalizationTests: XCTestCase {
         // ro: +1 ("combina", infinitive "to combine", vs. imperative
         // "Combină!" — one of Romanian's verb-form collisions, same family
         // as the definite-article forms already noted below).
+        // Phase 7 (removed upload strings): ca 2->1, fr 6->5, ro 46->44, sk 3->1, vi 41->39.
         // vi: +8 (ordinary, very common words — "cung" in "cung cấp"
         // (provide/supply), "thanh" in "âm thanh" (audio) and "thanh menu"
         // (menu bar) — colliding with unrelated accented homographs, the
         // same tonal-collision pattern the existing budget already covers).
-        "ca": 2, "cs": 19, "es": 0, "fr": 6, "hr": 2, "pl": 1,
-        "pt": 1, "pt-BR": 1, "ro": 46, "sk": 3, "sv": 1, "tr": 6, "vi": 41,
+        "ca": 1, "cs": 19, "es": 0, "fr": 5, "hr": 2, "pl": 1,
+        "pt": 1, "pt-BR": 1, "ro": 44, "sk": 1, "sv": 1, "tr": 6, "vi": 39,
     ]
 
     private static func deaccented(_ word: String) -> String {

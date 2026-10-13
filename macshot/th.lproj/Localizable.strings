@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -153,7 +153,6 @@
 "PII" = "ข้อมูลส่วนบุคคล";
 "Faces" = "ใบหน้า";
 "People" = "ผู้คน";
-"Confirm before upload" = "ยืนยันก่อนอัปโหลด";
 "Flip" = "พลิก";
 "Smooth" = "เรียบ";
 "Refined" = "ประณีต";
@@ -216,7 +215,6 @@
 "Recording" = "การบันทึก";
 "About" = "เกี่ยวกับ";
 "Shortcuts" = "ปุ่มลัด";
-"Uploads" = "อัปโหลด";
 "Language" = "ภาษา";
 "Language:" = "ภาษา:";
 "Restart the app to fully apply the new language." = "เริ่มแอปใหม่เพื่อใช้ภาษาใหม่อย่างสมบูรณ์";
@@ -331,44 +329,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "บริการอัปโหลด";
-"Upload Provider" = "ผู้ให้บริการอัปโหลด";
+/* Preferences - Transcription */
 "Provider:" = "ผู้ให้บริการ:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (รูปภาพ + วิดีโอ)";
-"imgbb (images only)" = "imgbb (รูปภาพเท่านั้น)";
-"S3-Compatible (images + videos)" = "S3-Compatible (รูปภาพ + วิดีโอ)";
-"S3-Compatible Storage" = "พื้นที่จัดเก็บ S3-Compatible";
-"Sign In with Google" = "ลงชื่อเข้าใช้ด้วย Google";
-"Sign Out" = "ออกจากระบบ";
-"Signed in" = "เข้าสู่ระบบแล้ว";
-"Not signed in" = "ยังไม่ได้เข้าสู่ระบบ";
-"Account:" = "บัญชี:";
-"Folder:" = "โฟลเดอร์:";
-"Test Connection" = "ทดสอบการเชื่อมต่อ";
-"Fill in endpoint, bucket, and credentials first" = "กรอก endpoint, bucket และข้อมูลรับรองก่อน";
-"Testing..." = "กำลังทดสอบ...";
-"Connection successful!" = "เชื่อมต่อสำเร็จ!";
-"Leave empty to use default" = "ปล่อยว่างเพื่อใช้ค่าเริ่มต้น";
-"Endpoint:" = "Endpoint:";
-"Region:" = "ภูมิภาค:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Access Key:";
-"Secret Key:" = "Secret Key:";
-"Public URL:" = "Public URL:";
-"Path Prefix:" = "Path Prefix:";
-"Make uploads publicly readable" = "ทำให้ไฟล์ที่อัปโหลดเป็นสาธารณะ";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "ส่ง ACL แบบ public-read เพื่อให้ไฟล์ที่อัปโหลดสามารถดูได้โดยทุกคนที่มีลิงก์ จำเป็นสำหรับ AWS S3, DigitalOcean Spaces, MinIO และ Backblaze B2 ซึ่งจัดเก็บอ็อบเจกต์แบบส่วนตัวโดยค่าเริ่มต้น ปิดไว้สำหรับ Cloudflare R2 ซึ่งไม่มี ACL และจะปฏิเสธ header";
-"API key:" = "API key:";
-"Upload History" = "ประวัติการอัปโหลด";
-"No uploads yet." = "ยังไม่มีการอัปโหลด";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "URL พื้นฐานสำหรับการเข้าถึงสาธารณะ หากปล่อยว่าง จะใช้ URL ของ S3 endpoint (อาจไม่สามารถเข้าถึงแบบสาธารณะได้)";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "มีคีย์สาธารณะให้ใช้, รับคีย์ฟรีของคุณเองที่ imgbb.com/api หากถึงขีดจำกัดอัตรา รองรับเฉพาะรูปภาพ (ไม่รองรับวิดีโอ)";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "ใช้งานได้กับ AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 และบริการอื่นที่เข้ากันได้กับ S3 รองรับรูปภาพและวิดีโอ";
-"Configure S3 in Preferences" = "ตั้งค่า S3 ในการตั้งค่า";
-"Sign in to Google Drive in Preferences" = "ลงชื่อเข้าใช้ Google Drive ในการตั้งค่า";
-"Video upload requires Google Drive or S3" = "การอัปโหลดวิดีโอต้องใช้ Google Drive หรือ S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -390,10 +352,6 @@
 "Cancel" = "ยกเลิก";
 "Microphone Access Required" = "ต้องการสิทธิ์ไมโครโฟน";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot ต้องการสิทธิ์ไมโครโฟนเพื่อบันทึกเสียง เปิดการตั้งค่าระบบเพื่ออนุญาต";
-"Upload to Google Drive?" = "อัปโหลดไปยัง Google Drive?";
-"Upload to S3?" = "อัปโหลดไปยัง S3?";
-"Upload to imgbb.com?" = "อัปโหลดไปยัง imgbb.com?";
-"Your screenshot will be uploaded." = "ภาพหน้าจอของคุณจะถูกอัปโหลด";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "ยินดีต้อนรับสู่ macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
 "Uploading... %d%%" = "กำลังอัปโหลด... %d%%";
 "Upload failed: %@" = "อัปโหลดล้มเหลว: %@";
-"Uploaded! Link copied." = "อัปโหลดแล้ว! คัดลอกลิงก์แล้ว";
-"Uploading to %@... %d%%" = "กำลังอัปโหลดไปยัง %@... %d%%";
 "Open" = "เปิด";
 
 /* Recording Toast */
@@ -559,8 +515,6 @@
 "Apple (on-device)" = "Apple (บนอุปกรณ์)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "การแปลของ Apple เร็วกว่าและใช้งานได้แบบออฟไลน์ Google Translate รองรับภาษาได้มากกว่า";
 "Download language packs in System Settings…" = "ดาวน์โหลดชุดภาษาในการตั้งค่าระบบ…";
-"Configure S3 in Settings" = "ตั้งค่า S3 ในการตั้งค่า";
-"Sign in to Google Drive in Settings" = "ลงชื่อเข้าใช้ Google Drive ในการตั้งค่า";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "บิลด์ออฟไลน์: การเชื่อมต่อการอัปโหลดและที่เก็บข้อมูลบนคลาวด์ถูกนำออกแล้ว การตรวจสอบอัปเดตอาจยังเชื่อมต่อกับเซิร์ฟเวอร์อัปเดตของ MacShot ภาพหน้าจอและการบันทึกจะยังคงอยู่ในเครื่อง เว้นแต่คุณจะแชร์หรือบันทึกด้วยตนเอง";
 "Position:" = "ตำแหน่ง:";
 "  Position:" = "  ตำแหน่ง:";
@@ -575,7 +529,6 @@
 "Clear History?" = "ล้างประวัติ?";
 "This will permanently delete all screenshots from history." = "การดำเนินการนี้จะลบภาพหน้าจอทั้งหมดออกจากประวัติอย่างถาวร";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "คลิก \"ตั้งค่า\" แล้วกดคีย์ผสมที่มีปุ่มตัวแก้ไขอย่างน้อยหนึ่งปุ่ม (⌘, ⌥, ⌃, ⇧) เพื่อตั้งค่าทางลัด";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "ไฟล์จะถูกอัปโหลดไปยังโฟลเดอร์นี้ใน Google Drive ของคุณ เว้นว่างไว้เพื่อใช้ \"macshot\" macshot สามารถใช้ได้เฉพาะโฟลเดอร์ที่ตัวเองสร้างขึ้นเท่านั้น ดังนั้นโฟลเดอร์ชื่อเดียวกันที่คุณสร้างเองใน Drive จะไม่ถูกนำมาใช้ซ้ำ, แต่จะสร้างโฟลเดอร์ใหม่แทน ทุกอย่างเป็นส่วนตัว, ไม่มีการแชร์สาธารณะ";
 
 "Pressure" = "แรงกด";
 

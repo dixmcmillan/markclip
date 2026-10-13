@@ -219,7 +219,6 @@ extension VideoFrameAnnotator: OverlayViewDelegate {
     func overlayViewDidRequestPin() {}
     func overlayViewDidRequestOCR() {}
     func overlayViewDidRequestFileSave() {}
-    func overlayViewDidRequestUpload() {}
     func overlayViewDidRequestShare(anchorView: NSView?) {}
     @available(macOS 14.0, *)
     func overlayViewDidRequestRemoveBackground() {}

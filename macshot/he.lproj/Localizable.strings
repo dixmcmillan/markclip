@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "PII";
 "Faces" = "פנים";
 "People" = "אנשים";
-"Confirm before upload" = "אשר לפני העלאה";
 "Flip" = "הפוך";
 "Smooth" = "החלקה";
 "Refined" = "מעודן";
@@ -200,7 +199,6 @@
 "Recording" = "הקלטה";
 "About" = "אודות";
 "Shortcuts" = "קיצורי דרך";
-"Uploads" = "העלאות";
 "Language" = "שפה";
 "Language:" = "שפה:";
 "Restart the app to fully apply the new language." = "הפעל מחדש את האפליקציה להחלת השפה החדשה במלואה.";
@@ -325,44 +323,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "שירות העלאה";
-"Upload Provider" = "ספק העלאה";
+/* Preferences - Transcription */
 "Provider:" = "ספק:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (תמונות + סרטונים)";
-"imgbb (images only)" = "imgbb (תמונות בלבד)";
-"S3-Compatible (images + videos)" = "S3-Compatible (תמונות + סרטונים)";
-"S3-Compatible Storage" = "אחסון תואם S3";
-"Sign In with Google" = "התחבר עם Google";
-"Sign Out" = "התנתק";
-"Signed in" = "מחובר";
-"Not signed in" = "לא מחובר";
-"Account:" = "חשבון:";
-"Folder:" = "תיקייה:";
-"Test Connection" = "בדוק חיבור";
-"Fill in endpoint, bucket, and credentials first" = "מלא קודם כתובת שרת, bucket ופרטי גישה";
-"Testing..." = "בודק...";
-"Connection successful!" = "החיבור הצליח!";
-"Leave empty to use default" = "השאר ריק לשימוש בברירת מחדל";
-"Endpoint:" = "כתובת שרת:";
-"Region:" = "אזור:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "מפתח גישה:";
-"Secret Key:" = "מפתח סודי:";
-"Public URL:" = "כתובת URL ציבורית:";
-"Path Prefix:" = "קידומת נתיב:";
-"Make uploads publicly readable" = "הפוך העלאות לקריאה ציבורית";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "שולח ACL מסוג public-read כדי שקבצים שהועלו יהיו נגישים לכל מי שיש לו את הקישור. נדרש עבור AWS S3, DigitalOcean Spaces, MinIO ו-Backblaze B2, ששומרים אובייקטים באופן פרטי כברירת מחדל. השאר כבוי עבור Cloudflare R2, שאינו תומך ב-ACLs ודוחה את הכותרת.";
-"API key:" = "מפתח API:";
-"Upload History" = "היסטוריית העלאות";
-"No uploads yet." = "אין העלאות עדיין.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "כתובת URL בסיסית לגישה ציבורית. אם ריק, נעשה שימוש בכתובת שרת S3 (ייתכן שלא נגיש לציבור).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "מפתח משותף כלול, קבל מפתח חינמי משלך ב-imgbb.com/api אם הגעת למגבלת קצב. תמונות בלבד (ללא תמיכה בווידאו).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "עובד עם AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 ושירותים תואמי S3 אחרים. תומך בתמונות וסרטונים.";
-"Configure S3 in Preferences" = "הגדר S3 בהעדפות";
-"Sign in to Google Drive in Preferences" = "התחבר ל-Google Drive בהעדפות";
-"Video upload requires Google Drive or S3" = "העלאת וידאו דורשת Google Drive או S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -384,10 +346,6 @@
 "Cancel" = "ביטול";
 "Microphone Access Required" = "נדרשת גישה למיקרופון";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot זקוק להרשאת מיקרופון להקלטת שמע קולי. פתח את הגדרות המערכת לאישור גישה.";
-"Upload to Google Drive?" = "להעלות ל-Google Drive?";
-"Upload to S3?" = "להעלות ל-S3?";
-"Upload to imgbb.com?" = "להעלות ל-imgbb.com?";
-"Your screenshot will be uploaded." = "צילום המסך שלך יועלה.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "ברוכים הבאים ל-macshot";
@@ -416,8 +374,6 @@
 "URL copied to the clipboard" = "הכתובת הועתקה ללוח";
 "Uploading... %d%%" = "מעלה... %d%%";
 "Upload failed: %@" = "ההעלאה נכשלה: %@";
-"Uploaded! Link copied." = "הועלה! הקישור הועתק.";
-"Uploading to %@... %d%%" = "מעלה ל-%@... %d%%";
 "Open" = "פתח";
 
 /* Recording Toast */
@@ -553,8 +509,6 @@
 "Apple (on-device)" = "Apple (על המכשיר)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "התרגום של Apple מהיר יותר ועובד ללא חיבור. Google Translate תומך ביותר שפות.";
 "Download language packs in System Settings…" = "הורד חבילות שפה בהגדרות המערכת…";
-"Configure S3 in Settings" = "הגדר S3 בהגדרות";
-"Sign in to Google Drive in Settings" = "התחבר ל-Google Drive בהגדרות";
 "Position:" = "מיקום:";
 "Size:" = "גודל:";
 "Shape:" = "צורה:";
@@ -567,7 +521,6 @@
 "Clear History?" = "לנקות את ההיסטוריה?";
 "This will permanently delete all screenshots from history." = "פעולה זו תמחק לצמיתות את כל צילומי המסך מההיסטוריה.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "לחץ על \"הגדר\" ולחץ על צירוף מקשים עם לפחות משנה אחד (⌘, ⌥, ⌃, ⇧) כדי להגדיר קיצור דרך.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "הקבצים מועלים לתיקייה זו ב-Google Drive שלך. השאר ריק כדי להשתמש ב-\"macshot\". macshot יכול להשתמש רק בתיקיות שהוא יצר בעצמו, ולכן תיקייה שיצרת ב-Drive עם אותו שם לא תנוצל מחדש, במקומה תיווצר תיקייה חדשה. הכל נשאר פרטי, שום דבר אינו משותף באופן ציבורי.";
 
 "Pressure" = "לחץ";
 

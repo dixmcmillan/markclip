@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -158,7 +158,6 @@
 "PII" = "PII";
 "Faces" = "Kasvot";
 "People" = "Ihmiset";
-"Confirm before upload" = "Vahvista ennen latausta";
 "Flip" = "Käännä";
 "Smooth" = "Tasoita";
 "Refined" = "Hienosäädetty";
@@ -213,7 +212,6 @@
 "Recording" = "Nauhoitus";
 "About" = "Tietoja";
 "Shortcuts" = "Pikanäppäimet";
-"Uploads" = "Lataukset";
 "Language" = "Kieli";
 "Language:" = "Kieli:";
 "Restart the app to fully apply the new language." = "Käynnistä sovellus uudelleen ottaaksesi uuden kielen käyttöön.";
@@ -330,44 +328,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Latauspalvelu";
-"Upload Provider" = "Latauspalveluntarjoaja";
+/* Preferences - Transcription */
 "Provider:" = "Palveluntarjoaja:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (kuvat + videot)";
-"imgbb (images only)" = "imgbb (vain kuvat)";
-"S3-Compatible (images + videos)" = "S3-yhteensopiva (kuvat + videot)";
-"S3-Compatible Storage" = "S3-yhteensopiva tallennustila";
-"Sign In with Google" = "Kirjaudu sisään Googlella";
-"Sign Out" = "Kirjaudu ulos";
-"Signed in" = "Kirjautunut sisään";
-"Not signed in" = "Ei kirjautunut";
-"Account:" = "Tili:";
-"Folder:" = "Kansio:";
-"Test Connection" = "Testaa yhteys";
-"Fill in endpoint, bucket, and credentials first" = "Täytä ensin päätepiste, säiliö ja tunnistetiedot";
-"Testing..." = "Testataan...";
-"Connection successful!" = "Yhteys onnistui!";
-"Leave empty to use default" = "Jätä tyhjäksi käyttääksesi oletusta";
-"Endpoint:" = "Päätepiste:";
-"Region:" = "Alue:";
-"Bucket:" = "Säiliö:";
-"Access Key:" = "Käyttöavain:";
-"Secret Key:" = "Salainen avain:";
-"Public URL:" = "Julkinen URL:";
-"Path Prefix:" = "Polun etuliite:";
-"Make uploads publicly readable" = "Tee latauksista julkisesti luettavia";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "L\U00E4hett\U00E4\U00E4 public-read ACL -otsakkeen, jotta ladatut tiedostot ovat kaikkien n\U00E4ht\U00E4viss\U00E4 linkin kautta. Tarvitaan AWS S3:lle, DigitalOcean Spacesille, MinIO:lle ja Backblaze B2:lle, jotka tallentavat objektit oletuksena yksityisin\U00E4. J\U00E4t\U00E4 pois p\U00E4\U00E4lt\U00E4 Cloudflare R2:lle, joka ei tue ACL-otsakkeita ja hylk\U00E4\U00E4 ne.";
-"API key:" = "API-avain:";
-"Upload History" = "Lataushistoria";
-"No uploads yet." = "Ei latauksia vielä.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Julkisen pääsyn perus-URL. Jos tyhjä, käytetään S3-päätepisteen URL-osoitetta (ei välttämättä julkisesti saatavilla).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Jaettu avain on mukana, hanki oma ilmainen avain osoitteesta imgbb.com/api, jos kohtaat nopeusrajoituksia. Vain kuvat (ei videotukea).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Toimii AWS S3:n, Cloudflare R2:n, MinIO:n, DigitalOcean Spacesin, Backblaze B2:n ja muiden S3-yhteensopivien palveluiden kanssa. Tukee kuvia ja videoita.";
-"Configure S3 in Preferences" = "Määritä S3 asetuksissa";
-"Sign in to Google Drive in Preferences" = "Kirjaudu Google Driveen asetuksissa";
-"Video upload requires Google Drive or S3" = "Videon lataus vaatii Google Driven tai S3:n";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -389,10 +351,6 @@
 "Cancel" = "Peruuta";
 "Microphone Access Required" = "Mikrofonin käyttöoikeus vaaditaan";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot tarvitsee mikrofonin käyttöoikeuden äänittääkseen puhetta. Avaa järjestelmän asetukset myöntääksesi käyttöoikeuden.";
-"Upload to Google Drive?" = "Ladataanko Google Driveen?";
-"Upload to S3?" = "Ladataanko S3:een?";
-"Upload to imgbb.com?" = "Ladataanko imgbb.com-palveluun?";
-"Your screenshot will be uploaded." = "Kuvakaappauksesi ladataan.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Tervetuloa macshot-sovellukseen";
@@ -421,8 +379,6 @@
 "URL copied to the clipboard" = "URL kopioitu leikepöydälle";
 "Uploading... %d%%" = "Ladataan... %d%%";
 "Upload failed: %@" = "Lataus epäonnistui: %@";
-"Uploaded! Link copied." = "Ladattu! Linkki kopioitu.";
-"Uploading to %@... %d%%" = "Ladataan palveluun %@... %d%%";
 "Open" = "Avaa";
 
 /* Recording Toast */
@@ -559,8 +515,6 @@
 "Apple (on-device)" = "Apple (laitteessa)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-k\U00E4\U00E4nn\U00F6s on nopeampi ja toimii offline-tilassa. Google Translate tukee useampia kieli\U00E4.";
 "Download language packs in System Settings\U2026" = "Lataa kielipaketteja J\U00E4rjestelm\U00E4asetuksista\U2026";
-"Configure S3 in Settings" = "M\U00E4\U00E4rit\U00E4 S3 asetuksissa";
-"Sign in to Google Drive in Settings" = "Kirjaudu Google Driveen asetuksissa";
 "Position:" = "Sijainti:";
 "Size:" = "Koko:";
 "Shape:" = "Muoto:";
@@ -573,7 +527,6 @@
 "Clear History?" = "Tyhjennetäänkö historia?";
 "This will permanently delete all screenshots from history." = "Tämä poistaa kaikki kuvakaappaukset historiasta pysyvästi.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Napsauta \"Aseta\" ja paina näppäinyhdistelmää, jossa on vähintään yksi muokkausnäppäin (⌘, ⌥, ⌃, ⇧) asettaaksesi pikakuvakkeen.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Tiedostot ladataan tähän kansioon Google Drivessasi. Jätä tyhjäksi, jos haluat käyttää kansiota \"macshot\". macshot voi käyttää vain itse luomiaan kansioita, joten Driveen itse tekemääsi samannimistä kansiota ei käytetä uudelleen, sen sijaan luodaan uusi. Kaikki pysyy yksityisenä, mitään ei jaeta julkisesti.";
 
 "Pressure" = "Paine";
 

@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -154,7 +154,6 @@
 "PII" = "PII";
 "Faces" = "Mga Mukha";
 "People" = "Mga Tao";
-"Confirm before upload" = "Kumpirmahin bago i-upload";
 "Flip" = "I-flip";
 "Smooth" = "Makinis";
 "Refined" = "Pinong-pino";
@@ -217,7 +216,6 @@
 "Recording" = "Pag-record";
 "About" = "Tungkol sa";
 "Shortcuts" = "Mga Shortcut";
-"Uploads" = "Mga Upload";
 "Language" = "Wika";
 "Language:" = "Wika:";
 "Restart the app to fully apply the new language." = "I-restart ang app upang ganap na mailapat ang bagong wika.";
@@ -332,44 +330,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Serbisyo ng Pag-upload";
-"Upload Provider" = "Tagapagbigay ng Upload";
+/* Preferences - Transcription */
 "Provider:" = "Tagapagbigay:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (mga larawan + video)";
-"imgbb (images only)" = "imgbb (mga larawan lamang)";
-"S3-Compatible (images + videos)" = "S3-Compatible (mga larawan + video)";
-"S3-Compatible Storage" = "S3-Compatible Storage";
-"Sign In with Google" = "Mag-sign In gamit ang Google";
-"Sign Out" = "Mag-sign Out";
-"Signed in" = "Naka-sign in";
-"Not signed in" = "Hindi naka-sign in";
-"Account:" = "Account:";
-"Folder:" = "Folder:";
-"Test Connection" = "Subukan ang Koneksyon";
-"Fill in endpoint, bucket, and credentials first" = "Punan muna ang endpoint, bucket, at mga kredensyal";
-"Testing..." = "Sinusubukan...";
-"Connection successful!" = "Matagumpay ang koneksyon!";
-"Leave empty to use default" = "Iwanang walang laman upang gamitin ang default";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Rehiyon:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Access Key:";
-"Secret Key:" = "Secret Key:";
-"Public URL:" = "Public URL:";
-"Path Prefix:" = "Path Prefix:";
-"Make uploads publicly readable" = "Gawing pampublikong nababasa ang mga upload";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Nagpapadala ng public-read ACL para makita ng kahit sino na may link ang mga na-upload na file. Kailangan para sa AWS S3, DigitalOcean Spaces, MinIO at Backblaze B2 na nag-iimbak ng mga object nang pribado bilang default. I-off para sa Cloudflare R2 na walang ACL at tinatanggihan ang header.";
-"API key:" = "API key:";
-"Upload History" = "Kasaysayan ng Pag-upload";
-"No uploads yet." = "Wala pang mga upload.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Base URL para sa pampublikong access. Kung walang laman, ang S3 endpoint URL ang gagamitin (maaaring hindi pampublikong ma-access).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "May kasamang shared key, kumuha ng sariling libreng key sa imgbb.com/api kung naabot ang rate limit. Mga larawan lamang (walang suporta sa video).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Gumagana sa AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, at iba pang S3-compatible na serbisyo. Sumusuporta sa mga larawan at video.";
-"Configure S3 in Preferences" = "I-configure ang S3 sa Mga Kagustuhan";
-"Sign in to Google Drive in Preferences" = "Mag-sign in sa Google Drive sa Mga Kagustuhan";
-"Video upload requires Google Drive or S3" = "Ang pag-upload ng video ay nangangailangan ng Google Drive o S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "Kanselahin";
 "Microphone Access Required" = "Kinakailangan ang Access sa Mikropono";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "Kailangan ng macshot ang microphone permission upang mag-record ng boses. Buksan ang System Settings upang bigyan ng access.";
-"Upload to Google Drive?" = "I-upload sa Google Drive?";
-"Upload to S3?" = "I-upload sa S3?";
-"Upload to imgbb.com?" = "I-upload sa imgbb.com?";
-"Your screenshot will be uploaded." = "Ia-upload ang iyong screenshot.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Maligayang pagdating sa macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "Nakopya ang URL sa clipboard";
 "Uploading... %d%%" = "Ina-upload... %d%%";
 "Upload failed: %@" = "Nabigo ang pag-upload: %@";
-"Uploaded! Link copied." = "Na-upload na! Nakopya ang link.";
-"Uploading to %@... %d%%" = "Ina-upload sa %@... %d%%";
 "Open" = "Buksan";
 
 /* Recording Toast */
@@ -560,8 +516,6 @@
 "Apple (on-device)" = "Apple (sa device)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Mas mabilis ang pagsasalin ng Apple at gumagana offline. Mas maraming wika ang sinusuportahan ng Google Translate.";
 "Download language packs in System Settings…" = "Mag-download ng mga language pack sa System Settings…";
-"Configure S3 in Settings" = "I-configure ang S3 sa Mga Setting";
-"Sign in to Google Drive in Settings" = "Mag-sign in sa Google Drive sa Mga Setting";
 "Position:" = "Posisyon:";
 "  Position:" = "  Posisyon:";
 "Size:" = "Laki:";
@@ -575,7 +529,6 @@
 "Clear History?" = "I-clear ang History?";
 "This will permanently delete all screenshots from history." = "Permanenteng mabubura ang lahat ng screenshot mula sa history.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "I-click ang \"Set\" at pindutin ang kombinasyon ng key na may kahit isang modifier (⌘, ⌥, ⌃, ⇧) upang magtakda ng shortcut.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Ina-upload ang mga file sa folder na ito sa iyong Google Drive. Iwanang blangko para gamitin ang \"macshot\". Maaari lamang gamitin ng macshot ang mga folder na nilikha nito, kaya ang folder na may parehong pangalan na ginawa mo sa Drive ay hindi gagamitin muli, sa halip ay lilikha ng bagong folder. Nananatiling pribado ang lahat, walang ibinabahagi nang publiko.";
 
 "Pressure" = "Pressure";
 

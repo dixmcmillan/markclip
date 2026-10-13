@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "PII";
 "Faces" = "الوجوه";
 "People" = "الأشخاص";
-"Confirm before upload" = "تأكيد قبل الرفع";
 "Flip" = "قلب";
 "Smooth" = "تنعيم";
 "Refined" = "محسّن";
@@ -200,7 +199,6 @@
 "Recording" = "التسجيل";
 "About" = "حول";
 "Shortcuts" = "الاختصارات";
-"Uploads" = "الرفع";
 "Language" = "اللغة";
 "Language:" = "اللغة:";
 "Restart the app to fully apply the new language." = "أعد تشغيل التطبيق لتطبيق اللغة الجديدة بالكامل.";
@@ -325,44 +323,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "خدمة الرفع";
-"Upload Provider" = "مزود الرفع";
+/* Preferences - Transcription */
 "Provider:" = "المزود:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (صور + فيديوهات)";
-"imgbb (images only)" = "imgbb (صور فقط)";
-"S3-Compatible (images + videos)" = "S3-Compatible (صور + فيديوهات)";
-"S3-Compatible Storage" = "تخزين متوافق مع S3";
-"Sign In with Google" = "تسجيل الدخول بحساب Google";
-"Sign Out" = "تسجيل الخروج";
-"Signed in" = "تم تسجيل الدخول";
-"Not signed in" = "لم يتم تسجيل الدخول";
-"Account:" = "الحساب:";
-"Folder:" = "المجلد:";
-"Test Connection" = "اختبار الاتصال";
-"Fill in endpoint, bucket, and credentials first" = "أدخل نقطة النهاية والحاوية وبيانات الاعتماد أولًا";
-"Testing..." = "جارٍ الاختبار...";
-"Connection successful!" = "تم الاتصال بنجاح!";
-"Leave empty to use default" = "اتركه فارغًا لاستخدام الافتراضي";
-"Endpoint:" = "نقطة النهاية:";
-"Region:" = "المنطقة:";
-"Bucket:" = "الحاوية:";
-"Access Key:" = "مفتاح الوصول:";
-"Secret Key:" = "المفتاح السري:";
-"Public URL:" = "الرابط العام:";
-"Path Prefix:" = "بادئة المسار:";
-"Make uploads publicly readable" = "جعل الملفات المرفوعة قابلة للقراءة العامة";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "يرسل ACL بقيمة public-read ليتمكن أي شخص لديه الرابط من عرض الملفات المرفوعة. مطلوب لـ AWS S3 وDigitalOcean Spaces وMinIO وBackblaze B2 التي تخزّن الكائنات بشكل خاص افتراضيًا. اتركه معطلًا لـ Cloudflare R2 الذي لا يدعم ACLs ويرفض الترويسة.";
-"API key:" = "مفتاح API:";
-"Upload History" = "سجل الرفع";
-"No uploads yet." = "لا توجد عمليات رفع بعد.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "الرابط الأساسي للوصول العام. إذا كان فارغًا، يُستخدم رابط نقطة نهاية S3 (قد لا يكون متاحًا للعامة).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "مفتاح مشترك مُضمّن, احصل على مفتاحك المجاني من imgbb.com/api إذا واجهت حدود الاستخدام. صور فقط (بدون دعم للفيديو).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "يعمل مع AWS S3 وCloudflare R2 وMinIO وDigitalOcean Spaces وBackblaze B2 وخدمات أخرى متوافقة مع S3. يدعم الصور والفيديوهات.";
-"Configure S3 in Preferences" = "إعداد S3 في التفضيلات";
-"Sign in to Google Drive in Preferences" = "تسجيل الدخول إلى Google Drive في التفضيلات";
-"Video upload requires Google Drive or S3" = "رفع الفيديو يتطلب Google Drive أو S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -384,10 +346,6 @@
 "Cancel" = "إلغاء";
 "Microphone Access Required" = "مطلوب إذن الميكروفون";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "يحتاج macshot إلى إذن الميكروفون لتسجيل الصوت. افتح إعدادات النظام لمنح الإذن.";
-"Upload to Google Drive?" = "الرفع إلى Google Drive؟";
-"Upload to S3?" = "الرفع إلى S3؟";
-"Upload to imgbb.com?" = "الرفع إلى imgbb.com؟";
-"Your screenshot will be uploaded." = "سيتم رفع لقطة الشاشة.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "مرحبًا بك في macshot";
@@ -416,8 +374,6 @@
 "URL copied to the clipboard" = "تم نسخ الرابط إلى الحافظة";
 "Uploading... %d%%" = "جارٍ الرفع... %d%%";
 "Upload failed: %@" = "فشل الرفع: %@";
-"Uploaded! Link copied." = "تم الرفع! تم نسخ الرابط.";
-"Uploading to %@... %d%%" = "جارٍ الرفع إلى %@... %d%%";
 "Open" = "فتح";
 
 /* Recording Toast */
@@ -554,8 +510,6 @@
 "Apple (on-device)" = "Apple (على الجهاز)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "ترجمة Apple أسرع وتعمل بدون اتصال. Google Translate يدعم لغات أكثر.";
 "Download language packs in System Settings…" = "قم بتنزيل حزم اللغات في إعدادات النظام…";
-"Configure S3 in Settings" = "إعداد S3 في الإعدادات";
-"Sign in to Google Drive in Settings" = "تسجيل الدخول إلى Google Drive في الإعدادات";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "إصدار غير متصل: تمت إزالة عمليات تكامل الرفع والتخزين السحابي. قد لا يزال التحقق من التحديثات يتصل بخادم تحديثات MacShot. تبقى لقطات الشاشة والتسجيلات محلية ما لم تشاركها أو تحفظها بنفسك.";
 "Position:" = "الموضع:";
 "Size:" = "الحجم:";
@@ -569,7 +523,6 @@
 "Clear History?" = "مسح السجل؟";
 "This will permanently delete all screenshots from history." = "سيؤدي هذا إلى حذف جميع لقطات الشاشة من السجل نهائيًا.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "انقر على \"تعيين\" واضغط على مجموعة مفاتيح تحتوي على معدِّل واحد على الأقل (⌘, ⌥, ⌃, ⇧) لتعيين اختصار.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "يتم تحميل الملفات إلى هذا المجلد في Google Drive الخاص بك. اتركه فارغًا لاستخدام \"macshot\". لا يمكن لـ macshot استخدام سوى المجلدات التي أنشأها بنفسه، لذلك لن يُعاد استخدام مجلد أنشأته في Drive بالاسم نفسه, بل سيُنشأ مجلد جديد بدلًا منه. كل شيء يبقى خاصًا, لا يُشارك أي شيء بشكل عام.";
 
 "Pressure" = "الضغط";
 

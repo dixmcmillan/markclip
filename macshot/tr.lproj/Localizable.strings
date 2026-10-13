@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "Kişisel Veri";
 "Faces" = "Yüzler";
 "People" = "Kişiler";
-"Confirm before upload" = "Yüklemeden önce onayla";
 "Flip" = "Çevir";
 "Smooth" = "Yumuşat";
 "Refined" = "İnce";
@@ -200,7 +199,6 @@
 "Recording" = "Kayıt";
 "About" = "Hakkında";
 "Shortcuts" = "Kısayollar";
-"Uploads" = "Yüklemeler";
 "Language" = "Dil";
 "Language:" = "Dil:";
 "Restart the app to fully apply the new language." = "Yeni dili tamamen uygulamak için uygulamayı yeniden başlatın.";
@@ -325,44 +323,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Yükleme Servisi";
-"Upload Provider" = "Yükleme Sağlayıcısı";
+/* Preferences - Transcription */
 "Provider:" = "Sağlayıcı:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (görseller + videolar)";
-"imgbb (images only)" = "imgbb (yalnızca görseller)";
-"S3-Compatible (images + videos)" = "S3 Uyumlu (görseller + videolar)";
-"S3-Compatible Storage" = "S3 Uyumlu Depolama";
-"Sign In with Google" = "Google ile Giriş Yap";
-"Sign Out" = "Çıkış Yap";
-"Signed in" = "Giriş yapıldı";
-"Not signed in" = "Giriş yapılmadı";
-"Account:" = "Hesap:";
-"Folder:" = "Klasör:";
-"Test Connection" = "Bağlantıyı Test Et";
-"Fill in endpoint, bucket, and credentials first" = "Önce uç nokta, kova ve kimlik bilgilerini doldurun";
-"Testing..." = "Test ediliyor...";
-"Connection successful!" = "Bağlantı başarılı!";
-"Leave empty to use default" = "Varsayılanı kullanmak için boş bırakın";
-"Endpoint:" = "Uç Nokta:";
-"Region:" = "Bölge:";
-"Bucket:" = "Kova:";
-"Access Key:" = "Erişim Anahtarı:";
-"Secret Key:" = "Gizli Anahtar:";
-"Public URL:" = "Genel URL:";
-"Path Prefix:" = "Yol Ön Eki:";
-"Make uploads publicly readable" = "Yüklemeleri herkese açık yap";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Yüklenen dosyaların bağlantıya sahip herkes tarafından görüntülenebilmesi için public-read ACL gönderir. Nesneleri varsayılan olarak gizli saklayan AWS S3, DigitalOcean Spaces, MinIO ve Backblaze B2 için gereklidir. ACL desteklemeyen ve başlığı reddeden Cloudflare R2 için kapalı bırakın.";
-"API key:" = "API anahtarı:";
-"Upload History" = "Yükleme Geçmişi";
-"No uploads yet." = "Henüz yükleme yok.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Genel erişim için temel URL. Boşsa S3 uç nokta URL'si kullanılır (herkese açık olmayabilir).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Paylaşımlı bir anahtar dahildir, hız sınırına ulaşırsanız imgbb.com/api adresinden kendi ücretsiz anahtarınızı alın. Yalnızca görseller (video desteği yok).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 ve diğer S3 uyumlu servislerle çalışır. Görselleri ve videoları destekler.";
-"Configure S3 in Preferences" = "Tercihlerde S3'ü yapılandırın";
-"Sign in to Google Drive in Preferences" = "Tercihlerde Google Drive'a giriş yapın";
-"Video upload requires Google Drive or S3" = "Video yüklemek için Google Drive veya S3 gereklidir";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -384,10 +346,6 @@
 "Cancel" = "İptal";
 "Microphone Access Required" = "Mikrofon Erişimi Gerekli";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot, ses kaydetmek için mikrofon iznine ihtiyaç duyar. İzin vermek için Sistem Ayarları'nı açın.";
-"Upload to Google Drive?" = "Google Drive'a yüklensin mi?";
-"Upload to S3?" = "S3'e yüklensin mi?";
-"Upload to imgbb.com?" = "imgbb.com'a yüklensin mi?";
-"Your screenshot will be uploaded." = "Ekran görüntünüz yüklenecek.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "macshot'a Hoş Geldiniz";
@@ -416,8 +374,6 @@
 "URL copied to the clipboard" = "URL panoya kopyalandı";
 "Uploading... %d%%" = "Yükleniyor... %%%d";
 "Upload failed: %@" = "Yükleme başarısız: %@";
-"Uploaded! Link copied." = "Yüklendi! Bağlantı kopyalandı.";
-"Uploading to %@... %d%%" = "%@ hizmetine yükleniyor... %%%d";
 "Open" = "Aç";
 
 /* Recording Toast */
@@ -554,8 +510,6 @@
 "Apple (on-device)" = "Apple (cihaz üzerinde)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple çevirisi daha hızlıdır ve çevrimdışı çalışır. Google Translate daha fazla dili destekler.";
 "Download language packs in System Settings…" = "Sistem Ayarları'ndan dil paketlerini indirin…";
-"Configure S3 in Settings" = "Ayarlar'da S3'ü yapılandırın";
-"Sign in to Google Drive in Settings" = "Ayarlar'da Google Drive'a giriş yapın";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Çevrimdışı sürüm: yükleme ve bulut depolama entegrasyonları kaldırıldı. Güncelleme denetimleri yine de MacShot'ın güncelleme sunucusuna bağlanabilir. Ekran görüntüleri ve kayıtlar, siz kendiniz paylaşmadıkça veya kaydetmedikçe yerel kalır.";
 "Position:" = "Konum:";
 "Size:" = "Boyut:";
@@ -569,7 +523,6 @@
 "Clear History?" = "Geçmiş Temizlensin mi?";
 "This will permanently delete all screenshots from history." = "Bu işlem, geçmişteki tüm ekran görüntülerini kalıcı olarak siler.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"Ayarla\"ya tıklayın ve kısayol atamak için en az bir değiştirici tuş (⌘, ⌥, ⌃, ⇧) içeren bir tuş kombinasyonuna basın.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Dosyalar, Google Drive'ınızdaki bu klasöre yüklenir. \"macshot\" kullanmak için boş bırakın. macshot yalnızca kendi oluşturduğu klasörleri kullanabilir; bu nedenle Drive'da aynı adla oluşturduğunuz bir klasör yeniden kullanılmaz, bunun yerine yeni bir klasör oluşturulur. Her şey gizli kalır, hiçbir şey herkesle paylaşılmaz.";
 
 "Pressure" = "Basınç";
 

@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "個人情報";
 "Faces" = "顔";
 "People" = "人物";
-"Confirm before upload" = "アップロード前に確認";
 "Flip" = "反転";
 "Smooth" = "スムーズ";
 "Refined" = "精密";
@@ -199,7 +198,6 @@
 "Recording" = "録画";
 "About" = "macshot について";
 "Shortcuts" = "ショートカット";
-"Uploads" = "アップロード";
 "Language" = "言語";
 "Language:" = "言語:";
 "Restart the app to fully apply the new language." = "新しい言語を完全に適用するには、アプリを再起動してください。";
@@ -314,44 +312,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "アップロードサービス";
-"Upload Provider" = "アップロードプロバイダ";
+/* Preferences - Transcription */
 "Provider:" = "プロバイダ:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (画像 + 動画)";
-"imgbb (images only)" = "imgbb (画像のみ)";
-"S3-Compatible (images + videos)" = "S3 互換 (画像 + 動画)";
-"S3-Compatible Storage" = "S3 互換ストレージ";
-"Sign In with Google" = "Google でサインイン";
-"Sign Out" = "サインアウト";
-"Signed in" = "サインイン済み";
-"Not signed in" = "未サインイン";
-"Account:" = "アカウント:";
-"Folder:" = "フォルダ:";
-"Test Connection" = "接続テスト";
-"Fill in endpoint, bucket, and credentials first" = "先にエンドポイント、バケット、認証情報を入力してください";
-"Testing..." = "テスト中...";
-"Connection successful!" = "接続に成功しました!";
-"Leave empty to use default" = "デフォルトを使用する場合は空欄";
-"Endpoint:" = "エンドポイント:";
-"Region:" = "リージョン:";
-"Bucket:" = "バケット:";
-"Access Key:" = "アクセスキー:";
-"Secret Key:" = "シークレットキー:";
-"Public URL:" = "パブリック URL:";
-"Path Prefix:" = "パスプレフィックス:";
-"Make uploads publicly readable" = "アップロードを公開読み取り可能にする";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "public-read ACL を送信して、アップロードされたファイルをリンクを知っている誰でも閲覧できるようにします。デフォルトでオブジェクトを非公開で保存する AWS S3、DigitalOcean Spaces、MinIO、Backblaze B2 に必要です。ACL がなくヘッダーを拒否する Cloudflare R2 ではオフのままにしてください。";
-"API key:" = "API キー:";
-"Upload History" = "アップロード履歴";
-"No uploads yet." = "アップロードはまだありません。";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "公開アクセス用のベース URL。空の場合、S3 エンドポイント URL が使用されます (公開アクセスできない場合があります)。";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "共有キーが含まれています, レート制限に達した場合は imgbb.com/api で無料キーを取得してください。画像のみ (動画は非対応)。";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "AWS S3、Cloudflare R2、MinIO、DigitalOcean Spaces、Backblaze B2、その他の S3 互換サービスで利用できます。画像と動画に対応。";
-"Configure S3 in Preferences" = "環境設定で S3 を設定してください";
-"Sign in to Google Drive in Preferences" = "環境設定で Google Drive にサインインしてください";
-"Video upload requires Google Drive or S3" = "動画のアップロードには Google Drive または S3 が必要です";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -373,10 +335,6 @@
 "Cancel" = "キャンセル";
 "Microphone Access Required" = "マイクのアクセスが必要です";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot が音声を録音するには、マイクの許可が必要です。システム設定を開いてアクセスを許可してください。";
-"Upload to Google Drive?" = "Google Drive にアップロードしますか?";
-"Upload to S3?" = "S3 にアップロードしますか?";
-"Upload to imgbb.com?" = "imgbb.com にアップロードしますか?";
-"Your screenshot will be uploaded." = "スクリーンショットがアップロードされます。";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "macshot へようこそ";
@@ -408,8 +366,6 @@
 "URL copied to the clipboard" = "URL をクリップボードにコピーしました";
 "Uploading... %d%%" = "アップロード中... %d%%";
 "Upload failed: %@" = "アップロード失敗: %@";
-"Uploaded! Link copied." = "アップロード完了! リンクをコピーしました。";
-"Uploading to %@... %d%%" = "%@ にアップロード中... %d%%";
 "Open" = "開く";
 "Open Link" = "リンクを開く";
 "Open With" = "次で開く";
@@ -549,8 +505,6 @@
 "Apple (on-device)" = "Apple (オンデバイス)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple の翻訳はより高速でオフラインでも動作します。Google Translate はより多くの言語に対応しています。";
 "Download language packs in System Settings…" = "システム設定で言語パックをダウンロード…";
-"Configure S3 in Settings" = "設定で S3 を構成してください";
-"Sign in to Google Drive in Settings" = "設定で Google Drive にサインインしてください";
 "Position:" = "位置:";
 "  Position:" = "  位置:";
 "Size:" = "サイズ:";
@@ -564,7 +518,6 @@
 "Clear History?" = "履歴をクリアしますか？";
 "This will permanently delete all screenshots from history." = "履歴からすべてのスクリーンショットが完全に削除されます。";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"設定\" をクリックし、少なくとも1つの修飾キー (⌘, ⌥, ⌃, ⇧) を含むキーの組み合わせを押してショートカットを設定してください。";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "ファイルはGoogle Driveのこのフォルダにアップロードされます。空欄の場合は \"macshot\" が使用されます。macshotは自身が作成したフォルダしか使用できないため、Drive上で同じ名前のフォルダを自分で作成していても再利用されず、新しいフォルダが作成されます。すべてプライベートに保たれ、公開されることはありません。";
 
 "Pressure" = "筆圧";
 

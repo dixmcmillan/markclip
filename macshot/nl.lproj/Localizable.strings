@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -153,7 +153,6 @@
 "PII" = "PII";
 "Faces" = "Gezichten";
 "People" = "Personen";
-"Confirm before upload" = "Bevestig voor uploaden";
 "Flip" = "Spiegelen";
 "Smooth" = "Vloeiend";
 "Refined" = "Verfijnd";
@@ -204,7 +203,6 @@
 "Recording" = "Opname";
 "About" = "Over";
 "Shortcuts" = "Sneltoetsen";
-"Uploads" = "Uploads";
 "Language" = "Taal";
 "Language:" = "Taal:";
 "Restart the app to fully apply the new language." = "Herstart de app om de nieuwe taal volledig toe te passen.";
@@ -321,44 +319,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Uploaddienst";
-"Upload Provider" = "Uploadprovider";
+/* Preferences - Transcription */
 "Provider:" = "Provider:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (afbeeldingen + video's)";
-"imgbb (images only)" = "imgbb (alleen afbeeldingen)";
-"S3-Compatible (images + videos)" = "S3-compatibel (afbeeldingen + video's)";
-"S3-Compatible Storage" = "S3-compatibele opslag";
-"Sign In with Google" = "Inloggen met Google";
-"Sign Out" = "Uitloggen";
-"Signed in" = "Ingelogd";
-"Not signed in" = "Niet ingelogd";
-"Account:" = "Account:";
-"Folder:" = "Map:";
-"Test Connection" = "Verbinding testen";
-"Fill in endpoint, bucket, and credentials first" = "Vul eerst endpoint, bucket en inloggegevens in";
-"Testing..." = "Testen...";
-"Connection successful!" = "Verbinding geslaagd!";
-"Leave empty to use default" = "Laat leeg voor standaardwaarde";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Regio:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Toegangssleutel:";
-"Secret Key:" = "Geheime sleutel:";
-"Public URL:" = "Publieke URL:";
-"Path Prefix:" = "Padprefix:";
-"Make uploads publicly readable" = "Uploads publiek leesbaar maken";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Verstuurt de public-read ACL zodat geüploade bestanden zichtbaar zijn voor iedereen met de link. Vereist voor AWS S3, DigitalOcean Spaces, MinIO en Backblaze B2, die objecten standaard privé opslaan. Laat uitgeschakeld voor Cloudflare R2, dat geen ACL's ondersteunt en de header weigert.";
-"API key:" = "API-sleutel:";
-"Upload History" = "Uploadgeschiedenis";
-"No uploads yet." = "Nog geen uploads.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Basis-URL voor publieke toegang. Indien leeg wordt de S3-endpoint-URL gebruikt (mogelijk niet publiek toegankelijk).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Een gedeelde sleutel is inbegrepen, haal je eigen gratis sleutel op imgbb.com/api als je limieten bereikt. Alleen afbeeldingen (geen video-ondersteuning).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Werkt met AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 en andere S3-compatibele diensten. Ondersteunt afbeeldingen en video's.";
-"Configure S3 in Preferences" = "Configureer S3 in Instellingen";
-"Sign in to Google Drive in Preferences" = "Log in bij Google Drive in Instellingen";
-"Video upload requires Google Drive or S3" = "Video-upload vereist Google Drive of S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -380,10 +342,6 @@
 "Cancel" = "Annuleer";
 "Microphone Access Required" = "Microfoontoegang vereist";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot heeft microfoontoestemming nodig om spraak op te nemen. Open Systeeminstellingen om toegang te verlenen.";
-"Upload to Google Drive?" = "Uploaden naar Google Drive?";
-"Upload to S3?" = "Uploaden naar S3?";
-"Upload to imgbb.com?" = "Uploaden naar imgbb.com?";
-"Your screenshot will be uploaded." = "Je schermafbeelding wordt geüpload.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Welkom bij macshot";
@@ -412,8 +370,6 @@
 "URL copied to the clipboard" = "URL gekopieerd naar het klembord";
 "Uploading... %d%%" = "Uploaden... %d%%";
 "Upload failed: %@" = "Upload mislukt: %@";
-"Uploaded! Link copied." = "Geüpload! Link gekopieerd.";
-"Uploading to %@... %d%%" = "Uploaden naar %@... %d%%";
 "Open" = "Open";
 
 /* Recording Toast */
@@ -549,8 +505,6 @@
 "Apple (on-device)" = "Apple (op het apparaat)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-vertaling is sneller en werkt offline. Google Translate ondersteunt meer talen.";
 "Download language packs in System Settings…" = "Download taalpakketten in Systeeminstellingen…";
-"Configure S3 in Settings" = "Configureer S3 in Instellingen";
-"Sign in to Google Drive in Settings" = "Log in bij Google Drive in Instellingen";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline build: integraties voor uploaden en cloudopslag zijn verwijderd. Controles op updates kunnen nog steeds verbinding maken met de updateserver van MacShot. Schermafbeeldingen en opnames blijven lokaal tenzij je ze zelf deelt of opslaat.";
 "Position:" = "Positie:";
 "Size:" = "Grootte:";
@@ -564,7 +518,6 @@
 "Clear History?" = "Geschiedenis wissen?";
 "This will permanently delete all screenshots from history." = "Hiermee worden alle schermafbeeldingen definitief uit de geschiedenis verwijderd.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klik op \"Instellen\" en druk op een toetscombinatie met ten minste één modifier (⌘, ⌥, ⌃, ⇧) om een sneltoets in te stellen.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Bestanden worden geüpload naar deze map in uw Google Drive. Laat leeg om \"macshot\" te gebruiken. macshot kan alleen mappen gebruiken die het zelf heeft aangemaakt, dus een map met dezelfde naam die u zelf in Drive hebt gemaakt wordt niet hergebruikt, er wordt in plaats daarvan een nieuwe aangemaakt. Alles blijft privé, er wordt niets openbaar gedeeld.";
 
 "Pressure" = "Druk";
 
