@@ -509,6 +509,7 @@ final class RecordingWriterTests: XCTestCase {
         XCTAssertTrue(silent.audioTracks.isEmpty)
         XCTAssertTrue(silent.composition.tracks(withMediaType: .audio).isEmpty)
         let out = directory.appendingPathComponent("trimmed.mp4")
+        try HardwareEncoderTests.require()
         let session = try XCTUnwrap(AVAssetExportSession(asset: silent.composition, presetName: AVAssetExportPresetHighestQuality))
         session.outputURL = out
         session.outputFileType = .mp4
@@ -539,6 +540,9 @@ final class RecordingWriterTests: XCTestCase {
     }
 
     func testStaticScreenHeartbeatsKeepAudioAndRecoveryFragmentsAdvancing() async throws {
+        // Recovery-fragment timing depends on the hardware encoder emitting each
+        // 1 fps heartbeat promptly; the software encoder holds them longer.
+        try HardwareEncoderTests.require()
         let (writer, url) = try makeWriter(audio: true)
         try await append(writer, time: 100, buffer: RecordingMediaFixture.pixels())
         // Twenty seconds of audio, but no new screen image after the first.

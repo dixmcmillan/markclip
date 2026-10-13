@@ -125,11 +125,18 @@ final class VideoSourceSnapshotTests: XCTestCase {
             XCTAssertEqual(prepared.pixelSize, CGSize(width: 64, height: 64))
             XCTAssertEqual(prepared.duration, 2, accuracy: 1.0 / 30)
             XCTAssertEqual(asset.duration.seconds, 2, accuracy: 1.0 / 30)
-            let session = try XCTUnwrap(AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality))
-            session.outputFileType = .mp4
-            session.timeRange = CMTimeRange(start: CMTime(seconds: start, preferredTimescale: 30),
-                duration: CMTime(seconds: duration, preferredTimescale: 30))
-            let job = VideoExportJob(session: session, sourceLease: source.lease)
+            // Transcoder backend: it honors the software-encoder policy, unlike
+            // AVAssetExportSession. Source replacement is what this test covers.
+            let request = VideoTranscoder.Request(asset: asset,
+                videoTrack: try XCTUnwrap(asset.tracks(withMediaType: .video).first),
+                audioTracks: asset.tracks(withMediaType: .audio), composition: nil,
+                timeRange: CMTimeRange(start: CMTime(seconds: start, preferredTimescale: 30),
+                                       duration: CMTime(seconds: duration, preferredTimescale: 30)),
+                outputURL: directory.appendingPathComponent("unused.mp4"),
+                videoSettings: VideoEncodingSettings.outputSettings(width: 64, height: 64, fps: 30,
+                                                                     codec: .h264, quality: .high),
+                decodedSize: nil, outputTransform: .identity)
+            let job = VideoExportJob(request: request, sourceLease: source.lease)
             let save = try AtomicMediaSave(destinationURL: publicURL)
             try await job.export(to: save.stagingURL)
             try save.commit()

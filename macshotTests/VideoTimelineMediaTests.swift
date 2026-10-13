@@ -212,6 +212,7 @@ final class VideoTimelineMediaTests: XCTestCase {
         // plus an edit mapping, which is not the fixture this test needs.
         let url = directory.appendingPathComponent("ntsc.mp4")
         let writer = try AVAssetWriter(outputURL: url, fileType: .mp4)
+        EncoderSessionTracker.track(writer, "VideoTimelineMediaTests")
         let input = AVAssetWriterInput(mediaType: .video, outputSettings: VideoEncodingSettings.outputSettings(
             width: 64, height: 64, fps: 30, codec: .h264, quality: .high))
         input.mediaTimeScale = 30_000
@@ -219,6 +220,8 @@ final class VideoTimelineMediaTests: XCTestCase {
             sourcePixelBufferAttributes: [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA])
         writer.add(input)
         XCTAssertTrue(writer.startWriting())
+        // A thrown timeout must not leave the encoder session running.
+        defer { if writer.status == .writing { writer.cancelWriting() } }
         writer.startSession(atSourceTime: .zero)
         for index in 0..<19 {
             let deadline = ProcessInfo.processInfo.systemUptime + 5
@@ -248,6 +251,8 @@ final class VideoTimelineMediaTests: XCTestCase {
         XCTAssertEqual(CMTimeCompare(built.composition.duration, ntsc.duration), 0)
         XCTAssertEqual(built.frameDuration.seconds, 1001.0 / 30_000, accuracy: 0.00000001)
         let customOutput = try await exportPlain(built)
+        try assertNTSCFrames(customOutput)
+        try HardwareEncoderTests.require()
         let highURL = directory.appendingPathComponent("ntsc-high.mp4")
         let highSession = try XCTUnwrap(AVAssetExportSession(asset: built.composition,
             presetName: AVAssetExportPresetHighestQuality))
@@ -256,13 +261,15 @@ final class VideoTimelineMediaTests: XCTestCase {
             renderSize: CGSize(width: 64, height: 64), duration: built.composition.duration, frameDuration: built.frameDuration)
         await highSession.export()
         XCTAssertEqual(highSession.status, .completed)
-        for output in [customOutput, AVAsset(url: highURL)] {
-            let frames = try frameIDs(output)
-            XCTAssertEqual(frames.count, 19)
-            for (index, frame) in frames.enumerated() {
-                XCTAssertEqual(frame.0, Double(index) * 1001 / 30_000, accuracy: 0.000001)
-                XCTAssertEqual(frame.1, index)
-            }
+        try assertNTSCFrames(AVAsset(url: highURL))
+    }
+
+    private func assertNTSCFrames(_ output: AVAsset, file: StaticString = #filePath, line: UInt = #line) throws {
+        let frames = try frameIDs(output)
+        XCTAssertEqual(frames.count, 19, file: file, line: line)
+        for (index, frame) in frames.enumerated() {
+            XCTAssertEqual(frame.0, Double(index) * 1001 / 30_000, accuracy: 0.000001, file: file, line: line)
+            XCTAssertEqual(frame.1, index, file: file, line: line)
         }
     }
 

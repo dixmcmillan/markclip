@@ -37,14 +37,18 @@ final class VideoOverlayAlphaSpikeTests: XCTestCase {
                                  frameCount: Int, in directory: URL) throws -> URL {
         let url = directory.appendingPathComponent(UUID().uuidString + ".mov")
         let writer = try AVAssetWriter(url: url, fileType: .mov)
+        EncoderSessionTracker.track(writer, "VideoOverlayAlphaSpikeTests")
         let input = AVAssetWriterInput(mediaType: .video,
-            outputSettings: [AVVideoCodecKey: AVVideoCodecType.h264, AVVideoWidthKey: width, AVVideoHeightKey: height])
+            outputSettings: VideoEncoderPolicy.applying(to: [AVVideoCodecKey: AVVideoCodecType.h264,
+                                                             AVVideoWidthKey: width, AVVideoHeightKey: height]))
         XCTAssertTrue(writer.canAdd(input))
         writer.add(input)
         let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
         ])
         XCTAssertTrue(writer.startWriting())
+        // Any early exit (a throwing unwrap) must not leave the encoder session running.
+        defer { if writer.status == .writing { writer.cancelWriting() } }
         writer.startSession(atSourceTime: .zero)
         for tick in 0..<frameCount {
             var pb: CVPixelBuffer?
@@ -80,14 +84,18 @@ final class VideoOverlayAlphaSpikeTests: XCTestCase {
                                 width: Int, height: Int, frameCount: Int, in directory: URL) throws -> URL? {
         let url = directory.appendingPathComponent(UUID().uuidString + ".mov")
         let writer = try AVAssetWriter(url: url, fileType: .mov)
+        EncoderSessionTracker.track(writer, "VideoOverlayAlphaSpikeTests")
         let input = AVAssetWriterInput(mediaType: .video,
-            outputSettings: [AVVideoCodecKey: codec, AVVideoWidthKey: width, AVVideoHeightKey: height])
+            outputSettings: VideoEncoderPolicy.applying(to: [AVVideoCodecKey: codec,
+                                                             AVVideoWidthKey: width, AVVideoHeightKey: height]))
         guard writer.canAdd(input) else { return nil }
         writer.add(input)
         let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
         ])
         guard writer.startWriting() else { return nil }
+        // Every early `return nil` must stop the encoder session it started.
+        defer { if writer.status == .writing { writer.cancelWriting() } }
         writer.startSession(atSourceTime: .zero)
         let square = CGRect(x: width / 4, y: height / 4, width: width / 2, height: height / 2)
         for tick in 0..<frameCount {
@@ -221,6 +229,9 @@ final class VideoOverlayAlphaSpikeTests: XCTestCase {
     private let fgBGR: (UInt8, UInt8, UInt8) = (30, 30, 230)   // overlay square: strong red, some blue
 
     func testProRes4444OverlayCompositesOverOpaqueSourceWithoutFringing() async throws {
+        // The blend range was calibrated on the hardware ProRes encoder; the
+        // software encoder (and CI runners) land at G = 53, just outside it.
+        try HardwareEncoderTests.require()
         guard let overlayURL = try makeAlphaMovie(codec: .proRes4444, squareBGR: fgBGR, width: width, height: height,
                                                   frameCount: 6, in: directory) else {
             throw XCTSkip("ProRes 4444 encoder unavailable on this machine")

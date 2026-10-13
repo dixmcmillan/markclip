@@ -15,6 +15,7 @@ final class VideoExportJob {
     private var started = false
 
     init(session: AVAssetExportSession, sourceLease: TemporaryMediaLease? = nil) {
+        EncoderSessionTracker.track(session, "VideoExportJob")
         backend = .session(session)
         self.sourceLease = sourceLease
     }

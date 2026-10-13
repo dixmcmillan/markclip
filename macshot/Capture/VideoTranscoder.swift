@@ -47,11 +47,13 @@ enum VideoTranscoder {
         let reader = try AVAssetReader(asset: request.asset)
         reader.timeRange = request.timeRange
         let writer = try AVAssetWriter(outputURL: request.outputURL, fileType: .mp4)
+        EncoderSessionTracker.track(writer, "VideoTranscoder")
         let cadence = request.composition?.frameDuration ?? request.sourceFrameDuration
             ?? VideoFrameCadence.declaredDuration(in: request.asset.metadata)
             ?? VideoFrameCadence.Inspection(track: request.videoTrack).duration()
         writer.metadata = VideoFrameCadence.metadata(for: cadence)
-        let videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: request.videoSettings)
+        let videoInput = AVAssetWriterInput(mediaType: .video,
+                                            outputSettings: VideoEncoderPolicy.applying(toOptional: request.videoSettings))
         videoInput.mediaTimeScale = VideoFrameCadence.mediaTimeScale(
             frameDuration: cadence,
             duration: request.timeRange.duration)
