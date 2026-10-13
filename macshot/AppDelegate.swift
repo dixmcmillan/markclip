@@ -352,6 +352,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         // UserDefaults value that could otherwise outlive an Info.plist change.
         updaterController.updater.automaticallyChecksForUpdates = false
         setupMainMenu()
+        NotificationCenter.default.addObserver(self, selector: #selector(exportPresetsDidChange),
+                                               name: .exportPresetsChanged, object: nil)
         setupStatusBar()
         DistributedNotificationCenter.default().addObserver(
             self,
@@ -752,10 +754,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         exportItem.target = self
         fileMenu.addItem(exportItem)
 
-        let quickExportItem = NSMenuItem(title: L("Quick Export"), action: #selector(quickExportFrontmostVideo), keyEquivalent: "e")
+        // ⇧⌘E repeats the last-used export preset (the old Quick Export).
+        let quickExportItem = NSMenuItem(title: L("Repeat Last Export"), action: #selector(quickExportFrontmostVideo), keyEquivalent: "e")
         quickExportItem.keyEquivalentModifierMask = [.command, .shift]
         quickExportItem.target = self
         fileMenu.addItem(quickExportItem)
+
+        let exportPresetItem = NSMenuItem(title: L("Export Preset"), action: nil, keyEquivalent: "")
+        exportPresetItem.submenu = makeExportPresetMenu()
+        fileMenu.addItem(exportPresetItem)
 
         fileMenuItem.submenu = fileMenu
 
@@ -852,7 +859,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     /// File > Quick Export (⇧⌘E) routes to the frontmost video editor
     /// window, same pattern as File > Export….
     @objc private func quickExportFrontmostVideo() {
-        VideoEditorWindowController.frontmostController?.quickExportAction()
+        VideoEditorWindowController.frontmostController?.runLastExportAction()
+    }
+
+    /// File ▸ Export Preset: one item per visible preset, showing its
+    /// shortcut. The items act on the editor that has focus (see
+    /// `validateMenuItem`), so the chords stay editor-scoped.
+    private func makeExportPresetMenu() -> NSMenu {
+        let menu = NSMenu(title: L("Export Preset"))
+        let presets = ExportPresetStore.visiblePresets()
+        for (preset, shortcut) in ExportPresetShortcutStore.assignments(for: presets) {
+            let item = NSMenuItem(title: preset.name, action: #selector(exportWithPresetFromMenu(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = preset.id
+            ExportPresetShortcutStore.apply(shortcut, to: item)
+            menu.addItem(item)
+        }
+        return menu
+    }
+
+    @objc fileprivate func exportWithPresetFromMenu(_ sender: NSMenuItem) {
+        guard let id = sender.representedObject as? UUID,
+              let preset = ExportPresetStore.preset(id: id),
+              let controller = VideoEditorWindowController.keyController else { return }
+        controller.runExportPresetFromMenu(preset)
+    }
+
+    @objc private func exportPresetsDidChange() {
+        setupMainMenu()
     }
 
     /// Custom About panel (Markclip Phase 1 — identity, ROADMAP.md): adds a
@@ -2329,6 +2363,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         toast.showFileSaved(url: url)
     }
 
+    /// "Uploaded to Stream", "Ready to stream": a finished-export toast with
+    /// one detail line and an optional action. Shares the export toast slot,
+    /// so a newer one replaces an older one.
+    func showExportNoticeToast(title: String, detail: String, actionTitle: String? = nil, action: (() -> Void)? = nil) {
+        exportToastController?.dismiss()
+        let toast = UploadToastController()
+        exportToastController = toast
+        toast.onDismiss = { [weak self] in self?.exportToastController = nil }
+        toast.show(status: title)
+        toast.showNotice(title: title, detail: detail, actionTitle: actionTitle, action: action)
+    }
+
     func showPin(image: NSImage) {
         let pin = PinWindowController(image: image)
         pin.delegate = self
@@ -2478,9 +2524,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     /// File > Export… routes to the frontmost video editor window's own
     /// export panel. A no-op with no editor open.
     @objc private func exportFrontmostVideo() {
-        guard let controller = VideoEditorWindowController.frontmostController,
-              let contentView = controller.window?.contentView else { return }
-        controller.showExportPanel(contentView)
+        VideoEditorWindowController.frontmostController?.showExportPopover(nil)
     }
 
     /// Handle files opened via Finder "Open With", drag-to-dock, or command line.
@@ -2569,6 +2613,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     // MARK: - Settings
 
     @objc private func openSettings() {
+        showSettings(tab: nil)
+    }
+
+    /// Opens Settings, optionally on a specific tab (`SettingsWindowController.exportTabID`).
+    func showSettings(tab: String?) {
         if settingsController == nil {
             settingsController = SettingsWindowController()
             settingsController?.onHotkeyChanged = { [weak self] in
@@ -2580,6 +2629,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
             }
         }
         settingsController?.showWindow()
+        if let tab { settingsController?.selectTab(tab) }
     }
 
     // MARK: - Welcome
@@ -3529,6 +3579,20 @@ extension AppDelegate: OverlayWindowControllerDelegate {
 extension AppDelegate: PinWindowControllerDelegate {
     func pinWindowDidClose(_ controller: PinWindowController) {
         pinControllers.removeAll { $0 === controller }
+    }
+}
+
+// MARK: - Menu validation
+
+extension AppDelegate: NSMenuItemValidation {
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        // Export Preset items (and their ⌃⌘-number chords) act on the focused
+        // video editor only; with Settings or another window key they are
+        // disabled, so the chords fall through.
+        if menuItem.action == #selector(exportWithPresetFromMenu(_:)) {
+            return VideoEditorWindowController.keyController != nil
+        }
+        return true
     }
 }
 

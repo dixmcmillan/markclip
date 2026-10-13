@@ -21,6 +21,15 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         return ready.first { $0.window?.isKeyWindow == true } ?? ready.last
     }
 
+    /// The editor that owns the key window, or whose popover is the key window
+    /// (the export popover is a child window of the editor). Editor-scoped
+    /// shortcuts and menu items act on this one, so they do nothing while
+    /// Settings or another window has focus.
+    static var keyController: VideoEditorWindowController? {
+        guard let key = NSApp.keyWindow else { return nil }
+        return activeControllers.first { $0.playback != nil && ($0.window === key || $0.window === key.parent) }
+    }
+
     private(set) var editorDocument: VideoEditorDocument!
     private(set) var playback: VideoEditorPlayback!
     var exporter: VideoEditorExporter!
@@ -43,6 +52,8 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     /// The preset export queue (Phase 4). Created on first use; the old
     /// popover path above keeps its own `isExporting` until Phase 6 removes it.
     var exportQueueStorage: ExportQueue?
+    /// The top bar's subscription to `exportQueue` (removed on close).
+    var exportQueueObserver: UUID?
     var savedURL: URL?
     var savedRevision: UInt64?
     private var statusTimer: Timer?
@@ -232,6 +243,7 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         playback.onRateChange = { [weak self] rate in self?.transport.setRate(rate) }
         playback.onError = { [weak self] message in self?.showStatus(message, isError: true) }
         observerID = editorDocument.observe { [weak self] change in self?.documentChanged(change) }
+        bindExportQueue()
         topBar.titleLabel.stringValue = window.title
         refreshChrome()
         timeChanged(0)
@@ -302,6 +314,9 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         timeline?.tearDown()
         playback?.tearDown()
         if let observerID { editorDocument?.removeObserver(observerID) }
+        if let exportQueueObserver { exportQueueStorage?.removeObserver(exportQueueObserver) }
+        exportQueueObserver = nil
+        PopoverHelper.dismiss()
         NotificationCenter.default.removeObserver(self)
         Self.activeControllers.removeAll { $0 === self }
         if Self.activeControllers.isEmpty { (NSApp.delegate as? AppDelegate)?.returnFocusIfNeeded() }
@@ -975,9 +990,14 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         }
         if KeyboardShortcutMatcher.matches(event, character: "s", modifiers: [.command]) { saveVideo(); return true }
         if KeyboardShortcutMatcher.matches(event, character: "s", modifiers: [.command, .shift]) { saveVideoAs(); return true }
-        if KeyboardShortcutMatcher.matches(event, character: "c", modifiers: [.command]) { copyAction(); return true }
-        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command, .shift]) { quickExportAction(); return true }
-        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command]) { showExportPanel(topBar.exportButton); return true }
+        // ⇧⌘E repeats the last-used preset; ⌘E opens the export popover.
+        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command, .shift]) { runLastExportAction(); return true }
+        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command]) { showExportPopover(topBar.exportControl.menuButton); return true }
+        // Per-preset shortcuts (⌃⌘1–3 by default), matched by character.
+        if let preset = ExportPresetShortcutStore.preset(for: event, among: ExportPresetStore.visiblePresets()) {
+            runExportPreset(preset)
+            return true
+        }
         return false
     }
 

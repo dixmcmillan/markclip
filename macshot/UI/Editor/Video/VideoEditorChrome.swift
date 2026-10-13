@@ -1,29 +1,26 @@
 import AppKit
 
-/// Title-bar strip: undo/redo, project title, status and the Export button.
+/// Title-bar strip: undo/redo, project title, status and the split Export button.
 final class VideoEditorTopBar: NSView {
     let undoButton: VideoIconButton
     let redoButton: VideoIconButton
     let titleLabel = VideoEditorStyle.label("", size: 13, weight: .semibold)
     let subtitleLabel = VideoEditorStyle.label("", size: 11, color: VideoEditorStyle.textTertiary)
     let statusLabel = VideoEditorStyle.label("", size: 11.5, weight: .medium, color: VideoEditorStyle.textSecondary)
-    let exportButton: VideoPillButton
-    let copyButton: VideoPillButton
+    /// Split Export control: main part runs the last-used preset, the chevron
+    /// opens the export popover; a ring shows the running export's progress.
+    let exportControl: ExportSplitButton
 
     init(target: AnyObject) {
         undoButton = VideoIconButton(symbol: "arrow.uturn.backward", size: 13, tooltip: L("Undo"), target: target,
                                      action: #selector(VideoEditorWindowController.undoAction))
         redoButton = VideoIconButton(symbol: "arrow.uturn.forward", size: 13, tooltip: L("Redo"), target: target,
                                      action: #selector(VideoEditorWindowController.redoAction))
-        exportButton = VideoPillButton(title: L("Export"), symbol: "square.and.arrow.up", target: target,
-                                       action: #selector(VideoEditorWindowController.showExportPanel(_:)))
-        copyButton = VideoPillButton(title: L("Copy"), symbol: "doc.on.doc", target: target,
-                                     action: #selector(VideoEditorWindowController.copyAction))
+        exportControl = ExportSplitButton(target: target,
+                                          runAction: #selector(VideoEditorWindowController.runLastExportAction),
+                                          menuAction: #selector(VideoEditorWindowController.showExportPopover(_:)))
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        exportButton.fill = VideoEditorStyle.accent
-        exportButton.textColor = .white
-        copyButton.toolTip = L("Copy the edited video to the clipboard")
         for button in [undoButton, redoButton] {
             button.widthAnchor.constraint(equalToConstant: 30).isActive = true
             button.heightAnchor.constraint(equalToConstant: 28).isActive = true
@@ -36,7 +33,7 @@ final class VideoEditorTopBar: NSView {
         titles.orientation = .vertical
         titles.spacing = 1
         titles.translatesAutoresizingMaskIntoConstraints = false
-        for view in [undoButton, redoButton, titles, statusLabel, copyButton, exportButton] as [NSView] { addSubview(view) }
+        for view in [undoButton, redoButton, titles, statusLabel, exportControl] as [NSView] { addSubview(view) }
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 52),
             undoButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 84),
@@ -46,13 +43,10 @@ final class VideoEditorTopBar: NSView {
             titles.centerXAnchor.constraint(equalTo: centerXAnchor),
             titles.centerYAnchor.constraint(equalTo: centerYAnchor),
             titles.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.4),
-            exportButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            exportButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            exportButton.heightAnchor.constraint(equalToConstant: 30),
-            copyButton.trailingAnchor.constraint(equalTo: exportButton.leadingAnchor, constant: -8),
-            copyButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            copyButton.heightAnchor.constraint(equalToConstant: 30),
-            statusLabel.trailingAnchor.constraint(equalTo: copyButton.leadingAnchor, constant: -14),
+            exportControl.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            exportControl.centerYAnchor.constraint(equalTo: centerYAnchor),
+            exportControl.heightAnchor.constraint(equalToConstant: 30),
+            statusLabel.trailingAnchor.constraint(equalTo: exportControl.leadingAnchor, constant: -14),
             statusLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             statusLabel.leadingAnchor.constraint(greaterThanOrEqualTo: titles.trailingAnchor, constant: 12),
         ])
