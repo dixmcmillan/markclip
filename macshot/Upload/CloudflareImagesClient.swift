@@ -11,7 +11,7 @@ nonisolated struct ImagesResult: Sendable, Equatable {
 }
 
 extension ImagesResult {
-    fileprivate struct Wire: Decodable {
+    fileprivate nonisolated struct Wire: Decodable {
         var id: String?
         var filename: String?
         var variants: [String]?

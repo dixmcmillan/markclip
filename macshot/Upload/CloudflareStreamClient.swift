@@ -40,7 +40,7 @@ nonisolated struct StreamStatus: Sendable, Equatable {
 
 extension StreamStatus {
     /// Wire shape; tolerant of missing fields and string/number `pctComplete`.
-    fileprivate struct Wire: Decodable {
+    fileprivate nonisolated struct Wire: Decodable {
         var uid: String?
         var readyToStream: Bool?
         var duration: Double?
@@ -49,8 +49,8 @@ extension StreamStatus {
         var playback: Playback?
         var status: Status?
 
-        struct Playback: Decodable { var hls: String?; var dash: String? }
-        struct Status: Decodable {
+        nonisolated struct Playback: Decodable { var hls: String?; var dash: String? }
+        nonisolated struct Status: Decodable {
             var state: String?
             var pctComplete: LenientDouble?
             var errorReasonCode: String?
@@ -58,7 +58,7 @@ extension StreamStatus {
         }
     }
 
-    fileprivate struct LenientDouble: Decodable {
+    fileprivate nonisolated struct LenientDouble: Decodable {
         let value: Double?
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
@@ -68,7 +68,7 @@ extension StreamStatus {
         }
     }
 
-    fileprivate init(wire: Wire, fallbackUID: String) {
+    fileprivate nonisolated init(wire: Wire, fallbackUID: String) {
         let state = State(rawValue: wire.status?.state)
         uid = wire.uid ?? fallbackUID
         self.state = state
