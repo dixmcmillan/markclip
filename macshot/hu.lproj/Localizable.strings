@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -151,7 +151,6 @@
 "PII" = "PII";
 "Faces" = "Arcok";
 "People" = "Emberek";
-"Confirm before upload" = "Megerősítés feltöltés előtt";
 "Flip" = "Tükrözés";
 "Smooth" = "Simítás";
 "Refined" = "Finomított";
@@ -212,7 +211,6 @@
 "Recording" = "Felvétel";
 "About" = "Névjegy";
 "Shortcuts" = "Gyorsbillentyűk";
-"Uploads" = "Feltöltések";
 "Language" = "Nyelv";
 "Language:" = "Nyelv:";
 "Restart the app to fully apply the new language." = "Indítsd újra az alkalmazást az új nyelv teljes alkalmazásához.";
@@ -331,44 +329,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Feltöltési szolgáltatás";
-"Upload Provider" = "Feltöltési szolgáltató";
+/* Preferences - Transcription */
 "Provider:" = "Szolgáltató:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (képek + videók)";
-"imgbb (images only)" = "imgbb (csak képek)";
-"S3-Compatible (images + videos)" = "S3-kompatibilis (képek + videók)";
-"S3-Compatible Storage" = "S3-kompatibilis tároló";
-"Sign In with Google" = "Bejelentkezés Google-lel";
-"Sign Out" = "Kijelentkezés";
-"Signed in" = "Bejelentkezve";
-"Not signed in" = "Nincs bejelentkezve";
-"Account:" = "Fiók:";
-"Folder:" = "Mappa:";
-"Test Connection" = "Kapcsolat tesztelése";
-"Fill in endpoint, bucket, and credentials first" = "Előbb add meg a végpontot, a tárolót és a hitelesítési adatokat";
-"Testing..." = "Tesztelés...";
-"Connection successful!" = "Sikeres kapcsolódás!";
-"Leave empty to use default" = "Hagyd üresen az alapértelmezett használatához";
-"Endpoint:" = "Végpont:";
-"Region:" = "Régió:";
-"Bucket:" = "Tároló:";
-"Access Key:" = "Hozzáférési kulcs:";
-"Secret Key:" = "Titkos kulcs:";
-"Public URL:" = "Nyilvános URL:";
-"Path Prefix:" = "Útvonal előtag:";
-"Make uploads publicly readable" = "Feltöltések nyilvánosan olvashatóvá tétele";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "A public-read ACL-t küldi, így a feltöltött fájlok bárki számára megtekinthetők a linkkel. Szükséges az AWS S3, DigitalOcean Spaces, MinIO és Backblaze B2 számára, amelyek alapértelmezetten privát módon tárolják az objektumokat. Hagyja kikapcsolva a Cloudflare R2-nél, amely nem támogatja az ACL-eket és elutasítja a fejlécet.";
-"API key:" = "API kulcs:";
-"Upload History" = "Feltöltési előzmények";
-"No uploads yet." = "Még nincsenek feltöltések.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Alap URL a nyilvános hozzáféréshez. Ha üres, az S3 végpont URL kerül használatra (lehet, hogy nem nyilvánosan elérhető).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Egy megosztott kulcs már benne van, szerezd be a saját ingyenes kulcsodat az imgbb.com/api oldalon, ha eléred a sebességkorlátot. Csak képek (nincs videó támogatás).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Működik AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 és más S3-kompatibilis szolgáltatásokkal. Képeket és videókat támogat.";
-"Configure S3 in Preferences" = "S3 beállítása a Beállításokban";
-"Sign in to Google Drive in Preferences" = "Jelentkezz be a Google Drive-ba a Beállításokban";
-"Video upload requires Google Drive or S3" = "A videó feltöltéshez Google Drive vagy S3 szükséges";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -390,10 +352,6 @@
 "Cancel" = "Mégse";
 "Microphone Access Required" = "Mikrofon hozzáférés szükséges";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "A macshot-nak mikrofon engedélyre van szüksége a hangfelvételhez. Nyisd meg a Rendszerbeállításokat a hozzáférés megadásához.";
-"Upload to Google Drive?" = "Feltöltés a Google Drive-ra?";
-"Upload to S3?" = "Feltöltés az S3-ra?";
-"Upload to imgbb.com?" = "Feltöltés az imgbb.com-ra?";
-"Your screenshot will be uploaded." = "A képernyőkép feltöltésre kerül.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Üdvözöl a macshot";
@@ -424,8 +382,6 @@
 "URL copied to the clipboard" = "URL másolva a vágólapra";
 "Uploading... %d%%" = "Feltöltés... %d%%";
 "Upload failed: %@" = "Feltöltés sikertelen: %@";
-"Uploaded! Link copied." = "Feltöltve! Link másolva.";
-"Uploading to %@... %d%%" = "Feltöltés ide: %@... %d%%";
 "Open" = "Megnyitás";
 
 /* Recording Toast */
@@ -561,8 +517,6 @@
 "Apple (on-device)" = "Apple (eszközön)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Az Apple fordítás gyorsabb és offline is működik. A Google Translate több nyelvet támogat.";
 "Download language packs in System Settings…" = "Töltsd le a nyelvi csomagokat a Rendszerbeállításokban…";
-"Configure S3 in Settings" = "S3 beállítása a Beállításokban";
-"Sign in to Google Drive in Settings" = "Jelentkezz be a Google Drive-ba a Beállításokban";
 "Position:" = "Pozíció:";
 "Size:" = "Méret:";
 "Shape:" = "Alakzat:";
@@ -575,7 +529,6 @@
 "Clear History?" = "Törli az előzményeket?";
 "This will permanently delete all screenshots from history." = "Ez véglegesen törli az összes képernyőképet az előzményekből.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Kattintson a \"Beállítás\" gombra, majd nyomjon meg egy billentyűkombinációt legalább egy módosítóbillentyűvel (⌘, ⌥, ⌃, ⇧) a gyorsbillentyű beállításához.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "A fájlok ebbe a mappába töltődnek fel a Google Drive-on. Hagyd üresen a \"macshot\" használatához. A macshot csak az általa létrehozott mappákat tudja használni, ezért a Drive-ban általad létrehozott, azonos nevű mappát nem használja újra, helyette új mappát hoz létre. Minden privát marad, semmi nem kerül nyilvános megosztásra.";
 
 "Pressure" = "Nyomás";
 

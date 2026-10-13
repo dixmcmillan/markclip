@@ -5,7 +5,7 @@ import XCTest
 
 /// Provider-neutral upload plumbing: the on-disk prepared body and the
 /// transport's progress delegate. (Provider-specific request tests went with
-/// the Drive/S3/imgbb uploaders in Phase 7; Cloudflare adds its own.)
+/// the legacy uploaders in Phase 7; Cloudflare adds its own.)
 final class UploadRequestTests: XCTestCase {
     private var directory: URL!
     private var session: URLSession!

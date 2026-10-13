@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "PII";
 "Faces" = "चेहरे";
 "People" = "लोग";
-"Confirm before upload" = "अपलोड से पहले पुष्टि करें";
 "Flip" = "पलटें";
 "Smooth" = "चिकना";
 "Refined" = "परिष्कृत";
@@ -200,7 +199,6 @@
 "Recording" = "रिकॉर्डिंग";
 "About" = "बारे में";
 "Shortcuts" = "शॉर्टकट";
-"Uploads" = "अपलोड";
 "Language" = "भाषा";
 "Language:" = "भाषा:";
 "Restart the app to fully apply the new language." = "नई भाषा पूरी तरह लागू करने के लिए ऐप पुनः आरंभ करें।";
@@ -330,46 +328,10 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "अपलोड सेवा";
-"Upload Provider" = "अपलोड प्रदाता";
+/* Preferences - Transcription */
 "Provider:" = "प्रदाता:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (चित्र + वीडियो)";
-"imgbb (images only)" = "imgbb (केवल चित्र)";
-"S3-Compatible (images + videos)" = "S3-संगत (चित्र + वीडियो)";
-"S3-Compatible Storage" = "S3-संगत भंडारण";
-"Sign In with Google" = "Google से साइन इन करें";
-"Sign Out" = "साइन आउट";
-"Signed in" = "साइन इन किया हुआ";
-"Not signed in" = "साइन इन नहीं किया";
-"Account:" = "खाता:";
-"Folder:" = "फ़ोल्डर:";
-"Test Connection" = "कनेक्शन परीक्षण";
-"Fill in endpoint, bucket, and credentials first" = "पहले एंडपॉइंट, बकेट और क्रेडेंशियल भरें";
-"Testing..." = "परीक्षण हो रहा है...";
-"Connection successful!" = "कनेक्शन सफल!";
-"Leave empty to use default" = "डिफ़ॉल्ट उपयोग के लिए खाली छोड़ें";
-"Endpoint:" = "एंडपॉइंट:";
-"Region:" = "क्षेत्र:";
-"Bucket:" = "बकेट:";
-"Access Key:" = "एक्सेस कुंजी:";
-"Secret Key:" = "सीक्रेट कुंजी:";
-"Public URL:" = "सार्वजनिक URL:";
-"Path Prefix:" = "पथ उपसर्ग:";
-"Make uploads publicly readable" = "अपलोड को सार्वजनिक रूप से पठनीय बनाएं";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "public-read ACL भेजता है ताकि अपलोड की गई फ़ाइलें लिंक रखने वाले किसी भी व्यक्ति को दिखाई दें। AWS S3, DigitalOcean Spaces, MinIO और Backblaze B2 के लिए आवश्यक है जो डिफ़ॉल्ट रूप से ऑब्जेक्ट्स को निजी रखते हैं। Cloudflare R2 के लिए बंद रखें जो ACLs का समर्थन नहीं करता और हेडर अस्वीकार करता है।";
-"API key:" = "API कुंजी:";
-"Upload History" = "अपलोड इतिहास";
-"No uploads yet." = "अभी तक कोई अपलोड नहीं।";
 "No Apps Available" = "कोई ऐप उपलब्ध नहीं";
 "No Share Services" = "कोई साझा सेवा नहीं";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "सार्वजनिक पहुँच के लिए बेस URL। यदि खाली है, तो S3 एंडपॉइंट URL उपयोग होता है (सार्वजनिक रूप से सुलभ नहीं हो सकता)।";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "एक साझा कुंजी शामिल है, यदि दर सीमा तक पहुँचें तो imgbb.com/api पर अपनी मुफ़्त कुंजी प्राप्त करें। केवल चित्र (वीडियो समर्थन नहीं)।";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, और अन्य S3-संगत सेवाओं के साथ काम करता है। चित्र और वीडियो समर्थित हैं।";
-"Configure S3 in Preferences" = "प्राथमिकताओं में S3 कॉन्फ़िगर करें";
-"Sign in to Google Drive in Preferences" = "प्राथमिकताओं में Google Drive से साइन इन करें";
-"Video upload requires Google Drive or S3" = "वीडियो अपलोड के लिए Google Drive या S3 आवश्यक है";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "रद्द करें";
 "Microphone Access Required" = "माइक्रोफ़ोन पहुँच आवश्यक";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot को ध्वनि ऑडियो रिकॉर्ड करने के लिए माइक्रोफ़ोन अनुमति चाहिए। पहुँच प्रदान करने के लिए सिस्टम सेटिंग्स खोलें।";
-"Upload to Google Drive?" = "Google Drive पर अपलोड करें?";
-"Upload to S3?" = "S3 पर अपलोड करें?";
-"Upload to imgbb.com?" = "imgbb.com पर अपलोड करें?";
-"Your screenshot will be uploaded." = "आपका स्क्रीनशॉट अपलोड किया जाएगा।";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "macshot में आपका स्वागत है";
@@ -424,8 +382,6 @@
 "URL copied to the clipboard" = "URL क्लिपबोर्ड पर कॉपी किया गया";
 "Uploading... %d%%" = "अपलोड हो रहा है... %d%%";
 "Upload failed: %@" = "अपलोड विफल: %@";
-"Uploaded! Link copied." = "अपलोड हो गया! लिंक कॉपी किया गया।";
-"Uploading to %@... %d%%" = "%@ पर अपलोड हो रहा है... %d%%";
 "Open" = "खोलें";
 
 /* Recording Toast */
@@ -561,8 +517,6 @@
 "Apple (on-device)" = "Apple (डिवाइस पर)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple अनुवाद तेज़ है और ऑफ़लाइन काम करता है। Google Translate अधिक भाषाओं का समर्थन करता है।";
 "Download language packs in System Settings…" = "सिस्टम सेटिंग्स में भाषा पैक डाउनलोड करें…";
-"Configure S3 in Settings" = "सेटिंग्स में S3 कॉन्फ़िगर करें";
-"Sign in to Google Drive in Settings" = "सेटिंग्स में Google Drive में साइन इन करें";
 "Position:" = "स्थिति:";
 "Size:" = "आकार:";
 "Shape:" = "आकृति:";
@@ -575,7 +529,6 @@
 "Clear History?" = "इतिहास साफ़ करें?";
 "This will permanently delete all screenshots from history." = "यह इतिहास से सभी स्क्रीनशॉट स्थायी रूप से हटा देगा।";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"सेट\" पर क्लिक करें और कम से कम एक मॉडिफ़ायर (⌘, ⌥, ⌃, ⇧) के साथ एक कुंजी संयोजन दबाएं।";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "फ़ाइलें आपके Google Drive में इस फ़ोल्डर में अपलोड की जाती हैं। \"macshot\" का उपयोग करने के लिए खाली छोड़ें। macshot केवल उन्हीं फ़ोल्डरों का उपयोग कर सकता है जिन्हें उसने स्वयं बनाया है, इसलिए Drive में आपके द्वारा उसी नाम से बनाया गया फ़ोल्डर दोबारा उपयोग नहीं किया जाएगा, इसके बजाय एक नया फ़ोल्डर बनाया जाता है। सब कुछ निजी रहता है, कुछ भी सार्वजनिक रूप से साझा नहीं किया जाता।";
 
 "Pressure" = "दबाव";
 

@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "PII";
 "Faces" = "چهره‌ها";
 "People" = "افراد";
-"Confirm before upload" = "تایید قبل از بارگذاری";
 "Flip" = "وارونه";
 "Smooth" = "هموار";
 "Refined" = "پالایش‌شده";
@@ -200,7 +199,6 @@
 "Recording" = "ضبط ویدیو";
 "About" = "درباره";
 "Shortcuts" = "میانبرها";
-"Uploads" = "بارگذاری‌ها";
 "Language" = "زبان";
 "Language:" = "زبان:";
 "Restart the app to fully apply the new language." = "برنامه را مجددا راه‌اندازی کنید تا زبان جدید به طور کامل اعمال شود.";
@@ -325,44 +323,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "سرویس بارگذاری";
-"Upload Provider" = "ارائه‌دهنده بارگذاری";
+/* Preferences - Transcription */
 "Provider:" = "ارائه‌دهنده:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (تصاویر + ویدیوها)";
-"imgbb (images only)" = "imgbb (فقط تصاویر)";
-"S3-Compatible (images + videos)" = "S3-Compatible (تصاویر + ویدیوها)";
-"S3-Compatible Storage" = "فضای ذخیره‌سازی S3-Compatible";
-"Sign In with Google" = "ورود با Google";
-"Sign Out" = "خروج از حساب";
-"Signed in" = "وارد شده";
-"Not signed in" = "وارد نشده";
-"Account:" = "حساب کاربری:";
-"Folder:" = "پوشه:";
-"Test Connection" = "تست اتصال";
-"Fill in endpoint, bucket, and credentials first" = "ابتدا آدرس، باکت و اطلاعات ورود را پر کنید";
-"Testing..." = "در حال تست...";
-"Connection successful!" = "اتصال موفقیت‌آمیز بود!";
-"Leave empty to use default" = "برای استفاده از پیش‌فرض خالی بگذارید";
-"Endpoint:" = "آدرس:";
-"Region:" = "منطقه:";
-"Bucket:" = "باکت:";
-"Access Key:" = "کلید دسترسی:";
-"Secret Key:" = "کلید محرمانه:";
-"Public URL:" = "آدرس عمومی:";
-"Path Prefix:" = "پیشوند مسیر:";
-"Make uploads publicly readable" = "قابل خواندن عمومی کردن بارگذاری‌ها";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "ACL از نوع public-read ارسال می‌کند تا فایل‌های بارگذاری‌شده برای هر کسی که لینک را دارد قابل مشاهده باشند. برای AWS S3، DigitalOcean Spaces، MinIO و Backblaze B2 که اشیاء را به صورت خصوصی ذخیره می‌کنند لازم است. برای Cloudflare R2 که ACLs ندارد و هدر را رد می‌کند، خاموش بگذارید.";
-"API key:" = "کلید API:";
-"Upload History" = "تاریخچه بارگذاری";
-"No uploads yet." = "هنوز بارگذاری‌ای انجام نشده.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "آدرس پایه برای دسترسی عمومی. اگر خالی باشد، آدرس S3 استفاده می‌شود (ممکن است به صورت عمومی قابل دسترسی نباشد).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "یک کلید مشترک موجود است, اگر به محدودیت نرخ رسیدید، کلید رایگان خود را از imgbb.com/api دریافت کنید. فقط تصاویر (بدون پشتیبانی ویدیو).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "با AWS S3، Cloudflare R2، MinIO، DigitalOcean Spaces، Backblaze B2 و سایر سرویس‌های سازگار با S3 کار می‌کند. از تصاویر و ویدیوها پشتیبانی می‌کند.";
-"Configure S3 in Preferences" = "پیکربندی S3 در تنظیمات";
-"Sign in to Google Drive in Preferences" = "ورود به Google Drive در تنظیمات";
-"Video upload requires Google Drive or S3" = "بارگذاری ویدیو نیاز به Google Drive یا S3 دارد";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -384,10 +346,6 @@
 "Cancel" = "لغو";
 "Microphone Access Required" = "دسترسی به میکروفون لازم است";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot برای ضبط صدای میکروفون به مجوز میکروفون نیاز دارد. تنظیمات سیستم را باز کنید تا دسترسی اعطا شود.";
-"Upload to Google Drive?" = "بارگذاری به Google Drive؟";
-"Upload to S3?" = "بارگذاری به S3؟";
-"Upload to imgbb.com?" = "بارگذاری به imgbb.com؟";
-"Your screenshot will be uploaded." = "تصویر صفحه شما بارگذاری خواهد شد.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "به macshot خوش آمدید";
@@ -416,8 +374,6 @@
 "URL copied to the clipboard" = "آدرس به کلیپ‌بورد کپی شد";
 "Uploading... %d%%" = "در حال بارگذاری... %d%%";
 "Upload failed: %@" = "بارگذاری ناموفق: %@";
-"Uploaded! Link copied." = "بارگذاری شد! لینک کپی شد.";
-"Uploading to %@... %d%%" = "در حال بارگذاری به %@... %d%%";
 "Open" = "باز کردن";
 
 /* Recording Toast */
@@ -553,8 +509,6 @@
 "Apple (on-device)" = "Apple (روی دستگاه)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "ترجمه Apple سریع‌تر است و بدون اینترنت کار می‌کند. Google Translate از زبان‌های بیشتری پشتیبانی می‌کند.";
 "Download language packs in System Settings…" = "بسته‌های زبان را در تنظیمات سیستم دانلود کنید…";
-"Configure S3 in Settings" = "پیکربندی S3 در تنظیمات";
-"Sign in to Google Drive in Settings" = "ورود به Google Drive در تنظیمات";
 "Position:" = "موقعیت:";
 "Size:" = "اندازه:";
 "Shape:" = "شکل:";
@@ -567,7 +521,6 @@
 "Clear History?" = "پاک کردن تاریخچه؟";
 "This will permanently delete all screenshots from history." = "این کار تمام اسکرین‌شات‌ها را به‌طور دائمی از تاریخچه حذف می‌کند.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "روی \"تنظیم\" کلیک کنید و یک ترکیب کلید با حداقل یک کلید تغییردهنده (⌘, ⌥, ⌃, ⇧) را برای تعیین میانبر فشار دهید.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "فایل‌ها در این پوشه در Google Drive شما بارگذاری می‌شوند. برای استفاده از \"macshot\" خالی بگذارید. macshot فقط می‌تواند از پوشه‌هایی استفاده کند که خودش ساخته است، بنابراین پوشه‌ای که خودتان با همین نام در Drive ساخته‌اید دوباره استفاده نمی‌شود, به‌جای آن یک پوشهٔ جدید ساخته می‌شود. همه چیز خصوصی می‌ماند, هیچ چیز به‌صورت عمومی به اشتراک گذاشته نمی‌شود.";
 
 "Pressure" = "فشار";
 

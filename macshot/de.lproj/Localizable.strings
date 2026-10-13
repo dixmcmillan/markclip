@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -154,7 +154,6 @@
 "PII" = "PII";
 "Faces" = "Gesichter";
 "People" = "Personen";
-"Confirm before upload" = "Vor dem Hochladen bestätigen";
 "Flip" = "Spiegeln";
 "Smooth" = "Glätten";
 "Refined" = "Verfeinert";
@@ -205,7 +204,6 @@
 "Recording" = "Aufzeichnung";
 "About" = "Über";
 "Shortcuts" = "Kurzbefehle";
-"Uploads" = "Uploads";
 "Language" = "Sprache";
 "Language:" = "Sprache:";
 "Restart the app to fully apply the new language." = "Starten Sie die App neu, um die neue Sprache vollständig zu übernehmen.";
@@ -322,44 +320,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Upload-Dienst";
-"Upload Provider" = "Upload-Anbieter";
+/* Preferences - Transcription */
 "Provider:" = "Anbieter:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (Bilder + Videos)";
-"imgbb (images only)" = "imgbb (nur Bilder)";
-"S3-Compatible (images + videos)" = "S3-kompatibel (Bilder + Videos)";
-"S3-Compatible Storage" = "S3-kompatibler Speicher";
-"Sign In with Google" = "Mit Google anmelden";
-"Sign Out" = "Abmelden";
-"Signed in" = "Angemeldet";
-"Not signed in" = "Nicht angemeldet";
-"Account:" = "Konto:";
-"Folder:" = "Ordner:";
-"Test Connection" = "Verbindung testen";
-"Fill in endpoint, bucket, and credentials first" = "Geben Sie zuerst Endpunkt, Bucket und Anmeldedaten ein";
-"Testing..." = "Teste ...";
-"Connection successful!" = "Verbindung erfolgreich!";
-"Leave empty to use default" = "Leer lassen für Standardwert";
-"Endpoint:" = "Endpunkt:";
-"Region:" = "Region:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Zugriffsschlüssel:";
-"Secret Key:" = "Geheimer Schlüssel:";
-"Public URL:" = "Öffentliche URL:";
-"Path Prefix:" = "Pfad-Präfix:";
-"Make uploads publicly readable" = "Uploads öffentlich lesbar machen";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Sendet die public-read ACL, sodass hochgeladene Dateien für jeden mit dem Link sichtbar sind. Erforderlich für AWS S3, DigitalOcean Spaces, MinIO und Backblaze B2, die Objekte standardmäßig privat speichern. Für Cloudflare R2 deaktiviert lassen, da dort keine ACLs unterstützt werden und der Header abgelehnt wird.";
-"API key:" = "API-Schlüssel:";
-"Upload History" = "Upload-Verlauf";
-"No uploads yet." = "Noch keine Uploads.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Basis-URL für öffentlichen Zugriff. Wenn leer, wird die S3-Endpunkt-URL verwendet (möglicherweise nicht öffentlich zugänglich).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Ein gemeinsamer Schlüssel ist enthalten, holen Sie sich einen eigenen kostenlosen Schlüssel auf imgbb.com/api, falls Sie Ratenlimits erreichen. Nur Bilder (keine Videounterstützung).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Funktioniert mit AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 und anderen S3-kompatiblen Diensten. Unterstützt Bilder und Videos.";
-"Configure S3 in Preferences" = "S3 in den Einstellungen konfigurieren";
-"Sign in to Google Drive in Preferences" = "In den Einstellungen bei Google Drive anmelden";
-"Video upload requires Google Drive or S3" = "Video-Upload erfordert Google Drive oder S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -381,10 +343,6 @@
 "Cancel" = "Abbrechen";
 "Microphone Access Required" = "Mikrofonzugriff erforderlich";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot benötigt die Mikrofonberechtigung zur Sprachaufzeichnung. Öffnen Sie die Systemeinstellungen, um den Zugriff zu gewähren.";
-"Upload to Google Drive?" = "Auf Google Drive hochladen?";
-"Upload to S3?" = "Auf S3 hochladen?";
-"Upload to imgbb.com?" = "Auf imgbb.com hochladen?";
-"Your screenshot will be uploaded." = "Ihr Screenshot wird hochgeladen.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Willkommen bei macshot";
@@ -413,8 +371,6 @@
 "URL copied to the clipboard" = "URL in die Zwischenablage kopiert";
 "Uploading... %d%%" = "Hochladen … %d%%";
 "Upload failed: %@" = "Hochladen fehlgeschlagen: %@";
-"Uploaded! Link copied." = "Hochgeladen! Link kopiert.";
-"Uploading to %@... %d%%" = "Hochladen auf %@ … %d%%";
 "Open" = "Öffnen";
 
 /* Recording Toast */
@@ -550,8 +506,6 @@
 "Apple (on-device)" = "Apple (auf dem Gerät)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-Übersetzung ist schneller und funktioniert offline. Google Translate unterstützt mehr Sprachen.";
 "Download language packs in System Settings…" = "Sprachpakete in den Systemeinstellungen laden …";
-"Configure S3 in Settings" = "S3 in den Einstellungen konfigurieren";
-"Sign in to Google Drive in Settings" = "In den Einstellungen bei Google Drive anmelden";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline-Build: Upload- und Cloud-Speicher-Integrationen sind entfernt. Updateprüfungen können weiterhin eine Verbindung zum Updateserver von MacShot herstellen. Screenshots und Aufnahmen bleiben lokal, sofern du sie nicht selbst teilst oder speicherst.";
 "Position:" = "Position:";
 "Size:" = "Größe:";
@@ -565,7 +519,6 @@
 "Clear History?" = "Verlauf löschen?";
 "This will permanently delete all screenshots from history." = "Dadurch werden alle Screenshots dauerhaft aus dem Verlauf gelöscht.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klicke auf \"Festlegen\" und drücke eine Tastenkombination mit mindestens einem Sonderzeichen (⌘, ⌥, ⌃, ⇧), um ein Kürzel festzulegen.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Dateien werden in diesen Ordner in deinem Google Drive hochgeladen. Leer lassen, um \"macshot\" zu verwenden. macshot kann nur Ordner verwenden, die es selbst erstellt hat. Ein von dir in Drive angelegter Ordner mit demselben Namen wird daher nicht wiederverwendet, stattdessen wird ein neuer erstellt. Alles bleibt privat, nichts wird öffentlich geteilt.";
 
 "Pressure" = "Druck";
 

@@ -112,13 +112,10 @@ macshot release.
 - **Selection border** — visible capture region outline during recording
 - **Menu bar stop button** — stop recording from the menu bar icon (appears even if icon is hidden)
 - **Quick settings popover** — change format, FPS, and post-recording action on the fly without opening Preferences
-- **Video editor** — trim timeline, mute/strip audio, play/pause, save (with Save As), upload, reveal in Finder
+- **Video editor** — trim timeline, mute/strip audio, play/pause, save (with Save As), reveal in Finder
 
-### Output & Upload
+### Output
 - **Formats** — PNG, JPEG, HEIC, WebP, AVIF with quality slider
-- **Google Drive** — sign in once, uploads to a private folder (defaults to "macshot", configurable in Settings)
-- **imgbb** — anonymous image hosting with shareable links
-- **S3-compatible** — upload to Cloudflare R2, AWS S3, MinIO, DigitalOcean Spaces, Backblaze B2, etc.
 - **Retina downscale** — optional 1x export for smaller files
 - **sRGB color profile** — optional embedding for cross-display consistency
 
@@ -144,7 +141,7 @@ macshot release.
 - **Invert colors** — one-click color inversion, apply twice to revert
 - **Background removal** — Apple Vision foreground mask (macOS 14+)
 - **Pin to screen** — floating always-on-top window
-- **Floating thumbnail** — auto-dismiss preview with Copy/Save/Pin/Edit/Upload
+- **Floating thumbnail** — auto-dismiss preview with Copy/Save/Pin/Edit
 - **Screenshot history with editable annotations** — menu bar submenu + drop-down history panel (`Cmd+Shift+H`). Re-open any capture in the editor with live annotations preserved — edit, then press Done to save back. Drag-and-drop, Quick Look, and right-click actions
 - **QR & barcode detection** — inline Open/Copy actions
 - **Snap alignment guides** — annotations snap to midlines and edges

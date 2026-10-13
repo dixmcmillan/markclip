@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -147,7 +147,6 @@
 "PII" = "개인정보";
 "Faces" = "얼굴";
 "People" = "사람";
-"Confirm before upload" = "업로드 전 확인";
 "Flip" = "뒤집기";
 "Smooth" = "부드럽게";
 "Refined" = "정밀";
@@ -199,7 +198,6 @@
 "Recording" = "녹화";
 "About" = "정보";
 "Shortcuts" = "단축키";
-"Uploads" = "업로드";
 "Language" = "언어";
 "Language:" = "언어:";
 "Restart the app to fully apply the new language." = "새 언어를 완전히 적용하려면 앱을 재시작하세요.";
@@ -314,44 +312,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "업로드 서비스";
-"Upload Provider" = "업로드 제공자";
+/* Preferences - Transcription */
 "Provider:" = "제공자:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (이미지 + 동영상)";
-"imgbb (images only)" = "imgbb (이미지만)";
-"S3-Compatible (images + videos)" = "S3 호환 (이미지 + 동영상)";
-"S3-Compatible Storage" = "S3 호환 저장소";
-"Sign In with Google" = "Google로 로그인";
-"Sign Out" = "로그아웃";
-"Signed in" = "로그인됨";
-"Not signed in" = "로그인되지 않음";
-"Account:" = "계정:";
-"Folder:" = "폴더:";
-"Test Connection" = "연결 테스트";
-"Fill in endpoint, bucket, and credentials first" = "먼저 엔드포인트, 버킷, 자격 증명을 입력하세요";
-"Testing..." = "테스트 중...";
-"Connection successful!" = "연결 성공!";
-"Leave empty to use default" = "기본값을 사용하려면 비워두세요";
-"Endpoint:" = "엔드포인트:";
-"Region:" = "리전:";
-"Bucket:" = "버킷:";
-"Access Key:" = "액세스 키:";
-"Secret Key:" = "시크릿 키:";
-"Public URL:" = "공개 URL:";
-"Path Prefix:" = "경로 접두사:";
-"Make uploads publicly readable" = "업로드를 공개 읽기 가능으로 설정";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "public-read ACL을 전송하여 업로드된 파일을 링크가 있는 누구나 볼 수 있게 합니다. 기본적으로 객체를 비공개로 저장하는 AWS S3, DigitalOcean Spaces, MinIO, Backblaze B2에 필요합니다. ACL이 없고 헤더를 거부하는 Cloudflare R2에서는 끄세요.";
-"API key:" = "API 키:";
-"Upload History" = "업로드 기록";
-"No uploads yet." = "아직 업로드가 없습니다.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "공개 접근용 기본 URL입니다. 비어 있으면 S3 엔드포인트 URL이 사용됩니다 (공개 접근이 불가능할 수 있음).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "공유 키가 포함되어 있습니다. 요청 제한에 도달하면 imgbb.com/api에서 무료 키를 받으세요. 이미지만 지원됩니다 (동영상 미지원).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 및 기타 S3 호환 서비스와 사용할 수 있습니다. 이미지와 동영상을 지원합니다.";
-"Configure S3 in Preferences" = "환경설정에서 S3 구성";
-"Sign in to Google Drive in Preferences" = "환경설정에서 Google Drive에 로그인";
-"Video upload requires Google Drive or S3" = "동영상 업로드에는 Google Drive 또는 S3가 필요합니다";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -373,10 +335,6 @@
 "Cancel" = "취소";
 "Microphone Access Required" = "마이크 접근 권한 필요";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot이 음성을 녹음하려면 마이크 권한이 필요합니다. 시스템 설정을 열어 권한을 허용하세요.";
-"Upload to Google Drive?" = "Google Drive에 업로드하시겠습니까?";
-"Upload to S3?" = "S3에 업로드하시겠습니까?";
-"Upload to imgbb.com?" = "imgbb.com에 업로드하시겠습니까?";
-"Your screenshot will be uploaded." = "스크린샷이 업로드됩니다.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "macshot에 오신 것을 환영합니다";
@@ -408,8 +366,6 @@
 "URL copied to the clipboard" = "URL이 클립보드에 복사되었습니다";
 "Uploading... %d%%" = "업로드 중... %d%%";
 "Upload failed: %@" = "업로드 실패: %@";
-"Uploaded! Link copied." = "업로드 완료! 링크가 복사되었습니다.";
-"Uploading to %@... %d%%" = "%@에 업로드 중... %d%%";
 "Open" = "열기";
 "Open Link" = "링크 열기";
 "Open With" = "다음으로 열기";
@@ -551,8 +507,6 @@
 "Apple (on-device)" = "Apple (기기 내)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple 번역은 더 빠르고 오프라인에서 작동합니다. Google Translate는 더 많은 언어를 지원합니다.";
 "Download language packs in System Settings…" = "시스템 설정에서 언어 팩 다운로드…";
-"Configure S3 in Settings" = "설정에서 S3 구성";
-"Sign in to Google Drive in Settings" = "설정에서 Google Drive에 로그인";
 "Position:" = "위치:";
 "  Position:" = "  위치:";
 "Size:" = "크기:";
@@ -566,7 +520,6 @@
 "Clear History?" = "기록을 지우시겠습니까?";
 "This will permanently delete all screenshots from history." = "기록에서 모든 스크린샷이 영구적으로 삭제됩니다.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"설정\" 을 클릭하고 적어도 하나의 수정 키 (⌘, ⌥, ⌃, ⇧) 가 포함된 키 조합을 눌러 단축키를 설정하세요.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "파일은 Google Drive의 이 폴더에 업로드됩니다. 비워 두면 \"macshot\" 폴더를 사용합니다. macshot은 직접 생성한 폴더만 사용할 수 있으므로, Drive에서 직접 만든 같은 이름의 폴더는 재사용되지 않고 새 폴더가 생성됩니다. 모든 것은 비공개로 유지되며 공개적으로 공유되지 않습니다.";
 
 "Pressure" = "필압";
 

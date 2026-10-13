@@ -150,16 +150,18 @@ jobs:
           expected_bundle_id = "com.sw33tlie.macshot.offline"
           expected_feed_url = "https://raw.githubusercontent.com/sw33tLie/macshot/main/appcast-offline.xml"
           plist["SUFeedURL"] = expected_feed_url
-          plist["CFBundleURLTypes"] = [
-              item for item in plist.get("CFBundleURLTypes", [])
-              if item.get("CFBundleURLName") != "Google OAuth"
-          ]
           if plist.get("CFBundleIdentifier") != expected_bundle_id:
               raise SystemExit(f"Offline bundle id mismatch: {plist.get('CFBundleIdentifier')}")
           if plist.get("SUFeedURL") != expected_feed_url:
               raise SystemExit(f"Offline Sparkle feed mismatch: {plist.get('SUFeedURL')}")
-          if any(item.get("CFBundleURLName") == "Google OAuth" for item in plist.get("CFBundleURLTypes", [])):
-              raise SystemExit("Offline build still contains Google OAuth URL scheme")
+          # The Google OAuth URL scheme was removed from Info.plist with the
+          # Drive uploader; keep asserting no build ships one.
+          for item in plist.get("CFBundleURLTypes", []):
+              if item.get("CFBundleURLName") == "Google OAuth" or any(
+                  scheme.startswith("com.googleusercontent.apps")
+                  for scheme in item.get("CFBundleURLSchemes", [])
+              ):
+                  raise SystemExit("Build still contains a Google OAuth URL scheme")
           plist_path.write_bytes(plistlib.dumps(plist))
           PYEOF
 

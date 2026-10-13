@@ -282,9 +282,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         // SandboxContainerMigration's doc comment for why this is needed.
         SandboxContainerMigration.runIfNeeded()
 
-        // Phase 7: drop credentials/settings left by the removed Google Drive,
-        // S3 and imgbb uploaders. Runs after the migration above, which could
-        // otherwise copy an old Drive token file back into place.
+        // Phase 7: drop credentials/settings left by the removed cloud upload
+        // integrations. Runs after the migration above, which could otherwise
+        // copy an old Drive token file back into place.
         LegacyUploadCleanup.run()
 
         // Markclip Phase 1 (identity, ROADMAP.md): the screenshot capture

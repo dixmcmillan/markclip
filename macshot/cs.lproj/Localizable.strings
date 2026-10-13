@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -167,7 +167,6 @@
 "PII" = "PII";
 "Faces" = "Obličeje";
 "People" = "Osoby";
-"Confirm before upload" = "Potvrdit před nahráním";
 "Flip" = "Převrátit";
 "Smooth" = "Vyhlazení";
 "Refined" = "Vyhlazené";
@@ -219,7 +218,6 @@
 "Recording" = "Nahrávání";
 "About" = "O aplikaci";
 "Shortcuts" = "Zkratky";
-"Uploads" = "Nahrávání souborů";
 "Language" = "Jazyk";
 "Language:" = "Jazyk:";
 "Restart the app to fully apply the new language." = "Restartujte aplikaci pro úplné použití nového jazyka.";
@@ -332,44 +330,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Služba nahrávání";
-"Upload Provider" = "Poskytovatel nahrávání";
+/* Preferences - Transcription */
 "Provider:" = "Poskytovatel:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (obrázky + videa)";
-"imgbb (images only)" = "imgbb (pouze obrázky)";
-"S3-Compatible (images + videos)" = "S3-kompatibilní (obrázky + videa)";
-"S3-Compatible Storage" = "S3-kompatibilní úložiště";
-"Sign In with Google" = "Přihlásit se přes Google";
-"Sign Out" = "Odhlásit se";
-"Signed in" = "Přihlášen";
-"Not signed in" = "Nepřihlášen";
-"Account:" = "Účet:";
-"Folder:" = "Složka:";
-"Test Connection" = "Test připojení";
-"Fill in endpoint, bucket, and credentials first" = "Nejprve vyplňte endpoint, bucket a přihlašovací údaje";
-"Testing..." = "Testování...";
-"Connection successful!" = "Připojení úspěšné!";
-"Leave empty to use default" = "Ponechte prázdné pro výchozí hodnotu";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Region:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Přístupový klíč:";
-"Secret Key:" = "Tajný klíč:";
-"Public URL:" = "Veřejná URL:";
-"Path Prefix:" = "Předpona cesty:";
-"Make uploads publicly readable" = "Zpřístupnit nahrávání veřejně ke čtení";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Odesílá ACL public-read, aby nahrané soubory byly přístupné komukoliv s odkazem. Nutné pro AWS S3, DigitalOcean Spaces, MinIO a Backblaze B2, které ve výchozím nastavení ukládají objekty jako soukromé. Ponechte vypnuté pro Cloudflare R2, které nepodporuje ACL a tento hlavičkový údaj odmítne.";
-"API key:" = "API klíč:";
-"Upload History" = "Historie nahrávání";
-"No uploads yet." = "Zatím žádná nahrávání.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Základní URL pro veřejný přístup. Pokud je prázdná, použije se URL S3 endpointu (nemusí být veřejně přístupná).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Sdílený klíč je součástí, získejte vlastní bezplatný klíč na imgbb.com/api, pokud narazíte na limity. Pouze obrázky (bez podpory videa).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Funguje s AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 a dalšími S3-kompatibilními službami. Podporuje obrázky a videa.";
-"Configure S3 in Preferences" = "Nastavit S3 v Předvolbách";
-"Sign in to Google Drive in Preferences" = "Přihlásit se ke Google Drive v Předvolbách";
-"Video upload requires Google Drive or S3" = "Nahrávání videa vyžaduje Google Drive nebo S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "Zrušit";
 "Microphone Access Required" = "Vyžadován přístup k mikrofonu";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot potřebuje oprávnění k mikrofonu pro nahrávání hlasu. Otevřete Nastavení systému pro udělení přístupu.";
-"Upload to Google Drive?" = "Nahrát na Google Drive?";
-"Upload to S3?" = "Nahrát na S3?";
-"Upload to imgbb.com?" = "Nahrát na imgbb.com?";
-"Your screenshot will be uploaded." = "Váš snímek bude nahrán.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Vítejte v macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "URL zkopírována do schránky";
 "Uploading... %d%%" = "Nahrávání... %d%%";
 "Upload failed: %@" = "Nahrávání selhalo: %@";
-"Uploaded! Link copied." = "Nahráno! Odkaz zkopírován.";
-"Uploading to %@... %d%%" = "Nahrávání na %@... %d%%";
 "Open" = "Otevřít";
 
 /* Recording Toast */
@@ -559,8 +515,6 @@
 "Apple (on-device)" = "Apple (na zařízení)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Překlad Apple je rychlejší a funguje offline. Google Translate podporuje více jazyků.";
 "Download language packs in System Settings…" = "Stáhněte jazykové balíčky v Nastavení systému…";
-"Configure S3 in Settings" = "Nastavte S3 v Nastavení";
-"Sign in to Google Drive in Settings" = "Přihlaste se ke Google Drive v Nastavení";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline sestavení: integrace pro nahrávání a cloudové úložiště jsou odstraněny. Kontrola aktualizací se stále může připojovat k aktualizačnímu serveru MacShotu. Snímky obrazovky a nahrávky zůstávají lokální, dokud je sami nesdílíte nebo neuložíte.";
 "Position:" = "Pozice:";
 "  Position:" = "  Pozice:";
@@ -575,7 +529,6 @@
 "Clear History?" = "Vymazat historii?";
 "This will permanently delete all screenshots from history." = "Tím se trvale odstraní všechny snímky obrazovky z historie.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klikněte na \"Nastavit\" a stiskněte kombinaci kláves s alespoň jedním modifikátorem (⌘, ⌥, ⌃, ⇧) pro nastavení zkratky.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Soubory jsou nahrávány do této složky na vašem Disku Google. Ponecháte-li pole prázdné, použije se \"macshot\". macshot může používat pouze složky, které sám vytvořil, takže složka se stejným názvem, kterou jste vytvořili na Disku, nebude použita, místo ní se vytvoří nová. Vše zůstává soukromé, nic není veřejně sdíleno.";
 
 "Pressure" = "Přítlak";
 

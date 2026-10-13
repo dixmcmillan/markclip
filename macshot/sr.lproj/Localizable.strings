@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -167,7 +167,6 @@
 "PII" = "Лични подаци";
 "Faces" = "Лица";
 "People" = "Особе";
-"Confirm before upload" = "Потврди пре отпремања";
 "Flip" = "Обрни";
 "Smooth" = "Глатко";
 "Refined" = "Прецизно";
@@ -219,7 +218,6 @@
 "Recording" = "Снимање";
 "About" = "О програму";
 "Shortcuts" = "Пречице";
-"Uploads" = "Отпремања";
 "Language" = "Језик";
 "Language:" = "Језик:";
 "Restart the app to fully apply the new language." = "Поново покрените апликацију да бисте у потпуности применили нови језик.";
@@ -332,44 +330,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Сервис за отпремање";
-"Upload Provider" = "Провајдер за отпремање";
+/* Preferences - Transcription */
 "Provider:" = "Провајдер:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (слике + видео)";
-"imgbb (images only)" = "imgbb (само слике)";
-"S3-Compatible (images + videos)" = "S3-компатибилно (слике + видео)";
-"S3-Compatible Storage" = "S3-компатибилно складиште";
-"Sign In with Google" = "Пријавите се преко Google";
-"Sign Out" = "Одјавите се";
-"Signed in" = "Пријављени";
-"Not signed in" = "Нисте пријављени";
-"Account:" = "Налог:";
-"Folder:" = "Фасцикла:";
-"Test Connection" = "Тестирај конекцију";
-"Fill in endpoint, bucket, and credentials first" = "Прво попуните крајњу тачку, кошару и акредитиве";
-"Testing..." = "Тестирање...";
-"Connection successful!" = "Конекција успешна!";
-"Leave empty to use default" = "Оставите празно за подразумевано";
-"Endpoint:" = "Крајња тачка:";
-"Region:" = "Регион:";
-"Bucket:" = "Кошара:";
-"Access Key:" = "Приступни кључ:";
-"Secret Key:" = "Тајни кључ:";
-"Public URL:" = "Јавни URL:";
-"Path Prefix:" = "Префикс путање:";
-"Make uploads publicly readable" = "Учини отпремања јавно читљивим";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Шаље ACL public-read тако да отпремљени фајлови буду доступни свима са линком. Потребно за AWS S3, DigitalOcean Spaces, MinIO и Backblaze B2, који подразумевано чувају објекте приватно. Оставите искључено за Cloudflare R2, који не подржава ACL и одбија ово заглавље.";
-"API key:" = "API кључ:";
-"Upload History" = "Историја отпремања";
-"No uploads yet." = "Још нема отпремања.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Основни URL за јавни приступ. Ако је празно, користи се URL S3 крајње тачке (можда неће бити јавно доступан).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Укључен је заједнички кључ, набавите свој бесплатни кључ на imgbb.com/api ако достигнете ограничења. Само слике (без подршке за видео).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Ради са AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 и другим S3-компатибилним сервисима. Подржава слике и видео.";
-"Configure S3 in Preferences" = "Подесите S3 у подешавањима";
-"Sign in to Google Drive in Preferences" = "Пријавите се на Google Drive у подешавањима";
-"Video upload requires Google Drive or S3" = "Отпремање видеа захтева Google Drive или S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "Откажи";
 "Microphone Access Required" = "Потребан приступ микрофону";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "macshot захтева дозволу микрофона за снимање гласа. Отворите системска подешавања да бисте одобрили приступ.";
-"Upload to Google Drive?" = "Отпреми на Google Drive?";
-"Upload to S3?" = "Отпреми на S3?";
-"Upload to imgbb.com?" = "Отпреми на imgbb.com?";
-"Your screenshot will be uploaded." = "Ваш снимак екрана ће бити отпремљен.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Добродошли у macshot";
@@ -423,8 +381,6 @@
 "URL copied to the clipboard" = "URL копиран у оставу";
 "Uploading... %d%%" = "Отпремање... %d%%";
 "Upload failed: %@" = "Отпремање неуспешно: %@";
-"Uploaded! Link copied." = "Отпремљено! Линк копиран.";
-"Uploading to %@... %d%%" = "Отпремање на %@... %d%%";
 "Open" = "Отвори";
 
 /* Recording Toast */
@@ -561,8 +517,6 @@
 "Apple (on-device)" = "Apple (на уређају)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Apple превод је бржи и ради офлајн. Google Translate подржава више језика.";
 "Download language packs in System Settings…" = "Преузмите језичке пакете у Подешавањима система…";
-"Configure S3 in Settings" = "Подесите S3 у Подешавањима";
-"Sign in to Google Drive in Settings" = "Пријавите се на Google Drive у Подешавањима";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Офлајн верзија: интеграције за отпремање и складиштење у облаку су уклоњене. Провера ажурирања и даље може да се повеже са MacShot-овим сервером за ажурирања. Снимци екрана и снимци остају локални осим ако их сами не поделите или сачувате.";
 "Position:" = "Позиција:";
 "  Position:" = "  Позиција:";
@@ -577,7 +531,6 @@
 "Clear History?" = "Obrisati istoriju?";
 "This will permanently delete all screenshots from history." = "Ovo će trajno obrisati sve snimke ekrana iz istorije.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Kliknite \"Postavi\" i pritisnite kombinaciju tastera sa barem jednim modifikatorom (⌘, ⌥, ⌃, ⇧) da biste postavili prečicu.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Фајлови се отпремају у ову фасциклу на вашем Google диску. Оставите празно да бисте користили \"macshot\". macshot може да користи само фасцикле које је сам направио, па фасцикла са истим именом коју сте ви направили на Диску неће бити поново искоришћена, уместо ње биће направљена нова. Све остаје приватно, ништа се не дели јавно.";
 
 "Pressure" = "Pritisak";
 

@@ -11,7 +11,7 @@
  * Keys use the English text. Values should be the translation.
  * Format strings use %@ for strings, %d for integers.
  * Keep keyboard shortcuts (like ⌘C) untranslated.
- * Keep brand names (macshot, Google Drive, imgbb, S3) untranslated.
+ * Keep brand names (macshot) untranslated.
  */
 
 /* Menu Bar */
@@ -151,7 +151,6 @@
 "PII" = "PII";
 "Faces" = "Πρόσωπα";
 "People" = "Άνθρωποι";
-"Confirm before upload" = "Επιβεβαίωση πριν τη μεταφόρτωση";
 "Flip" = "Αναστροφή";
 "Smooth" = "Εξομάλυνση";
 "Refined" = "Εκλεπτυσμένο";
@@ -212,7 +211,6 @@
 "Recording" = "Εγγραφή";
 "About" = "Σχετικά";
 "Shortcuts" = "Συντομεύσεις";
-"Uploads" = "Μεταφορτώσεις";
 "Language" = "Γλώσσα";
 "Language:" = "Γλώσσα:";
 "Restart the app to fully apply the new language." = "Επανεκκινήστε την εφαρμογή για πλήρη εφαρμογή της νέας γλώσσας.";
@@ -332,44 +330,8 @@
 "MP4 (H.264)" = "MP4 (H.264)";
 "GIF" = "GIF";
 
-/* Preferences - Upload */
-"Upload Service" = "Υπηρεσία μεταφόρτωσης";
-"Upload Provider" = "Πάροχος μεταφόρτωσης";
+/* Preferences - Transcription */
 "Provider:" = "Πάροχος:";
-"Google Drive" = "Google Drive";
-"Google Drive (images + videos)" = "Google Drive (εικόνες + βίντεο)";
-"imgbb (images only)" = "imgbb (μόνο εικόνες)";
-"S3-Compatible (images + videos)" = "S3-Compatible (εικόνες + βίντεο)";
-"S3-Compatible Storage" = "Αποθήκευση συμβατή με S3";
-"Sign In with Google" = "Σύνδεση με Google";
-"Sign Out" = "Αποσύνδεση";
-"Signed in" = "Συνδεδεμένος";
-"Not signed in" = "Μη συνδεδεμένος";
-"Account:" = "Λογαριασμός:";
-"Folder:" = "Φάκελος:";
-"Test Connection" = "Δοκιμή σύνδεσης";
-"Fill in endpoint, bucket, and credentials first" = "Συμπληρώστε πρώτα το endpoint, το bucket και τα διαπιστευτήρια";
-"Testing..." = "Δοκιμή...";
-"Connection successful!" = "Επιτυχής σύνδεση!";
-"Leave empty to use default" = "Αφήστε κενό για χρήση προεπιλογής";
-"Endpoint:" = "Endpoint:";
-"Region:" = "Περιοχή:";
-"Bucket:" = "Bucket:";
-"Access Key:" = "Κλειδί πρόσβασης:";
-"Secret Key:" = "Μυστικό κλειδί:";
-"Public URL:" = "Δημόσιο URL:";
-"Path Prefix:" = "Πρόθεμα διαδρομής:";
-"Make uploads publicly readable" = "Δημόσια αναγνώσιμες μεταφορτώσεις";
-"Sends the public-read ACL so uploaded files are viewable by anyone with the link. Needed for AWS S3, DigitalOcean Spaces, MinIO and Backblaze B2, which store objects privately by default. Leave off for Cloudflare R2, which has no ACLs and rejects the header." = "Στέλνει το ACL public-read ώστε τα μεταφορτωμένα αρχεία να είναι ορατά σε οποιονδήποτε έχει τον σύνδεσμο. Απαιτείται για AWS S3, DigitalOcean Spaces, MinIO και Backblaze B2, που αποθηκεύουν αντικείμενα ιδιωτικά από προεπιλογή. Αφήστε το απενεργοποιημένο για Cloudflare R2, που δεν υποστηρίζει ACLs και απορρίπτει την κεφαλίδα.";
-"API key:" = "Κλειδί API:";
-"Upload History" = "Ιστορικό μεταφορτώσεων";
-"No uploads yet." = "Δεν υπάρχουν μεταφορτώσεις ακόμα.";
-"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Βασικό URL για δημόσια πρόσβαση. Αν είναι κενό, χρησιμοποιείται το URL του S3 endpoint (μπορεί να μην είναι δημόσια προσβάσιμο).";
-"A shared key is included. Get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Περιλαμβάνεται κοινόχρηστο κλειδί, αποκτήστε το δικό σας δωρεάν κλειδί στο imgbb.com/api αν φτάσετε τα όρια. Μόνο εικόνες (χωρίς υποστήριξη βίντεο).";
-"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Λειτουργεί με AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 και άλλες υπηρεσίες συμβατές με S3. Υποστηρίζει εικόνες και βίντεο.";
-"Configure S3 in Preferences" = "Ρύθμιση S3 στις Προτιμήσεις";
-"Sign in to Google Drive in Preferences" = "Σύνδεση στο Google Drive στις Προτιμήσεις";
-"Video upload requires Google Drive or S3" = "Η μεταφόρτωση βίντεο απαιτεί Google Drive ή S3";
 
 /* Preferences - About */
 "macshot" = "macshot";
@@ -391,10 +353,6 @@
 "Cancel" = "Ακύρωση";
 "Microphone Access Required" = "Απαιτείται πρόσβαση μικροφώνου";
 "macshot needs microphone permission to record voice audio. Open System Settings to grant access." = "Το macshot χρειάζεται άδεια μικροφώνου για εγγραφή φωνητικού ήχου. Ανοίξτε τις Ρυθμίσεις συστήματος για παραχώρηση πρόσβασης.";
-"Upload to Google Drive?" = "Μεταφόρτωση στο Google Drive;";
-"Upload to S3?" = "Μεταφόρτωση στο S3;";
-"Upload to imgbb.com?" = "Μεταφόρτωση στο imgbb.com;";
-"Your screenshot will be uploaded." = "Το στιγμιότυπό σας θα μεταφορτωθεί.";
 
 /* Permission Onboarding */
 "Welcome to macshot" = "Καλώς ήρθατε στο macshot";
@@ -424,8 +382,6 @@
 "URL copied to the clipboard" = "Το URL αντιγράφηκε στο πρόχειρο";
 "Uploading... %d%%" = "Μεταφόρτωση... %d%%";
 "Upload failed: %@" = "Αποτυχία μεταφόρτωσης: %@";
-"Uploaded! Link copied." = "Μεταφορτώθηκε! Ο σύνδεσμος αντιγράφηκε.";
-"Uploading to %@... %d%%" = "Μεταφόρτωση στο %@... %d%%";
 "Open" = "Άνοιγμα";
 
 /* Recording Toast */
@@ -562,8 +518,6 @@
 "Apple (on-device)" = "Apple (στη συσκευή)";
 "Apple translation is faster and works offline. Google Translate supports more languages." = "Η μετάφραση Apple είναι πιο γρήγορη και λειτουργεί εκτός σύνδεσης. Το Google Translate υποστηρίζει περισσότερες γλώσσες.";
 "Download language packs in System Settings…" = "Λήψη πακέτων γλώσσας στις Ρυθμίσεις Συστήματος…";
-"Configure S3 in Settings" = "Ρύθμιση S3 στις Ρυθμίσεις";
-"Sign in to Google Drive in Settings" = "Σύνδεση στο Google Drive στις Ρυθμίσεις";
 "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to MacShot's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Έκδοση εκτός σύνδεσης: οι ενσωματώσεις μεταφόρτωσης και αποθήκευσης στο cloud έχουν αφαιρεθεί. Οι έλεγχοι ενημερώσεων ενδέχεται να συνδέονται ακόμη στον διακομιστή ενημερώσεων του MacShot. Τα στιγμιότυπα οθόνης και οι εγγραφές παραμένουν τοπικά, εκτός αν τα μοιραστείτε ή τα αποθηκεύσετε εσείς.";
 "Position:" = "Θέση:";
 "Size:" = "Μέγεθος:";
@@ -577,7 +531,6 @@
 "Clear History?" = "Εκκαθάριση ιστορικού;";
 "This will permanently delete all screenshots from history." = "Αυτό θα διαγράψει μόνιμα όλα τα στιγμιότυπα από το ιστορικό.";
 "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Κάνε κλικ στο \"Ορισμός\" και πάτησε έναν συνδυασμό πλήκτρων με τουλάχιστον έναν τροποποιητή (⌘, ⌥, ⌃, ⇧) για να ορίσεις μια συντόμευση.";
-"Files are uploaded to this folder in your Google Drive. Leave empty to use \"macshot\". macshot can only use folders it created itself, so a folder you made in Drive with the same name won't be reused. A new one is created instead. Everything stays private and nothing is shared publicly." = "Τα αρχεία ανεβαίνουν σε αυτόν τον φάκελο στο Google Drive σου. Άφησέ το κενό για να χρησιμοποιηθεί ο \"macshot\". Το macshot μπορεί να χρησιμοποιήσει μόνο φακέλους που δημιούργησε το ίδιο, οπότε ένας φάκελος με το ίδιο όνομα που δημιούργησες στο Drive δεν θα επαναχρησιμοποιηθεί, αντί γι' αυτό δημιουργείται νέος. Όλα παραμένουν ιδιωτικά, τίποτα δεν κοινοποιείται δημόσια.";
 
 "Pressure" = "Πίεση";
 
