@@ -13,8 +13,13 @@ import Darwin
 final class GIFEncoder: @unchecked Sendable {
     enum EncodingError: LocalizedError {
         case invalidFrame, invalidTime, noFrames, closed, encodingFailed
+        /// The optional `maxBytes` budget was exceeded. The partially written
+        /// file has already been removed. `bytesWritten` is the count when the
+        /// limit tripped (always greater than the limit).
+        case overByteBudget(bytesWritten: Int64)
         nonisolated var errorDescription: String? {
             switch self {
+            case .overByteBudget: return "The GIF is larger than the allowed size."
             case .invalidFrame: return "The recording contains an unsupported GIF frame."
             case .invalidTime: return "The recording contains invalid GIF frame timing."
             case .noFrames: return "No frames were read from the recording."
@@ -25,6 +30,7 @@ final class GIFEncoder: @unchecked Sendable {
     }
 
     private let url: URL
+    private let maxBytes: Int64?
     private let lock = NSLock()
     private let writeData: @Sendable (FileHandle, Data) throws -> Void
     nonisolated(unsafe) private var file: FileHandle?
@@ -35,11 +41,25 @@ final class GIFEncoder: @unchecked Sendable {
     nonisolated(unsafe) private var pendingTick: Int64 = 0
     nonisolated(unsafe) private var lastTick: Int64 = -1
     nonisolated(unsafe) private var lastPresentationTime = CMTime.invalid
+    nonisolated(unsafe) private var written: Int64 = 0
 
-    nonisolated init(url: URL, writeData: @escaping @Sendable (FileHandle, Data) throws -> Void = {
+    /// Bytes handed to the file so far (header, completed frame blocks, trailer).
+    /// The frame still pending a hold is not counted until the next frame or
+    /// `finish` writes it, so this lags the eventual size by at most one frame
+    /// block; after `finish` it equals the file's size. Monotonically increasing.
+    nonisolated var bytesWritten: Int64 {
+        lock.lock()
+        defer { lock.unlock() }
+        return written
+    }
+
+    /// `maxBytes` aborts the encode (deleting the partial file) with
+    /// `EncodingError.overByteBudget` once more than that many bytes were written.
+    nonisolated init(url: URL, maxBytes: Int64? = nil, writeData: @escaping @Sendable (FileHandle, Data) throws -> Void = {
         try $0.write(contentsOf: $1)
     }) throws {
         self.url = url
+        self.maxBytes = maxBytes
         self.writeData = writeData
         guard url.isFileURL else { throw CocoaError(.fileWriteInvalidFileName) }
         let descriptor = try url.withUnsafeFileSystemRepresentation {
@@ -90,7 +110,7 @@ final class GIFEncoder: @unchecked Sendable {
                 header.append(contentsOf: [0x21, 0xff, 11])
                 header.append(Data("NETSCAPE2.0".utf8))
                 header.append(contentsOf: [3, 1, 0, 0, 0]) // Infinite loop.
-                try writeData(file, header)
+                try counted(file, header)
             }
             pending = packet
             previousPixels = pixels
@@ -116,7 +136,7 @@ final class GIFEncoder: @unchecked Sendable {
             guard CMTimeCompare(endTime, lastPresentationTime) > 0 else { throw EncodingError.invalidTime }
             let tick = max(rounded, lastTick + 1)
             try write(pending, ticks: tick - pendingTick, to: file)
-            try writeData(file, Data([0x3b]))
+            try counted(file, Data([0x3b]))
             try file.synchronize()
             try file.close()
             self.file = nil
@@ -144,10 +164,17 @@ final class GIFEncoder: @unchecked Sendable {
             let delay = Int(min(remaining, Int64(UInt16.max)))
             var control = Data([0x21, 0xf9, 4, 4])
             control.append(contentsOf: Self.littleEndian(delay) + [0, 0])
-            try writeData(file, control)
-            try writeData(file, packet.imageBlock)
+            try counted(file, control)
+            try counted(file, packet.imageBlock)
             remaining -= Int64(delay)
         }
+    }
+
+    /// Every file write goes through here (lock held) so the count matches the file.
+    nonisolated private func counted(_ file: FileHandle, _ data: Data) throws {
+        try writeData(file, data)
+        written += Int64(data.count)
+        if let maxBytes, written > maxBytes { throw EncodingError.overByteBudget(bytesWritten: written) }
     }
 
     nonisolated private func abortLocked() {
