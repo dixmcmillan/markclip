@@ -73,4 +73,31 @@ final class SecretStoreTests: XCTestCase {
         TranscriptionSecrets.openAIAPIKey = nil
         XCTAssertNil(TranscriptionSecrets.openAIAPIKey)
     }
+
+    // MARK: - Tests never reach the real Keychain
+
+    func testDefaultStoreIsInMemoryUnderXCTest() {
+        XCTAssertTrue(KeychainSecretStore.isUnderTest)
+        XCTAssertTrue(KeychainSecretStore.makeDefault() is InMemorySecretStore)
+        XCTAssertTrue(TranscriptionSecrets.store is InMemorySecretStore || !(TranscriptionSecrets.store is KeychainSecretStore),
+                      "the transcription facade must not default to the Keychain under test")
+    }
+
+    func testKeychainStoreRefusesToTouchTheKeychainUnderXCTest() {
+        let store = KeychainSecretStore()
+        store.write("must-not-be-stored", service: "com.dixmcmillan.markclip.test-only", account: "x")
+        XCTAssertNil(store.read(service: "com.dixmcmillan.markclip.test-only", account: "x"))
+    }
+
+    #if !OFFLINE
+    func testSharedCloudflareAccountIsNotBackedByTheKeychainUnderXCTest() {
+        // `shared` is what the popover, Settings and queue read by default. It round-trips only
+        // through an in-memory store: the Keychain-backed one is a no-op in tests.
+        let shared = CloudflareAccount.shared
+        defer { shared.save(accountID: "", apiToken: "") }
+        shared.save(accountID: "acct-test", apiToken: "token-test")
+        XCTAssertEqual(shared.accountID, "acct-test")
+        XCTAssertEqual(shared.apiToken, "token-test")
+    }
+    #endif
 }

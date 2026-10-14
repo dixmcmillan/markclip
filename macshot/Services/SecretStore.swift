@@ -21,7 +21,20 @@ protocol SecretStore: Sendable {
 struct KeychainSecretStore: SecretStore {
     static let shared = KeychainSecretStore()
 
+    /// True inside an XCTest process. The Keychain holds the user's real
+    /// credentials (the installed app shares service names with the tests'
+    /// code), and touching them from a test shows password prompts.
+    nonisolated static let isUnderTest = NSClassFromString("XCTestCase") != nil
+
+    /// The store app code should default to: the Keychain, or a throwaway
+    /// in-memory store under XCTest so tests can never reach the real one.
+    nonisolated static func makeDefault() -> SecretStore {
+        isUnderTest ? InMemorySecretStore() : shared
+    }
+
     func read(service: String, account: String) -> String? {
+        // Backstop for anything that builds a `KeychainSecretStore` directly.
+        guard !Self.isUnderTest else { return nil }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -36,6 +49,7 @@ struct KeychainSecretStore: SecretStore {
     }
 
     func write(_ value: String?, service: String, account: String) {
+        guard !Self.isUnderTest else { return }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -81,7 +95,7 @@ enum TranscriptionSecrets {
     private static let service = "com.dixmcmillan.markclip.transcription"
     private static let openAIAccount = "openai-api-key"
 
-    static var store: SecretStore = KeychainSecretStore.shared
+    static var store: SecretStore = KeychainSecretStore.makeDefault()
 
     static var openAIAPIKey: String? {
         get { store.read(service: service, account: openAIAccount) }

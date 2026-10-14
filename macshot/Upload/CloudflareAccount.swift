@@ -11,7 +11,8 @@ struct CloudflareAccount {
     private static let accountIDKey = "account-id"
     private static let apiTokenKey = "api-token"
 
-    static let shared = CloudflareAccount(store: KeychainSecretStore.shared)
+    /// Keychain-backed, except under XCTest, where it is in memory (see `KeychainSecretStore.makeDefault`).
+    static let shared = CloudflareAccount(store: KeychainSecretStore.makeDefault())
 
     private let store: SecretStore
     private let session: URLSession
