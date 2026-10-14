@@ -1,9 +1,11 @@
 import Cocoa
 import XCTest
 
-/// macshot ships 40 translations. Nothing in the build checks them, so a new
-/// `L("…")` key or an edited translation can silently leave users with an
-/// English string — or, for a format string, crash `String(format:)`.
+/// macshot ships 40 translations. Policy: existing translations are kept, but
+/// new strings only need an English entry — a locale that lacks a key falls
+/// back to English at runtime (`LanguageManager.lookup`). What is translated
+/// must stay valid: parseable, non-empty, same format placeholders (a
+/// translation that drops `%d` would crash `String(format:)`), no duplicate keys.
 ///
 /// These read the repository sources directly (via `#filePath`) rather than the
 /// test bundle, because the keys live in Swift code, not in resources.
@@ -89,16 +91,87 @@ final class LocalizationTests: XCTestCase {
             """)
     }
 
-    func testEveryLocaleTranslatesEveryEnglishKey() throws {
+    /// Policy: existing translations are kept, but a new string only needs an
+    /// English entry. A locale may lack any English key; `LanguageManager` shows
+    /// the English text for it (see the fallback tests below), never the raw key.
+    func testMissingTranslationsAreAllowed() throws {
         let base = try XCTUnwrap(Self.tables[Self.baseLocale])
-        var report: [String] = []
-        for (locale, table) in Self.tables.sorted(by: { $0.key < $1.key }) where locale != Self.baseLocale {
-            let missing = base.keys.filter { table[$0] == nil }.sorted()
-            if !missing.isEmpty {
-                report.append("\(locale): \(missing.count) missing (\(missing.prefix(3).joined(separator: ", ")))")
-            }
+        XCTAssertFalse(base.isEmpty)
+        for (locale, table) in Self.tables where locale != Self.baseLocale {
+            // Whatever a locale does translate must still be a real, non-empty string
+            // (also covered by `testNoTranslationIsEmpty` / the placeholder tests).
+            XCTAssertTrue(table.values.allSatisfy { !$0.isEmpty }, "\(locale) has an empty translation")
         }
-        XCTAssertTrue(report.isEmpty, "untranslated keys — these fall back to the raw key:\n" + report.joined(separator: "\n"))
+    }
+
+    // MARK: - English fallback
+
+    /// A resources folder with `<locale>.lproj/Localizable.strings` for each table.
+    private func makeResources(_ tables: [String: [String: String]]) throws -> (bundle: Bundle, url: URL) {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("l10n-fallback-" + UUID().uuidString, isDirectory: true)
+        for (locale, table) in tables {
+            let folder = root.appendingPathComponent("\(locale).lproj", isDirectory: true)
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            XCTAssertTrue((table as NSDictionary).write(to: folder.appendingPathComponent("Localizable.strings"), atomically: true))
+        }
+        addTeardownBlock { try? FileManager.default.removeItem(at: root) }
+        return (try XCTUnwrap(Bundle(path: root.path)), root)
+    }
+
+    private func makeManager(_ resources: Bundle, language: String) throws -> LanguageManager {
+        let suite = "l10n-tests-" + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        addTeardownBlock { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(language, forKey: "appLanguage")
+        return LanguageManager(defaults: defaults, resources: resources)
+    }
+
+    func testMissingKeyFallsBackToTheEnglishValueNotTheKey() throws {
+        let (resources, _) = try makeResources([
+            "en": ["Save": "Save", "Webcam Size Small": "Small", "New feature": "A brand new string"],
+            "de": ["Save": "Sichern"],
+        ])
+        let manager = try makeManager(resources, language: "de")
+        XCTAssertEqual(manager.localizedString("Save"), "Sichern", "translated keys stay translated")
+        XCTAssertEqual(manager.localizedString("New feature"), "A brand new string")
+        // The English value, not the key, even when they differ.
+        XCTAssertEqual(manager.localizedString("Webcam Size Small"), "Small")
+        // Unknown everywhere: the key itself.
+        XCTAssertEqual(manager.localizedString("Not in any table"), "Not in any table")
+    }
+
+    func testFallbackAppliesToEveryLocaleAndStillRebrands() throws {
+        let (resources, _) = try makeResources([
+            "en": ["Quit macshot": "Quit macshot"], "fr": [:], "ja": ["Other": "他"],
+        ])
+        for language in ["fr", "ja", "en"] {
+            let manager = try makeManager(resources, language: language)
+            XCTAssertEqual(manager.localizedString("Quit macshot"), "Quit Markclip", language)
+        }
+    }
+
+    func testFallbackWithARealLocaleLosingAKey() throws {
+        // Real shipped tables; the German one loses a few keys, as a new string would.
+        let english = try XCTUnwrap(Self.tables[Self.baseLocale])
+        var german = try XCTUnwrap(Self.tables["de"])
+        let dropped = ["Save As…", "Save", "Export"].filter { german[$0] != nil && english[$0] != nil }
+        XCTAssertFalse(dropped.isEmpty)
+        for key in dropped { german[key] = nil }
+        let (resources, _) = try makeResources(["en": english, "de": german])
+        let manager = try makeManager(resources, language: "de")
+        for key in dropped {
+            XCTAssertEqual(manager.localizedString(key), LanguageManager.applyBrand(english[key]!), key)
+        }
+        let kept = try XCTUnwrap(german.keys.first { $0 != "Save" && english[$0] != nil && german[$0] != english[$0] })
+        XCTAssertEqual(manager.localizedString(kept), LanguageManager.applyBrand(german[kept]!))
+    }
+
+    func testResolvedLanguageWithNoFolderFallsBackToTheResourcesTable() throws {
+        // A language with no lproj at all (nothing shipped) must still render English.
+        let (resources, _) = try makeResources(["en": ["Hello": "Hello"]])
+        let manager = try makeManager(resources, language: "tlh")
+        XCTAssertEqual(manager.localizedString("Hello"), "Hello")
     }
 
     func testNoTranslationIsEmpty() {
