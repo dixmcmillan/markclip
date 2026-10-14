@@ -30,7 +30,7 @@ Working name: **TBD** (see "Identity"). Living document — add ideas under
 - Regular Dock app: launch opens a Welcome / Recent Projects window.
 - Register video document types so Finder "Open With", drag onto the Dock
   icon and launchers (Raycast, Spotlight) open videos directly.
-- File menu: Open, Open Recent, Export; menu bar icon optional (off by
+- File menu: Open, Open Recent, Save, Save As…, Export; menu bar icon optional (off by
   default).
 - Hide the screenshot capture flow; keep screen recording.
 - README/About rewritten for the new app; stop wholesale upstream merges.
@@ -39,7 +39,7 @@ Working name: **TBD** (see "Identity"). Living document — add ideas under
 
 - Playback: full J/K/L shuttle (repeat L for 2×/4×, J for reverse, K
   pause) and a playback speed menu.
-- Export: hotkey export (⌘E with the last settings) and saved presets.
+- Export: done — split Export button running the last-used preset (⌘S / ⇧⌘E), ⌘E popover, ⇧⌘S Save As…, saved presets with per-preset shortcuts, Cloudflare Stream/Images upload (see docs/export-redesign.md; legacy export panel removed).
 - Transcription: Apple's macOS 26 SpeechAnalyzer instead of the old
   SFSpeechRecognizer; import SRT/VTT captions (e.g. from MacWhisper);
   optional cloud providers with your own API key.

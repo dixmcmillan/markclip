@@ -74,13 +74,17 @@ macshot/
 │   ├── EditorCommandShortcutManager.swift  # Configurable undo/redo chords
 │   ├── FilenameFormatter.swift         # Filename templates ({date}, {window}, {random}, …)
 │   ├── SettingsPortability.swift       # Settings export/import + the secret filter
-│   ├── LanguageManager.swift           # Locale resolution + L("…") lookup
+│   ├── LanguageManager.swift           # Locale resolution + L("…") lookup, English fallback for untranslated keys
+│   ├── EditorExportCommand.swift       # Fixed video-editor export chords (⌘S, ⇧⌘S, ⌘E, ⇧⌘E)
+│   ├── ExportPresetShortcutStore.swift # Per-preset editor shortcuts + the reserved-chord list
+│   ├── Export/                         # ExportRun/ExportQueue/ExportStages (preset export engine), ExportRecords, ExportRemoteSync, ExportLocalDestination, FreeDestinationPicker, ExportCloudflareSupport
 │   ├── ScreenshotHistory.swift         # Local history in ~/Library/Application Support/
 │   └── SaveDirectoryAccess.swift       # Security-scoped bookmark for save directory
 │
 ├── Upload/
 │   ├── UploadPayload.swift             # Streamed upload bodies (chunking, incremental SHA256, multipart on disk)
-│   └── PreparedUploadBody.swift        # On-disk owned upload body, UploadJob quit-drain, UploadTransport (provider-neutral; no uploaders ship yet)
+│   ├── PreparedUploadBody.swift        # On-disk owned upload body, UploadJob quit-drain, UploadTransport (provider-neutral)
+│   └── Cloudflare*.swift               # Cloudflare account (Keychain), Stream/Images clients, tus, export service (`#if !OFFLINE`)
 │
 ├── UI/
 │   ├── Overlay/
@@ -98,7 +102,7 @@ macshot/
 │   │   ├── EditorTopBarView.swift      # NSView with crop, flip, zoom buttons
 │   │   ├── CenteringClipView.swift     # NSClipView subclass that centers document when smaller than clip
 │   │   ├── VideoEditorWindowController(+Export).swift  # Studio video editor window, actions, exports
-│   │   └── Video/                      # Editor document, playback, planner, exporter, inspector, stage, timeline
+│   │   └── Video/                      # Editor document, playback, planner, exporter, inspector, stage, timeline; Export* = preset model/store, popover (model + view), split button, completion toasts
 │   │
 │   ├── Toolbar/
 │   │   ├── ToolbarDefinitions.swift    # ToolbarButtonAction enum, ToolbarButton struct, ToolbarLayout constants
@@ -141,6 +145,8 @@ macshot/
 │       ├── RecordingControlView.swift         # Click-through recording control overlay
 │       ├── RecordingToastView.swift           # Toast notification after recording completes
 │       ├── CountdownView.swift                # Delay capture countdown display
+│       ├── ExportSettingsTabView.swift        # Settings ▸ Export: presets, folders, shortcut recorder (model: ExportSettingsModel)
+│       ├── CloudflareSettingsView.swift       # Settings ▸ Cloudflare account (`#if !OFFLINE`)
 │       └── PermissionOnboardingController.swift  # First-run permission guide
 │
 ├── Info.plist
@@ -234,8 +240,8 @@ The video editor is built around `VideoEditorDocument` (one `VideoProject`: time
 - **Recorded pointer data.** Every take writes `cursor.mstl` (`CursorTelemetry`) beside the MP4. Takes that open in the editor with "Editable pointer" hide the system cursor from ScreenCaptureKit and exclude the click/keystroke/webcam overlay windows; the editor redraws them. Any other destination keeps them in the pixels. Telemetry is host-clock based and anchored to the writer's first frame (`MP4WriterSession` `onSessionStart`); pauses are removed exactly like the writer removes them. Telemetry and camera failures never affect the screen recording.
 - **Time-dependent motion is precomputed and pure.** Cursor smoothing (`CursorMotion`) and the camera path (`CameraPathBuilder`) are sampled deterministically so scrubbing, playback and export produce identical frames. Motion-blur averaging must weight alpha only (Core Image color matrices are unpremultiplied).
 - **Webcam.** When the camera records separately, `VideoCompositionBuilder` adds its track in lockstep with every cut/speed/freeze piece.
-- **Export UI.** The top bar's split Export button (`ExportSplitButton`) runs the last-used preset through `editor.exportQueue`; the chevron and ⌘E open `ExportPopoverView`, ⇧⌘E repeats the last preset, and `ExportPresetShortcutStore` (⌃⌘1–3 by default, editor-scoped, matched through `KeyboardShortcutMatcher`) runs the others. The popover is Auto Layout only (never a fixed frame plus a one-time `fittingSize`, which left controls without hit areas): show it with `PopoverHelper.showAutoLayout` and call `PopoverHelper.resizeActive(to:)` when its height changes. It is always dark; text links use `VideoEditorStyle.accentText` and white-on-accent pills use `accentFill` so contrast stays above 4.5:1. Logic lives in `ExportPopoverModel` (selection, Adjust -> `ExportOverrides`, status line) and `ExportSettingsModel` (Settings ▸ Export); both are unit-tested without views. Toasts come from `ExportCompletionNotifier`, retained by the queue so they outlive the editor window.
-- **Visual checks.** `scripts/probe-export-popover.sh` compiles the real export popover, split button, queue and Settings ▸ Export tab into a tiny app (commands: open, adjust, select, busy, click, hit, snapshot, settings…). Its renderer only waits, so nothing encodes and no video is read. `scripts/probe-video-editor.sh` builds the real editor into an isolated app (as of Phase 5 its hand-kept source list no longer links: it predates `EncoderSessionTracker`, `VideoEncoderPolicy` and the annotation/overlay files, and the editor now reaches `Annotation`/`OverlayView`, so it needs its list rebuilt before use); with `-D VIDEO_EDITOR_PROBE` it accepts scripted commands (`PROBE_COMMANDS` file) and renders in-process snapshots, including the preview frame. `scripts/make-studio-fixture.swift` generates a synthetic recording with pointer data.
+- **Export UI.** The top bar's split Export button (`ExportSplitButton`) runs the last-used preset through `editor.exportQueue`; the chevron and ⌘E open `ExportPopoverView`, ⌘S and ⇧⌘E run the last preset, ⇧⌘S is Save As… (for the open popover's selection, else the last preset; `EditorExportCommand` owns these chords and feeds the recorder's reserved list), and `ExportPresetShortcutStore` (⌃⌘1–3 by default, editor-scoped, matched through `KeyboardShortcutMatcher`) runs the others. The popover is Auto Layout only (never a fixed frame plus a one-time `fittingSize`, which left controls without hit areas): show it with `PopoverHelper.showAutoLayout` and call `PopoverHelper.resizeActive(to:)` when its height changes. It is always dark; text links use `VideoEditorStyle.accentText` and white-on-accent pills use `accentFill` so contrast stays above 4.5:1. Logic lives in `ExportPopoverModel` (selection, Adjust -> `ExportOverrides`, status line) and `ExportSettingsModel` (Settings ▸ Export); both are unit-tested without views. Toasts come from `ExportCompletionNotifier`, retained by the queue so they outlive the editor window.
+- **Visual checks.** `scripts/probe-export-popover.sh` compiles the real export popover, split button, queue and Settings ▸ Export tab into a tiny app (commands: open, adjust, select, busy, click, hit, snapshot, settings…). Its renderer only waits, so nothing encodes and no video is read. `scripts/probe-video-editor.sh` builds the real editor into an isolated app. It compiles the whole `macshot/` tree except `main.swift` (like the test target, so new files need no listing), with tiny generated Sparkle/WebP stubs and a `ProbeAppDelegate` subclass; `--build-only` compiles without touching a video. With `-D VIDEO_EDITOR_PROBE` it accepts scripted commands (`PROBE_COMMANDS` file) and renders in-process snapshots, including the preview frame. `scripts/make-studio-fixture.swift` generates a synthetic recording with pointer data.
 
 ### Undo/Redo
 
@@ -261,7 +267,7 @@ The video editor is built around `VideoEditorDocument` (one `VideoProject`: time
 - Tools: `enabledTools`, `knownToolRawValues`
 - Features: `beautifyEnabled`, `beautifyStyleIndex`, `beautifyMode`, `beautifyPadding`, `beautifyCornerRadius`, `beautifyShadowRadius`, `pencilSmoothEnabled`, `loupeSize`, `stampSize`, `translateTargetLang`
 - Styles: `currentLineStyle`, `currentArrowStyle`, `currentRectFillStyle`, `currentRectCornerRadius`
-- Export: `exportPresets.v2` (preset list), `lastUsedExportPresetID`, `exportPresetShortcuts.v1` (per-preset chords, keyed by preset id; absent = built-in default). The old loose keys (`lastExportScale`, `lastExportQuality`, `gifExportFPS`, `videoEditorExportFormat`, `lastExportDestinationDirectory`) are still read by the legacy ⌘S/⇧⌘S path until Phase 6. The Cloudflare account ID and token are in the Keychain (`CloudflareAccount`), never here.
+- Export: only `exportPresets.v2` (preset list), `lastUsedExportPresetID`, `exportPresetShortcuts.v1` (per-preset chords, keyed by preset id; absent = built-in default), plus the migration flags `exportPresets.v2.migratedLegacy` / `exportPresets.v2.legacyKeysRemoved`. The pre-preset loose keys (`lastExportScale`, `lastExportQuality`, `gifExportFPS`, `videoEditorExportFormat`, `lastExportDestinationDirectory`, `videoExportCustomPresets`) are read once by the `ExportPresetStore` migration and then deleted at launch; don't reintroduce them (`VideoExportSettings` is a per-run value, never persisted). The Cloudflare account ID and token are in the Keychain (`CloudflareAccount`), never here.
 - Upload: none. The Drive/S3/imgbb keys are removed once at launch by `LegacyUploadCleanup` (flag `legacyUploadCleanupDone`).
 
 ### Threading Model
@@ -340,6 +346,7 @@ Copy to clipboard, Save to file (PNG/JPEG/HEIC/WebP), Pin (floating always-on-to
 - **GIF export streams.** Use `GIFExporter` with the processed timeline and an explicit output cadence. `GIFEncoder` consumes presentation timestamps and writes one ImageIO-encoded frame at a time, combining unchanged pixels into holds. Do not accumulate an animation in one ImageIO destination, decimate by guessed source FPS, or spool every frame into scratch PNGs.
 - **Uploads stream, they don't buffer.** A recording is routinely larger than the memory the app can hold, so any uploader takes an `UploadPayload` (`.file` for recordings, `.data` for in-memory bytes). `UploadPayload` chunks, hashes incrementally, and `MultipartBodyWriter` writes request bodies straight to a temp file. Don't reintroduce `Data(contentsOf:)` on a recording.
 - **Upload bodies and callbacks belong to one job.** Prepare `PreparedUploadBody` off the main actor, hash the bytes while writing that owned body, and retain it through every retry. Never reread the public source for a retry or put progress on a shared uploader property. `UploadJob` participates in the existing quit drain; completion owns source leases until the request finishes. Verify requests with local fixtures, not live cloud uploads.
+- **Localization:** existing translations are kept, but new strings need only an English entry in `en.lproj/Localizable.strings`. A locale lacking a key falls back to English at runtime (`LanguageManager.lookup`); `LocalizationTests` still require every `L("…")` key to exist in English and every translation to parse, be non-empty, keep its format placeholders and have no duplicate keys.
 - **Keyboard shortcuts:** Character-based commands must go through `KeyboardShortcutMatcher`; do not compare raw letter key codes or read `charactersIgnoringModifiers` directly. The matcher follows the character produced by rearranged Latin layouts such as QWERTZ, AZERTY, and Dvorak, while falling back through the user's ASCII-capable layout for non-Latin input sources such as Russian or Arabic. Use `EditorCommandShortcutManager` for configurable Undo/Redo chords and `ToolShortcutManager` plus `KeyboardShortcutMatcher.toolCharacters(for:)` for single-key overlay tools. Raw `event.keyCode` checks are appropriate only for layout-independent non-character keys such as Escape, Return, Tab, Space, Delete, arrows, and function keys. Global Carbon hotkeys remain physical key-code bindings; translate them only for display with `KeyboardShortcutMatcher.currentLayoutCharacter(for:)`, and disable `NSMenuItem` automatic key-equivalent localization after applying an already-translated physical binding.
 - `autoreleasepool` for overlay teardown to prevent memory spikes
 - Extension files (`OverlayView+Feature.swift`) for self-contained feature code that accesses OverlayView state but is logically separate (recording overlays, scroll capture HUD, window snapping, popovers)
@@ -360,6 +367,7 @@ Copy to clipboard, Save to file (PNG/JPEG/HEIC/WebP), Pin (floating always-on-to
 - The `macshotTests` target compiles the app sources directly (a synchronized group over `macshot/`, minus `main.swift`), so there is **no host app**: tests run headless, with no Screen Recording permission and no window server dependency. `internal` symbols are reachable without `@testable import`; `private` ones are not.
 - Shared helpers live in `macshotTests/TestSupport.swift`: `withDefaults` (isolated UserDefaults), `ImageProbe` (scale-independent fixture images + pixel probes — never build fixtures with `lockFocus`, it produces 2x buffers on Retina and 1x in CI), `TestKeyEvent` (synthesized `NSEvent`s), and `Reflect`/`FieldDescriber` (compare every stored property of a value at once).
 - Logic that is worth testing but buried in a permission-gated class should be extracted rather than left untested — see `ScrollFrameAnalyzer` and `RecordingEngine.cropRect(for:displayBounds:)`.
+- Tests never touch the real Keychain: under XCTest `KeychainSecretStore.makeDefault()` (used by `CloudflareAccount.shared` and `TranscriptionSecrets`) is in memory and `KeychainSecretStore` is a no-op. Inject `InMemorySecretStore` explicitly where a test builds an account.
 - `.github/workflows/tests.yml` runs the suite plus a Release build of both variants on every push and PR. The Release build is what catches strict-concurrency errors that Debug builds let through.
 
 ### Video encoder tests (kernel panic guard)
