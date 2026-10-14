@@ -98,10 +98,21 @@ final class ExportRun {
         var localFolder: URL?
         var wantsVTT: Bool
         var remote: ExportRemoteService?
+        /// Save As: the exact file to write. Skips numbering, uploads and records.
+        var saveAs: URL?
     }
 
     private func preflight() throws -> Plan {
         let settings = effective.resolvedSettings(nativeSize: env.renderer.nativeSize)
+        if let target = overrides.saveAsURL {
+            // One-off "Save As…": the preset's encoding, written to the chosen
+            // file. The user already confirmed replacing it in the save panel.
+            let ext = settings.format == .gif ? "gif" : "mp4"
+            let url = target.pathExtension.lowercased() == ext
+                ? target : target.deletingPathExtension().appendingPathExtension(ext)
+            return Plan(settings: settings, upload: nil, localFolder: url.deletingLastPathComponent(),
+                        wantsVTT: effective.captions == .soft, remote: nil, saveAs: url)
+        }
         var upload: ExportRemoteKind?
         var localFolder: URL?
         switch effective.destination {
@@ -164,7 +175,7 @@ final class ExportRun {
             let ext = plan.settings.format == .gif ? "gif" : "mp4"
             let request = ExportRenderRequest(settings: plan.settings,
                                               outputURL: directory.appendingPathComponent(base + "." + ext),
-                                              fitGIF: effective.format.isGIF && effective.destination == .images)
+                                              fitGIF: effective.format.isGIF && effective.destination == .images && plan.saveAs == nil)
             let output = try await env.renderer.render(request, progress: stageProgress(.rendering, report: report))
             retained = output
             try checkCancelled(cancellation)
@@ -174,7 +185,8 @@ final class ExportRun {
             // Publish locally
             if let folder = plan.localFolder {
                 enter(.publishing, report: report)
-                try await publishLocally(rendered, vtt: vttURL, folder: folder, base: base, cancellation: cancellation)
+                try await publishLocally(rendered, vtt: vttURL, folder: folder, base: base, saveAs: plan.saveAs,
+                                         cancellation: cancellation)
             } else if let summary = output.fitSummary {
                 env.records.update(preset.id) { $0.fitSummary = summary }
             }
@@ -202,11 +214,12 @@ final class ExportRun {
 
     // MARK: Local publish
 
-    private func publishLocally(_ source: URL, vtt: URL?, folder: URL, base: String,
+    private func publishLocally(_ source: URL, vtt: URL?, folder: URL, base: String, saveAs: URL?,
                                 cancellation: MediaExportCancellation) async throws {
         try await MediaExportIO.perform { try ExportLocalDestination.ensureFolder(folder) }
-        let choice = ExportLocalDestination.choose(folder: folder, base: base, ext: source.pathExtension,
-                                                   recorded: env.records.record(for: preset.id)?.localFile)
+        let choice = saveAs.map { ExportLocalDestination.Choice(url: $0, overwrites: true) }
+            ?? ExportLocalDestination.choose(folder: folder, base: base, ext: source.pathExtension,
+                                             recorded: env.records.record(for: preset.id)?.localFile)
         let destination = choice.url
         let overwrites = choice.overwrites
         try await MediaExportIO.perform {
@@ -217,7 +230,9 @@ final class ExportRun {
             try save.commit(overwritingExisting: overwrites, beforePublish: { try cancellation.beginPublication() })
         }
         result.localFile = destination
-        if let described = ExportFileRecord.describing(destination) {
+        // Save As is a one-off copy: it must not move the file the preset's
+        // next run overwrites.
+        if saveAs == nil, let described = ExportFileRecord.describing(destination) {
             env.records.update(preset.id) { $0.localFile = described }
         }
         if let vtt {

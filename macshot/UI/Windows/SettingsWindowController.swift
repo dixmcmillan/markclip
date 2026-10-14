@@ -32,10 +32,21 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             TabDef(id: "tools",     label: "Tools",     symbolName: "paintbrush",                legacyImageName: NSImage.preferencesGeneralName),
             TabDef(id: "recording", label: "Recording", symbolName: "record.circle",             legacyImageName: NSImage.preferencesGeneralName),
         ]
+        tabs.append(TabDef(id: Self.exportTabID, label: "Export", symbolName: "square.and.arrow.up", legacyImageName: NSImage.preferencesGeneralName))
+        #if !OFFLINE
+        tabs.append(TabDef(id: Self.cloudflareTabID, label: "Cloudflare", symbolName: "cloud", legacyImageName: NSImage.preferencesGeneralName))
+        #endif
         tabs.append(TabDef(id: "transcription", label: "Transcription", symbolName: "captions.bubble", legacyImageName: NSImage.preferencesGeneralName))
         tabs.append(TabDef(id: "about", label: "About", symbolName: "info.circle", legacyImageName: NSImage.preferencesGeneralName))
         return tabs
     }
+
+    /// The tabs this build shows, in toolbar order (tests assert that the
+    /// OFFLINE build has no Cloudflare tab).
+    static var tabIdentifiers: [String] { tabDefs.map(\.id) }
+
+    static let exportTabID = "export"
+    static let cloudflareTabID = "cloudflare"
 
     private var tabContentContainer: NSView!
     private var tabContentViews: [String: NSView] = [:]
@@ -183,7 +194,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         // the old layout). The extra 60pt flows evenly across the two
         // toggle-grid columns so Polish/German/Dutch labels fit on one
         // line instead of wrapping.
-        window.setContentSize(NSSize(width: 620, height: 520))
+        window.setContentSize(NSSize(width: 720, height: 520))
 
         // Build all tab content views up front (preserves existing behavior — nothing lazy-created)
         tabContentViews["general"]   = makeGeneralTabView()
@@ -191,6 +202,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         tabContentViews["shortcuts"] = makeShortcutsTabView()
         tabContentViews["tools"]     = makeToolsTabView()
         tabContentViews["recording"] = makeRecordingTabView()
+        registerExportTabs()
         tabContentViews["transcription"] = makeTranscriptionTabView()
         tabContentViews["about"]     = makeAboutTabView()
 
@@ -252,6 +264,25 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
 
         // Show initial tab
         showTab(id: "general")
+    }
+
+    /// The Export tab, and (normal build only) the Cloudflare tab. Called from
+    /// both places that populate `tabContentViews`: window setup and the
+    /// rebuild after a settings import.
+    private func registerExportTabs() {
+        let export = MainActor.assumeIsolated { ExportSettingsTabView(model: ExportSettingsModel()) }
+        export.onOpenCloudflareTab = { [weak self] in self?.selectTab(Self.cloudflareTabID) }
+        tabContentViews[Self.exportTabID] = export
+        #if !OFFLINE
+        tabContentViews[Self.cloudflareTabID] = MainActor.assumeIsolated { CloudflareSettingsView(model: CloudflareSettingsModel()) }
+        #endif
+    }
+
+    /// Switches to a tab programmatically (and moves the toolbar selection).
+    func selectTab(_ id: String) {
+        guard tabContentViews[id] != nil else { return }
+        window?.toolbar?.selectedItemIdentifier = NSToolbarItem.Identifier(id)
+        showTab(id: id)
     }
 
     private func showTab(id: String) {
@@ -679,6 +710,8 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         tabContentViews["shortcuts"] = makeShortcutsTabView()
         tabContentViews["tools"] = makeToolsTabView()
         tabContentViews["recording"] = makeRecordingTabView()
+        registerExportTabs()
+        tabContentViews["transcription"] = makeTranscriptionTabView()
         tabContentViews["about"] = makeAboutTabView()
         showTab(id: previouslySelected)
     }

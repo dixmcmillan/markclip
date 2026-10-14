@@ -16,6 +16,41 @@ enum VideoEditorStyle {
 
     static var accent: NSColor { ToolbarLayout.accentColor }
 
+    /// The accent, lightened for text and glyphs on the dark panel and
+    /// popovers. The default purple is only about 2.3:1 against them as-is;
+    /// this keeps text links above 4.5:1 for the default and typical custom
+    /// accents. Fills (pills, selection) keep using `accent`.
+    static var accentText: NSColor {
+        let base = accent.usingColorSpace(.sRGB) ?? accent
+        return base.blended(withFraction: 0.45, of: .white) ?? base
+    }
+
+    /// The accent for a pill that carries white text (Export): darkened just
+    /// enough that white on it reaches 4.5:1. The default purple alone is
+    /// about 3.8:1.
+    static var accentFill: NSColor { fill(forWhiteTextOn: accent) }
+
+    static func fill(forWhiteTextOn color: NSColor, minimumContrast: Double = 4.5) -> NSColor {
+        let base = color.usingColorSpace(.sRGB) ?? color
+        var candidate = base
+        for step in 0...20 {
+            candidate = base.blended(withFraction: CGFloat(step) * 0.04, of: .black) ?? base
+            if whiteTextContrast(on: candidate) >= minimumContrast { break }
+        }
+        return candidate
+    }
+
+    /// WCAG contrast ratio of white text on an opaque `color`.
+    static func whiteTextContrast(on color: NSColor) -> Double {
+        let c = color.usingColorSpace(.sRGB) ?? color
+        func linear(_ v: CGFloat) -> Double {
+            let d = Double(v)
+            return d <= 0.03928 ? d / 12.92 : pow((d + 0.055) / 1.055, 2.4)
+        }
+        let luminance = 0.2126 * linear(c.redComponent) + 0.7152 * linear(c.greenComponent) + 0.0722 * linear(c.blueComponent)
+        return 1.05 / (luminance + 0.05)
+    }
+
     // Timeline item colors.
     static let zoom = NSColor(srgbRed: 0.49, green: 0.40, blue: 1.0, alpha: 1)
     static let cut = NSColor(srgbRed: 0.93, green: 0.30, blue: 0.33, alpha: 1)
@@ -155,6 +190,8 @@ final class VideoPillButton: NSButton {
     var fill: NSColor = VideoEditorStyle.control { didSet { needsDisplay = true } }
     var textColor: NSColor = VideoEditorStyle.textPrimary { didSet { updateTitle() } }
     private var symbolName: String?
+    /// Replaces the symbol with a drawn image (the export progress ring).
+    var customImage: NSImage? { didSet { updateTitle() } }
     private var trailingChevron = false
     private var baseTitle = ""
     private var updating = false
@@ -197,7 +234,10 @@ final class VideoPillButton: NSButton {
             ]))
         }
         attributedTitle = attributed
-        if let symbolName {
+        if let customImage {
+            image = customImage
+            imagePosition = .imageLeading
+        } else if let symbolName {
             image = VideoEditorStyle.symbol(symbolName, size: 12, weight: .semibold)
             imagePosition = .imageLeading
             contentTintColor = textColor

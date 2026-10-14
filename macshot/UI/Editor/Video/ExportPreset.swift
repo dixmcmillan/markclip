@@ -261,8 +261,19 @@ struct ExportOverrides: Equatable, Sendable {
     var explicitBitrate: ExportLimitOverride?
     var audio: ExportAudioMode?
     var captions: ExportCaptionsMode?
+    /// "Save As…": write the preset's encoding to exactly this file and do
+    /// nothing else (no upload, no change to the per-preset records). The
+    /// extension follows the format. Not a preset field, so `applied(to:)`
+    /// ignores it; `ExportRun` reads it.
+    var saveAsURL: URL?
 
-    var isEmpty: Bool { self == ExportOverrides() }
+    /// True when no encoding field is overridden. A Save As destination is not
+    /// an "adjustment", so it doesn't count.
+    var isEmpty: Bool {
+        var copy = self
+        copy.saveAsURL = nil
+        return copy == ExportOverrides()
+    }
 
     func applied(to preset: ExportPreset) -> ExportPreset {
         var p = preset

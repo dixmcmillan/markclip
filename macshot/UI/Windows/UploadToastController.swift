@@ -10,7 +10,7 @@ class UploadToastController {
     private var spinner: NSProgressIndicator?
     private var dismissTask: DispatchWorkItem?
     private var currentLink: String?
-    private var revealURL: URL?
+    private var noticeAction: (() -> Void)?
     var onDismiss: (() -> Void)?
 
     private let toastWidth: CGFloat = 380
@@ -169,8 +169,17 @@ class UploadToastController {
     /// `showSuccess`, but the action reveals the file in Finder instead of
     /// opening a link.
     func showFileSaved(url: URL) {
+        showNotice(title: L("Export complete"), detail: url.lastPathComponent, actionTitle: L("Show in Finder")) {
+            NSWorkspace.shared.activateFileViewerSelecting([url])
+        }
+    }
+
+    /// A finished export: a title ("Uploaded to Stream"), one detail line and
+    /// an optional action button ("Show in Finder", "Open in dashboard").
+    /// Replaces the spinner `show(status:)` put up.
+    func showNotice(title: String, detail: String, actionTitle: String? = nil, action: (() -> Void)? = nil) {
         guard let window = window, let contentView = window.contentView else { return }
-        revealURL = url
+        noticeAction = action
 
         spinner?.stopAnimation(nil)
         spinner?.removeFromSuperview()
@@ -181,10 +190,13 @@ class UploadToastController {
         statusLabel = nil
         linkLabel?.removeFromSuperview()
         linkLabel = nil
+        openButton?.removeFromSuperview()
+        openButton = nil
 
+        let hasAction = actionTitle != nil && action != nil
         let nameFont = NSFont.systemFont(ofSize: 11)
-        let maxNameW = toastWidth - 140
-        let nameTextSize = (url.lastPathComponent as NSString).boundingRect(
+        let maxNameW = toastWidth - (hasAction ? 140 : 64)
+        let nameTextSize = (detail as NSString).boundingRect(
             with: NSSize(width: maxNameW, height: 200), options: [.usesLineFragmentOrigin], attributes: [.font: nameFont]
         ).size
         let nameH = max(16, ceil(nameTextSize.height))
@@ -204,15 +216,15 @@ class UploadToastController {
         contentView.needsDisplay = true
         iconView?.frame = NSRect(x: 14, y: (toastHeight - 28) / 2, width: 28, height: 28)
 
-        let titleLabel = NSTextField(labelWithString: L("Export complete"))
-        titleLabel.frame = NSRect(x: 50, y: toastHeight - 28, width: toastWidth - 140, height: 18)
+        let titleLabel = NSTextField(labelWithString: title)
+        titleLabel.frame = NSRect(x: 50, y: toastHeight - 28, width: maxNameW, height: 18)
         titleLabel.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
         titleLabel.textColor = .labelColor
         titleLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(titleLabel)
         self.statusLabel = titleLabel
 
-        let nameLabel = NSTextField(wrappingLabelWithString: url.lastPathComponent)
+        let nameLabel = NSTextField(wrappingLabelWithString: detail)
         nameLabel.frame = NSRect(x: 50, y: 10, width: maxNameW, height: nameH)
         nameLabel.font = nameFont
         nameLabel.textColor = .secondaryLabelColor
@@ -220,22 +232,24 @@ class UploadToastController {
         contentView.addSubview(nameLabel)
         self.linkLabel = nameLabel
 
-        let btn = NSButton(frame: NSRect(x: toastWidth - 130, y: (toastHeight - 28) / 2, width: 116, height: 28))
-        btn.title = L("Show in Finder")
-        btn.bezelStyle = .rounded
-        btn.font = NSFont.systemFont(ofSize: 12, weight: .medium)
-        btn.target = self
-        btn.action = #selector(revealInFinder)
-        contentView.addSubview(btn)
-        self.openButton = btn
+        if let actionTitle, hasAction {
+            let btn = NSButton(frame: NSRect(x: toastWidth - 130, y: (toastHeight - 28) / 2, width: 116, height: 28))
+            btn.title = actionTitle
+            btn.bezelStyle = .rounded
+            btn.font = NSFont.systemFont(ofSize: 12, weight: .medium)
+            btn.target = self
+            btn.action = #selector(performNoticeAction)
+            contentView.addSubview(btn)
+            self.openButton = btn
+        }
 
         scheduleDismiss(seconds: 8)
     }
 
-    @objc private func revealInFinder() {
-        guard let url = revealURL else { return }
-        NSWorkspace.shared.activateFileViewerSelecting([url])
+    @objc private func performNoticeAction() {
+        let action = noticeAction
         dismiss()
+        action?()
     }
 
     /// `asUploadFailure` prefixes the message with "Upload failed:". Failures
@@ -313,7 +327,7 @@ class UploadToastController {
         openButton = nil
         iconView = nil
         spinner = nil
-        revealURL = nil
+        noticeAction = nil
         onDismiss?()
         onDismiss = nil
     }

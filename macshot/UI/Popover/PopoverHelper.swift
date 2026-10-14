@@ -6,6 +6,7 @@ import Cocoa
 enum PopoverHelper {
 
     private static var activePopover: NSPopover?
+    private static let darkAppearance = NSAppearance(named: .darkAqua)
     private static var anchorView: NSView?
     private static var localMouseDownMonitor: Any?
     private static var globalMouseDownMonitor: Any?
@@ -29,6 +30,65 @@ enum PopoverHelper {
         activePopover = popover
         installOutsideClickMonitors()
     }
+
+    /// Shows a popover whose content is laid out with Auto Layout: the view is
+    /// pinned to the popover (no fixed frame) and the popover is sized to the
+    /// view's fitting size. Call `resizeActive(to:)` when the content's height
+    /// changes (a disclosure opens, a status line appears).
+    static func showAutoLayout(_ contentView: NSView, relativeTo rect: NSRect, of view: NSView, preferredEdge: NSRectEdge = .minY) {
+        contentView.layoutSubtreeIfNeeded()
+        let size = contentView.fittingSize
+        dismiss()
+
+        let popover = NSPopover()
+        popover.behavior = .semitransient
+        popover.contentSize = size
+        popover.animates = true
+        popover.appearance = darkAppearance
+
+        let wrapper = ArrowCursorView(frame: NSRect(origin: .zero, size: size))
+        wrapper.appearance = darkAppearance
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(contentView)
+        // The bottom edge yields (not required) so a popover that is briefly
+        // smaller than the content, while it animates to a new size, doesn't
+        // produce an unsatisfiable layout.
+        let bottom = contentView.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor)
+        bottom.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: wrapper.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+            bottom,
+        ])
+
+        let vc = NSViewController()
+        vc.view = wrapper
+        popover.contentViewController = vc
+        popover.delegate = AnchorCleanupDelegate.shared
+        popover.show(relativeTo: rect, of: view, preferredEdge: preferredEdge)
+        configureShownPopover(popover, parentWindow: view.window)
+        activePopover = popover
+        installOutsideClickMonitors()
+    }
+
+    /// Resizes the open popover (animated) to `size`. A no-op when no popover
+    /// is showing or the size is already current.
+    static func resizeActive(to size: NSSize, animated: Bool = true) {
+        guard let popover = activePopover, popover.isShown,
+              size.width > 0, size.height > 0,
+              abs(popover.contentSize.width - size.width) > 0.5 || abs(popover.contentSize.height - size.height) > 0.5 else { return }
+        let wasAnimating = popover.animates
+        popover.animates = animated
+        popover.contentSize = size
+        popover.animates = wasAnimating
+    }
+
+    /// The size of the open popover's content, for tests and probes.
+    static var activeContentSize: NSSize? { activePopover?.isShown == true ? activePopover?.contentSize : nil }
+
+    /// The open popover's content window, for probes that hit-test inside it.
+    static var activeContentWindow: NSWindow? { activePopover?.contentViewController?.view.window }
 
     /// Show a popover anchored to a specific point in a view (for overlay mode where buttons aren't real views).
 

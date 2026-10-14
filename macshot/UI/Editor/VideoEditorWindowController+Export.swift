@@ -7,12 +7,7 @@ import UniformTypeIdentifiers
 // runs as a `MediaExportCoordinator` job that outlives the window.
 extension VideoEditorWindowController {
 
-    // MARK: Export panel
-
-    @objc func showExportPanel(_ sender: NSView) {
-        let panel = VideoExportPanel(settings: exportSettings, controller: self)
-        PopoverHelper.show(panel, size: panel.fittingSize, relativeTo: sender.bounds, of: sender, preferredEdge: .minY)
-    }
+    // MARK: Legacy export panel support (removed in Phase 6)
 
     func exportSettingsChanged(_ settings: VideoExportSettings) {
         exportSettings = settings
@@ -53,6 +48,8 @@ extension VideoEditorWindowController {
             localFolderForUploads: { ExportEnvironment.defaultLocalFolderForUploads() })
         let queue = ExportQueue(environment: environment)
         exportQueueStorage = queue
+        // Toasts for results and for Stream finishing later; independent of this window.
+        ExportCompletionNotifier.attach(to: queue, projectName: environment.projectName)
         return queue
     }
 
@@ -83,28 +80,6 @@ extension VideoEditorWindowController {
             FileManager.default.fileExists(atPath: $0.path)
         }
         export(to: destination, directory: directory)
-    }
-
-    /// ⇧⌘E: exports immediately with the last-used settings and destination
-    /// folder, no dialog. Falls back to the regular Export panel once when
-    /// there's no usable last-used destination yet (first run, or the
-    /// destination volume is gone).
-    @objc func quickExportAction() {
-        PopoverHelper.dismiss()
-        guard !isExporting else { return }
-        guard let directory = QuickExportDestination.resolve(lastUsedDirectory: VideoExportSettings.lastDirectory(),
-                                                              isWritable: { FileManager.default.isWritableFile(atPath: $0.path) }) else {
-            showExportPanel(topBar.exportButton)
-            return
-        }
-        let settings = exportSettings
-        let ext = settings.format == .gif ? "gif" : "mp4"
-        let sourceName = editorDocument.source.originalURL.deletingPathExtension().lastPathComponent
-        let stampedBase = QuickExportFilename.build(sourceName: sourceName, date: Date())
-        let destination = FreeDestinationPicker.pick(directory: directory, base: stampedBase, ext: ext) {
-            FileManager.default.fileExists(atPath: $0.path)
-        }
-        export(to: destination, directory: directory, quickExport: true)
     }
 
     func saveVideoAs() {
@@ -307,8 +282,7 @@ extension VideoEditorWindowController {
         // The old path and the preset queue never render at the same time.
         guard !isExporting, exportQueueStorage?.isBusy != true else { completion(.failure(CancellationError())); return }
         isExporting = true
-        topBar.exportButton.isEnabled = false
-        topBar.copyButton.isEnabled = false
+        topBar.exportControl.isEnabled = false
         let token = UUID()
         activeExportToken = token
         showStatus(status, persist: true)
@@ -328,8 +302,7 @@ extension VideoEditorWindowController {
                 self.isExporting = false
                 self.activeExportJob = nil
                 self.activeExportToken = nil
-                self.topBar.exportButton.isEnabled = true
-                self.topBar.copyButton.isEnabled = true
+                self.topBar.exportControl.isEnabled = true
                 if case .failure(let error) = result, error is CancellationError { self.showStatus(L("Cancelled")) }
             }
             completion(result)

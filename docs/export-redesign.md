@@ -1,6 +1,6 @@
 # Export redesign
 
-Status: spec agreed 2026-10-13, not started. Replaces the current export popover (`VideoExportPanel`), which is broken (blank Preset popup, MP4/GIF control unresponsive) and is deliberately not getting a stopgap fix.
+Status: spec agreed 2026-10-13; Phases 0-5 implemented (Phase 5 UI: split button, `ExportPopoverView`, preset shortcuts, Settings ▸ Export and Cloudflare tabs, toasts). Replaces the current export popover (`VideoExportPanel`), which is broken (blank Preset popup, MP4/GIF control unresponsive) and is deliberately not getting a stopgap fix.
 
 ## Why
 
