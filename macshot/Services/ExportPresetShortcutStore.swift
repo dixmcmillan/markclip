@@ -165,15 +165,10 @@ enum ExportPresetShortcutStore {
     // MARK: Conflicts
 
     /// Chords the editor already owns, which a preset must not take:
-    /// ⌘S/⇧⌘S (save), ⌘E/⇧⌘E (export), ⌘C and the configurable Undo/Redo chords.
+    /// ⌘S (run the last preset), ⇧⌘S (Save As…), ⌘E/⇧⌘E (export popover / repeat)
+    /// from `EditorExportCommand`, ⌘C and the configurable Undo/Redo chords.
     static func reservedShortcuts() -> [Shortcut] {
-        var reserved = [
-            Shortcut(character: "s", modifiers: [.command]),
-            Shortcut(character: "s", modifiers: [.command, .shift]),
-            Shortcut(character: "e", modifiers: [.command]),
-            Shortcut(character: "e", modifiers: [.command, .shift]),
-            Shortcut(character: "c", modifiers: [.command]),
-        ]
+        var reserved = EditorExportCommand.allShortcuts + [Shortcut(character: "c", modifiers: [.command])]
         for action in EditorCommandShortcutManager.Action.allCases {
             reserved += EditorCommandShortcutManager.shortcuts(for: action)
         }

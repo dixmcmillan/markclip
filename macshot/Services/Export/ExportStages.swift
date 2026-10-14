@@ -162,6 +162,10 @@ struct ExportEnvironment {
     /// Folder for the local copy of a Stream/Images preset with "also save
     /// locally". Defaults to the Archive preset's folder.
     var localFolderForUploads: () -> URL
+    /// Called once a local copy has been published (Save As, a folder preset,
+    /// or "also save locally"). The editor uses it to hand ownership of a
+    /// disposable source file to the user when the copy replaced it.
+    var localFilePublished: (URL) -> Void = { _ in }
     var coordinator: MediaExportCoordinator = .shared
     var clock: ExportClock = SystemExportClock()
     var offline: Bool = BuildVariant.isOffline

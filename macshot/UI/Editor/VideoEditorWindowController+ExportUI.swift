@@ -52,6 +52,7 @@ extension VideoEditorWindowController {
         guard let anchor = topBar?.exportControl else { return }
         let queue = exportQueue
         let model = ExportPopoverModel(environment: exportPopoverEnvironment())
+        activeExportPopoverModel = model
         var handlers = ExportPopoverView.Handlers()
         handlers.run = { [weak self] preset, overrides in
             PopoverHelper.dismiss()
@@ -96,6 +97,26 @@ extension VideoEditorWindowController {
     }
 
     // MARK: Save As…
+
+    /// ⇧⌘S and File ▸ Save As…: the same panel as the popover's Save As…, for
+    /// the preset selected in the open popover (with its Adjust overrides),
+    /// otherwise the last-used preset.
+    @objc func saveAsAction() {
+        guard window?.attachedSheet == nil else { return }
+        let preset: ExportPreset
+        var overrides = ExportOverrides()
+        if PopoverHelper.isVisible, let model = activeExportPopoverModel {
+            guard model.canSaveAs else { return }
+            preset = model.selectedPreset
+            overrides = model.overrides
+        } else if let last = ExportPresetStore.lastUsedPreset() {
+            preset = last
+        } else {
+            return
+        }
+        PopoverHelper.dismiss()
+        presentSaveAsPanel(preset: preset, overrides: overrides)
+    }
 
     /// Asks where to put one export of `preset`'s encoding, then queues it.
     /// Local only: Save As never uploads.

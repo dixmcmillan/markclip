@@ -3,6 +3,9 @@ import Foundation
 /// Manages the active language for the app.
 /// Loads from UserDefaults ("appLanguage"), falls back to system language, then English.
 /// Supports runtime switching without app restart by swapping the active bundle.
+///
+/// A key a translation doesn't have falls back to the English table (then to the
+/// key itself), so new strings only need an `en.lproj` entry.
 final class LanguageManager {
     static let shared = LanguageManager()
 
@@ -54,16 +57,28 @@ final class LanguageManager {
     ]
 
     private var bundle: Bundle = .main
+    /// English table used when the active language lacks a key. Nil when the
+    /// resources have no `en.lproj`.
+    private var fallbackBundle: Bundle?
+    private let defaults: UserDefaults
+    private let resources: Bundle
 
-    private init() {
+    private convenience init() {
+        self.init(defaults: .standard, resources: .main)
+    }
+
+    /// `resources` holds the `<code>.lproj` folders; tests point it at a temporary folder.
+    init(defaults: UserDefaults, resources: Bundle) {
+        self.defaults = defaults
+        self.resources = resources
         reload()
     }
 
     /// The active language code. "system" means follow macOS preference.
     var currentLanguage: String {
-        get { UserDefaults.standard.string(forKey: "appLanguage") ?? "system" }
+        get { defaults.string(forKey: "appLanguage") ?? "system" }
         set {
-            UserDefaults.standard.set(newValue, forKey: "appLanguage")
+            defaults.set(newValue, forKey: "appLanguage")
             reload()
             NotificationCenter.default.post(name: Self.changedNotification, object: nil)
         }
@@ -94,7 +109,22 @@ final class LanguageManager {
     }
 
     func localizedString(_ key: String) -> String {
-        Self.applyBrand(bundle.localizedString(forKey: key, value: nil, table: nil))
+        Self.applyBrand(Self.lookup(key, in: bundle, fallback: fallbackBundle))
+    }
+
+    /// `key` from `bundle`; when that table lacks it, from `fallback` (English);
+    /// when neither has it, the key itself (which is the English text for most keys).
+    static func lookup(_ key: String, in bundle: Bundle, fallback: Bundle?) -> String {
+        // `localizedString(forKey:value:)` returns `value` for a missing key, so
+        // a sentinel tells "missing" apart from a legitimately equal string.
+        let missing = "\u{1}missing-translation\u{1}"
+        let value = bundle.localizedString(forKey: key, value: missing, table: nil)
+        guard value == missing else { return value }
+        if let fallback {
+            let english = fallback.localizedString(forKey: key, value: missing, table: nil)
+            if english != missing { return english }
+        }
+        return key
     }
 
     /// Every one of the 40 shipped locales still says "macshot" (and a few
@@ -119,11 +149,12 @@ final class LanguageManager {
 
     private func reload() {
         let lang = resolvedLanguage
-        if let path = Bundle.main.path(forResource: lang, ofType: "lproj"),
+        fallbackBundle = resources.path(forResource: "en", ofType: "lproj").flatMap { Bundle(path: $0) }
+        if let path = resources.path(forResource: lang, ofType: "lproj"),
            let langBundle = Bundle(path: path) {
             bundle = langBundle
         } else {
-            bundle = .main
+            bundle = resources
         }
     }
 }

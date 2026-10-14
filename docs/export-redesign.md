@@ -1,6 +1,6 @@
 # Export redesign
 
-Status: spec agreed 2026-10-13; Phases 0-5 implemented (Phase 5 UI: split button, `ExportPopoverView`, preset shortcuts, Settings ▸ Export and Cloudflare tabs, toasts). Replaces the current export popover (`VideoExportPanel`), which is broken (blank Preset popup, MP4/GIF control unresponsive) and is deliberately not getting a stopgap fix.
+Status: spec agreed 2026-10-13; Phases 0-6 implemented (Phase 5 UI: split button, `ExportPopoverView`, preset shortcuts, Settings ▸ Export and Cloudflare tabs, toasts; Phase 6: the old `VideoExportPanel` path and its loose UserDefaults keys are gone). Phase 7 (legacy uploaders) is separate. The old popover was broken (blank Preset popup, MP4/GIF control unresponsive) and never got a stopgap fix.
 
 ## Why
 
@@ -11,7 +11,7 @@ Two real use cases: a local archive copy, and an upload to Cloudflare Stream (or
 ### Entry points
 
 - Top bar: a split **Export** button. The main part runs the last-used preset; the chevron opens the export popover. The top-bar **Copy** button is removed.
-- ⌘E opens the popover. ⇧⌘E repeats the last-used preset.
+- ⌘E opens the popover. ⌘S and ⇧⌘E run the last-used preset (same as the main segment). ⇧⌘S is Save As…: it asks where to put one export of the open popover's selected preset (with its Adjust overrides), else the last-used preset.
 - Per-preset shortcuts, editor-scoped, customizable; defaults ⌃⌘1–⌃⌘4 by preset order. Also listed under File ▸ Export Preset.
 
 ### Presets
@@ -265,10 +265,12 @@ Phases 1–3 are independent once Phase 0 lands and can run in parallel. Phase 4
   - Wiring: add a `tabDefs` entry and register the tab in both `tabContentViews` places in `SettingsWindowController.swift`.
   - Contents: preset list, editor, folder picker, and shortcut recorder. The recorder is adapted to accept ⌃⌘ without ⌘-only validation.
 - **Cloudflare account** section: lives in the existing Uploads tab, which is already OFFLINE-gated.
-- **Toasts:** "Saved", "Uploaded to Stream" and "Ready" use the existing toast (`AppDelegate.showExportCompletedToast` / `UploadToastController`). No system notifications.
-- **Localization:** new strings go into all locale tables, per the existing localization checks.
+- **Toasts:** "Saved", "Uploaded to Stream" and "Ready" use the existing toast (`AppDelegate.showExportNoticeToast` / `UploadToastController`). No system notifications.
+- **Localization:** existing translations are kept, but new strings need only an English entry; other locales fall back to English at runtime (see `CLAUDE.md`).
 
 ### Phase 6: removal and cleanup
+
+Done. What changed relative to the list below: the editor's `prepare` step keeps `MediaExportProgressController` (it shows progress and Cancel while a large video is copied in, which is not an export); `FreeDestinationPicker` stays (now `Services/Export/FreeDestinationPicker.swift`, used by `ExportLocalDestination`); `VideoExportSettings` is a pure per-run value; the loose keys are deleted by `ExportPresetStore` right after the migration has read them (flag `exportPresets.v2.legacyKeysRemoved`, also covering users who migrated earlier). The Esc-cancels-export binding went with the legacy job; cancel is in the popover. The video Copy-to-clipboard action and the legacy panel's Show in Finder button are gone (the completion toast has Show in Finder). `ExportEnvironment.localFilePublished` carries over the legacy `VideoSourceSnapshot.didSave` call so saving over a disposable input keeps that file.
 
 Delete:
 - `VideoExportPanel`

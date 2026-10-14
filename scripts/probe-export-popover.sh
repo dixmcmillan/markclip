@@ -64,6 +64,7 @@ sources=(
   macshot/Services/BeautifyRenderer.swift
   macshot/Services/BuildVariant.swift
   macshot/Services/EditorCommandShortcutManager.swift
+  macshot/Services/EditorExportCommand.swift
   macshot/Services/Export/ExportCloudflareSupport.swift
   macshot/Services/Export/ExportLocalDestination.swift
   macshot/Services/Export/ExportQueue.swift
@@ -86,7 +87,7 @@ sources=(
   macshot/UI/Editor/Video/VideoEditorDocument.swift
   macshot/UI/Editor/Video/VideoEditorExporter.swift
   macshot/UI/Editor/Video/VideoEditorStyle.swift
-  macshot/UI/Editor/Video/VideoExportPresets.swift
+  macshot/Services/Export/FreeDestinationPicker.swift
   macshot/UI/Editor/Video/VideoRenderPlanner.swift
   macshot/UI/Popover/PopoverHelper.swift
   macshot/UI/Tools/OutlineTextRenderer.swift
