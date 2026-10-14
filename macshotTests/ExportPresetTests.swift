@@ -1,20 +1,22 @@
 import XCTest
 
-/// Export presets (model, store, migration, lenient decode, resolved
-/// settings) and Quick Export's pure destination/filename logic. UI (the
-/// export panel) isn't covered here; see CLAUDE.md's testing notes on
-/// extracting pure logic out of UI classes.
+/// Export presets: model, store, migration and legacy-key cleanup, lenient
+/// decode, resolved settings and the free-destination picker. UI isn't
+/// covered here; see CLAUDE.md's testing notes on extracting pure logic out
+/// of UI classes.
 final class ExportPresetTests: XCTestCase {
 
     private let presetsKey = ExportPresetStore.presetsKey
     private let lastUsedKey = ExportPresetStore.lastUsedKey
     private let flagKey = ExportPresetStore.migrationFlagKey
     private let legacyKey = ExportPresetStore.legacyPresetsKey
-    private let lastDirectoryKey = "lastExportDestinationDirectory"
+    private let lastDirectoryKey = ExportPresetStore.legacyDirectoryKey
+    private let cleanupFlagKey = ExportPresetStore.legacyCleanupFlagKey
 
     /// Clean slate for every key the store touches.
     private func withCleanStore(_ extra: [String: Any?] = [:], _ body: () throws -> Void) rethrows {
-        var values: [String: Any?] = [presetsKey: nil, lastUsedKey: nil, flagKey: nil, legacyKey: nil, lastDirectoryKey: nil]
+        var values: [String: Any?] = [presetsKey: nil, lastUsedKey: nil, flagKey: nil, cleanupFlagKey: nil]
+        for key in ExportPresetStore.legacyKeys { values[key] = nil }
         for (k, v) in extra { values[k] = v }
         try withDefaults(values, body)
     }
@@ -229,10 +231,83 @@ final class ExportPresetTests: XCTestCase {
         }
     }
 
-    func testLegacyKeyIsLeftInPlace() {
-        withCleanStore([legacyKey: Data(legacyJSON.utf8)]) {
+    // MARK: Legacy key cleanup
+
+    private let looseLegacyValues: [String: Any?] = [
+        "lastExportScale": 0.5, "lastExportQuality": "medium", "gifExportFPS": 20,
+        "videoEditorExportFormat": "gif",
+    ]
+
+    func testLegacyKeyListCoversEveryPreV2Key() {
+        XCTAssertEqual(Set(ExportPresetStore.legacyKeys), [
+            "lastExportScale", "lastExportQuality", "gifExportFPS", "videoEditorExportFormat",
+            "lastExportDestinationDirectory", "videoExportCustomPresets",
+        ])
+    }
+
+    func testMigrationReadsTheLegacyKeysThenRemovesThem() throws {
+        var values = looseLegacyValues
+        values[lastDirectoryKey] = "/Volumes/Work/Exports"
+        values[legacyKey] = Data(legacyJSON.utf8)
+        try withCleanStore(values) {
+            let all = ExportPresetStore.allPresets()
+            // Read before delete: the folder and the custom presets made it across...
+            XCTAssertEqual(folderPath(try XCTUnwrap(all.first)), "/Volumes/Work/Exports")
+            XCTAssertTrue(all.contains { $0.name == "Web 720" })
+            // ...and every loose key is gone afterwards.
+            for key in ExportPresetStore.legacyKeys {
+                XCTAssertNil(UserDefaults.standard.object(forKey: key), "\(key) should be removed")
+            }
+            XCTAssertTrue(UserDefaults.standard.bool(forKey: cleanupFlagKey))
+            // The migrated presets are what is stored from now on.
+            XCTAssertEqual(ExportPresetStore.allPresets().count, 5)
+            XCTAssertEqual(folderPath(try XCTUnwrap(ExportPresetStore.allPresets().first)), "/Volumes/Work/Exports")
+        }
+    }
+
+    func testCleanupWorksForUsersWhoNeverOpenedTheEditor() throws {
+        // Launch is the only caller: nothing in the editor ever read the store.
+        var values = looseLegacyValues
+        values[lastDirectoryKey] = "/Volumes/Work/Exports"
+        try withCleanStore(values) {
+            ExportPresetStore.removeLegacyKeysIfNeeded()   // not migrated yet: must not delete what is unread
+            XCTAssertNotNil(UserDefaults.standard.string(forKey: lastDirectoryKey))
+            _ = ExportPresetStore.allPresets()             // launch
+            XCTAssertNil(UserDefaults.standard.object(forKey: lastDirectoryKey))
+            XCTAssertNil(UserDefaults.standard.object(forKey: "lastExportScale"))
+            XCTAssertEqual(folderPath(try XCTUnwrap(ExportPresetStore.allPresets().first)), "/Volumes/Work/Exports")
+        }
+    }
+
+    func testCleanupCoversUsersWhoMigratedBeforeItExisted() {
+        var values = looseLegacyValues
+        values[flagKey] = true
+        values[legacyKey] = Data(legacyJSON.utf8)
+        withCleanStore(values) {
             _ = ExportPresetStore.allPresets()
-            XCTAssertNotNil(UserDefaults.standard.data(forKey: legacyKey), "Phase 6 removes the legacy keys, not migration")
+            for key in ExportPresetStore.legacyKeys {
+                XCTAssertNil(UserDefaults.standard.object(forKey: key), "\(key) should be removed")
+            }
+            XCTAssertEqual(ExportPresetStore.allPresets().count, 3, "already-migrated users are not re-imported")
+        }
+    }
+
+    func testCleanupRunsOnlyOnce() {
+        withCleanStore([flagKey: true, cleanupFlagKey: true]) {
+            UserDefaults.standard.set("late", forKey: "lastExportQuality")   // e.g. an imported old settings file
+            _ = ExportPresetStore.allPresets()
+            XCTAssertEqual(UserDefaults.standard.string(forKey: "lastExportQuality"), "late")
+        }
+    }
+
+    func testCleanupLeavesTheNewKeysAlone() {
+        let mine = ExportPreset(name: "Mine")
+        withCleanStore([lastUsedKey: mine.id.uuidString]) {
+            ExportPresetStore.addOrReplace(mine)
+            _ = ExportPresetStore.allPresets()
+            XCTAssertNotNil(UserDefaults.standard.data(forKey: presetsKey))
+            XCTAssertEqual(UserDefaults.standard.string(forKey: lastUsedKey), mine.id.uuidString)
+            XCTAssertTrue(ExportPresetStore.allPresets().contains { $0.name == "Mine" })
         }
     }
 
@@ -354,7 +429,7 @@ final class ExportPresetTests: XCTestCase {
         XCTAssertEqual(preset.resolvedSettings(nativeSize: native, overrides: source).scale, 1)
     }
 
-    func testLegacySettingsDefaultsAreUnchangedByTheNewFields() {
+    func testSettingsDefaults() {
         let s = VideoExportSettings()
         XCTAssertEqual(s.format, .mp4)
         XCTAssertEqual(s.codec, .h264)
@@ -423,56 +498,6 @@ final class ExportPresetTests: XCTestCase {
         withCleanStore([presetsKey: data, flagKey: true]) {
             XCTAssertEqual(ExportPresetStore.allPresets().map(\.name), ["Archive", "Stream", "Loop", "Good"])
         }
-    }
-
-    // MARK: Quick Export destination fallback
-
-    func testQuickExportResolvesToLastUsedDirectoryWhenWritable() {
-        let directory = URL(fileURLWithPath: "/tmp/fake-export-dir")
-        let resolved = QuickExportDestination.resolve(lastUsedDirectory: directory) { $0 == directory }
-        XCTAssertEqual(resolved, directory)
-    }
-
-    func testQuickExportFallsBackToDialogWhenNoLastUsedDirectory() {
-        let resolved = QuickExportDestination.resolve(lastUsedDirectory: nil) { _ in true }
-        XCTAssertNil(resolved)
-    }
-
-    func testQuickExportFallsBackToDialogWhenLastUsedDirectoryIsNotWritable() {
-        // e.g. the destination was on an external drive that's since been ejected.
-        let directory = URL(fileURLWithPath: "/tmp/ejected-volume")
-        let resolved = QuickExportDestination.resolve(lastUsedDirectory: directory) { _ in false }
-        XCTAssertNil(resolved)
-    }
-
-    func testLastDirectoryPersistsThroughUserDefaults() {
-        withDefaults([lastDirectoryKey: nil]) {
-            XCTAssertNil(VideoExportSettings.lastDirectory())
-            let directory = URL(fileURLWithPath: "/tmp/my-exports", isDirectory: true)
-            VideoExportSettings.setLastDirectory(directory)
-            XCTAssertEqual(VideoExportSettings.lastDirectory()?.path, directory.path)
-        }
-    }
-
-    // MARK: Quick Export filename
-
-    func testQuickExportFilenameFormat() {
-        var components = DateComponents()
-        components.year = 2026; components.month = 3; components.day = 14
-        components.hour = 9; components.minute = 5; components.second = 2
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
-        let date = calendar.date(from: components)!
-        let formatter = QuickExportFilename.dateFormatter()
-        formatter.timeZone = TimeZone(identifier: "UTC")
-        let name = QuickExportFilename.build(sourceName: "My Recording", date: date, formatter: formatter)
-        XCTAssertEqual(name, "My Recording 2026-03-14 09.05.02")
-    }
-
-    func testQuickExportFilenameHasNoColons() {
-        // Colons render as "/" in Finder (classic Mac OS path-separator legacy).
-        let name = QuickExportFilename.build(sourceName: "Clip", date: Date())
-        XCTAssertFalse(name.contains(":"))
     }
 
     // MARK: Free destination picker (overwrite avoidance)

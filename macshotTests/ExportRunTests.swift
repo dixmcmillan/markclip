@@ -233,6 +233,26 @@ final class ExportRunTests: XCTestCase {
         XCTAssertTrue(staged)
     }
 
+    func testPublishedLocalFilesAreReportedSoTheEditorCanKeepTheDestination() async throws {
+        var published: [URL] = []
+        var env = environment()
+        env.localFilePublished = { published.append($0) }
+        let folderResult = await run(folderPreset, env: env)
+        XCTAssertEqual(published, [folderResult.localFile].compactMap { $0 })
+
+        // Save As reports the chosen URL too (it may be the source's own path).
+        let chosen = root.appendingPathComponent("elsewhere.mp4")
+        var overrides = ExportOverrides(); overrides.saveAsURL = chosen
+        published.removeAll()
+        _ = await run(folderPreset, overrides: overrides, env: env)
+        XCTAssertEqual(published.map(\.lastPathComponent), ["elsewhere.mp4"])
+
+        // An upload-only preset publishes nothing locally.
+        published.removeAll()
+        _ = await run(streamPreset(alsoSave: false), env: env)
+        XCTAssertTrue(published.isEmpty)
+    }
+
     func testImagesUploadFitsTheGIFAndRecordsReady() async throws {
         renderer.fitSummary = "fit: 12 fps, 960 px"
         let result = await run(loopPreset)

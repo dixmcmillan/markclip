@@ -47,7 +47,7 @@ enum SettingsPortability {
 
     /// Keys that must never transfer: machine-/path-specific state, hardware IDs, transient
     /// geometry, and internal migration bookkeeping. (Secrets are handled by `looksSecret`.)
-    static let excludedKeys: Set<String> = [
+    static let excludedKeys: Set<String> = Set([
         // Save directories: paths + security-scoped bookmarks are machine-specific.
         "saveDirectory", "saveDirectoryBookmark",
         "recordingSaveDirectory", "recordingSaveDirectoryBookmark",
@@ -62,7 +62,9 @@ enum SettingsPortability {
         "knownToolRawValues", "knownActionTags",
         "suppressMoveToApplications", "useWindowTitleInFilename",
         LegacyUploadCleanup.doneKey,
-    ]
+        // Export preset migration flags and the pre-preset loose keys they retire.
+        ExportPresetStore.migrationFlagKey, ExportPresetStore.legacyCleanupFlagKey,
+    ] + ExportPresetStore.legacyKeys)
 
     /// Prefixes of OS/framework key families macOS injects into every app's domain. Stable —
     /// Apple doesn't churn these. Anything starting with one of these is not a macshot setting.

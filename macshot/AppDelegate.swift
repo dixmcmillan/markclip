@@ -212,8 +212,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     /// Transient toast for failures that would otherwise be invisible — a save
     /// that couldn't be written, a recording that produced no file.
     private var errorToastController: UploadToastController?
-    /// Transient success toast for Quick Export (⇧⌘E), which has no dialog
-    /// of its own to show a "Saved to…" status line in.
+    /// Transient toast for finished exports ("Saved", "Uploaded to Stream").
     private var exportToastController: UploadToastController?
     private var playbackSpeedMenu: NSMenu?
     private var recordingEngine: RecordingEngine?
@@ -286,6 +285,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         // integrations. Runs after the migration above, which could otherwise
         // copy an old Drive token file back into place.
         LegacyUploadCleanup.run()
+
+        // Export presets: fold the pre-preset loose export keys into
+        // `exportPresets.v2` once, then delete them (also for users who never
+        // open the editor). Runs after the sandbox migration for the same
+        // reason as above.
+        _ = ExportPresetStore.allPresets()
 
         // Markclip Phase 1 (identity, ROADMAP.md): the screenshot capture
         // flow is retired from the UI by default, so the menu bar icon that
@@ -750,6 +755,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
 
         fileMenu.addItem(NSMenuItem.separator())
 
+        // ⌘S runs the last-used export preset (same as the top bar's Export
+        // button); ⇧⌘S asks where to save one export. Both act on the focused
+        // video editor only (see `validateMenuItem`), so screenshot editors keep
+        // handling their own ⌘S.
+        let saveItem = NSMenuItem(title: L("Save"), action: #selector(saveKeyVideo), keyEquivalent: "s")
+        saveItem.target = self
+        saveItem.toolTip = "Exports with the last-used preset"
+        fileMenu.addItem(saveItem)
+
+        let saveAsItem = NSMenuItem(title: L("Save As…"), action: #selector(saveAsKeyVideo), keyEquivalent: "s")
+        saveAsItem.keyEquivalentModifierMask = [.command, .shift]
+        saveAsItem.target = self
+        fileMenu.addItem(saveAsItem)
+
+        fileMenu.addItem(NSMenuItem.separator())
+
         let exportItem = NSMenuItem(title: L("Export") + "…", action: #selector(exportFrontmostVideo), keyEquivalent: "e")
         exportItem.target = self
         fileMenu.addItem(exportItem)
@@ -856,7 +877,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         VideoEditorWindowController.frontmostController?.setPlaySpeedAction(sender)
     }
 
-    /// File > Quick Export (⇧⌘E) routes to the frontmost video editor
+    /// File ▸ Save (⌘S): the focused editor runs its last-used preset.
+    @objc private func saveKeyVideo() {
+        VideoEditorWindowController.keyController?.runLastExportAction()
+    }
+
+    /// File ▸ Save As… (⇧⌘S): the focused editor asks where to save one export.
+    @objc private func saveAsKeyVideo() {
+        VideoEditorWindowController.keyController?.saveAsAction()
+    }
+
+    /// File ▸ Repeat Last Export (⇧⌘E) routes to the frontmost video editor
     /// window, same pattern as File > Export….
     @objc private func quickExportFrontmostVideo() {
         VideoEditorWindowController.frontmostController?.runLastExportAction()
@@ -2352,17 +2383,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         toast.showError(message: message, asUploadFailure: false)
     }
 
-    /// Quick Export (⇧⌘E) has no dialog of its own — this is how it reports
-    /// success, with a "Show in Finder" action.
-    func showExportCompletedToast(_ url: URL) {
-        exportToastController?.dismiss()
-        let toast = UploadToastController()
-        exportToastController = toast
-        toast.onDismiss = { [weak self] in self?.exportToastController = nil }
-        toast.show(status: String(format: L("Exported %@"), url.lastPathComponent))
-        toast.showFileSaved(url: url)
-    }
-
     /// "Uploaded to Stream", "Ready to stream": a finished-export toast with
     /// one detail line and an optional action. Shares the export toast slot,
     /// so a newer one replaces an older one.
@@ -3586,10 +3606,11 @@ extension AppDelegate: PinWindowControllerDelegate {
 
 extension AppDelegate: NSMenuItemValidation {
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        // Export Preset items (and their ⌃⌘-number chords) act on the focused
-        // video editor only; with Settings or another window key they are
-        // disabled, so the chords fall through.
-        if menuItem.action == #selector(exportWithPresetFromMenu(_:)) {
+        // Save, Save As… and the Export Preset items (and their ⌃⌘-number chords)
+        // act on the focused video editor only; with Settings or another window
+        // key they are disabled, so the chords fall through.
+        if menuItem.action == #selector(exportWithPresetFromMenu(_:))
+            || menuItem.action == #selector(saveKeyVideo) || menuItem.action == #selector(saveAsKeyVideo) {
             return VideoEditorWindowController.keyController != nil
         }
         return true

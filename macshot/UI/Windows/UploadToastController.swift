@@ -165,15 +165,6 @@ class UploadToastController {
         scheduleDismiss(seconds: 8)
     }
 
-    /// A file finished saving successfully (Quick Export). Same layout as
-    /// `showSuccess`, but the action reveals the file in Finder instead of
-    /// opening a link.
-    func showFileSaved(url: URL) {
-        showNotice(title: L("Export complete"), detail: url.lastPathComponent, actionTitle: L("Show in Finder")) {
-            NSWorkspace.shared.activateFileViewerSelecting([url])
-        }
-    }
-
     /// A finished export: a title ("Uploaded to Stream"), one detail line and
     /// an optional action button ("Show in Finder", "Open in dashboard").
     /// Replaces the spinner `show(status:)` put up.

@@ -3,16 +3,24 @@ import Foundation
 /// Persistence for `ExportPreset`s: the full ordered list (built-ins first)
 /// under `exportPresets.v2`, plus the last-used preset id. The first read
 /// seeds the built-ins and migrates the legacy `videoExportCustomPresets`
-/// list exactly once.
+/// list exactly once, then removes the pre-preset loose export keys.
 enum ExportPresetStore {
     static let presetsKey = "exportPresets.v2"
     static let lastUsedKey = "lastUsedExportPresetID"
     /// Set once the legacy list has been folded into `exportPresets.v2`.
     static let migrationFlagKey = "exportPresets.v2.migratedLegacy"
 
-    // Legacy keys (removed in Phase 6).
+    /// Set once the pre-preset loose keys (`legacyKeys`) have been removed.
+    static let legacyCleanupFlagKey = "exportPresets.v2.legacyKeysRemoved"
+
+    // Keys written by the pre-preset export panel. Read once by the migration
+    // (custom presets, Archive folder), then deleted by `removeLegacyKeysIfNeeded`.
     static let legacyPresetsKey = "videoExportCustomPresets"
-    static let legacyDirectoryKey = VideoExportSettings.lastDirectoryKey
+    static let legacyDirectoryKey = "lastExportDestinationDirectory"
+    static let legacyKeys = [
+        "lastExportScale", "lastExportQuality", "gifExportFPS", "videoEditorExportFormat",
+        legacyDirectoryKey, legacyPresetsKey,
+    ]
 
     // Fixed ids: later phases (shortcuts, upload state) refer to built-ins by id.
     static let archiveID = UUID(uuidString: "6D41C11B-0000-4000-8000-000000000001")!
@@ -128,9 +136,25 @@ enum ExportPresetStore {
         return ExportDestination.defaultArchivePath
     }
 
-    /// One-time: seed built-ins and fold in the legacy custom presets.
-    /// Idempotent via `migrationFlagKey`.
+    /// One-time: seed built-ins and fold in the legacy custom presets, then
+    /// drop the legacy keys. Both steps are idempotent (`migrationFlagKey`,
+    /// `legacyCleanupFlagKey`); the removal always comes after the migration
+    /// has read them, and also covers users who migrated before it existed.
     private static func migrateIfNeeded(defaults: UserDefaults) {
+        migrateLegacy(defaults: defaults)
+        removeLegacyKeysIfNeeded(defaults: defaults)
+    }
+
+    /// Deletes the loose pre-preset export keys once. Public so launch can
+    /// run it without touching the preset list.
+    static func removeLegacyKeysIfNeeded(defaults: UserDefaults = .standard) {
+        // Never delete what the migration has not read yet.
+        guard defaults.bool(forKey: migrationFlagKey), !defaults.bool(forKey: legacyCleanupFlagKey) else { return }
+        for key in legacyKeys { defaults.removeObject(forKey: key) }
+        defaults.set(true, forKey: legacyCleanupFlagKey)
+    }
+
+    private static func migrateLegacy(defaults: UserDefaults) {
         guard !defaults.bool(forKey: migrationFlagKey) else { return }
         let folderPath = seedArchivePath(defaults: defaults)
         var presets = stored(defaults: defaults)   // normally empty on first run

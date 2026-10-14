@@ -35,6 +35,9 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     private(set) var editorDocument: VideoEditorDocument!
     private(set) var playback: VideoEditorPlayback!
     var exporter: VideoEditorExporter!
+    /// The model behind the open export popover, so ⇧⌘S can Save As… with its
+    /// selection and Adjust overrides. Nil once the popover is gone.
+    weak var activeExportPopoverModel: ExportPopoverModel?
     private var inspector: VideoInspectorView!
     private var stage: VideoStageView!
     private var stageToolbar: VideoStageToolbar!
@@ -47,17 +50,10 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     private var wasPlayingBeforeScrub = false
 
     // Export state
-    var exportSettings = VideoExportSettings.load()
-    var isExporting = false
-    var activeExportJob: MediaExportCoordinator.Job?
-    var activeExportToken: UUID?
-    /// The preset export queue (Phase 4). Created on first use; the old
-    /// popover path above keeps its own `isExporting` until Phase 6 removes it.
+    /// The preset export queue. Created on first use.
     var exportQueueStorage: ExportQueue?
     /// The top bar's subscription to `exportQueue` (removed on close).
     var exportQueueObserver: UUID?
-    var savedURL: URL?
-    var savedRevision: UInt64?
     private var statusTimer: Timer?
     private var captionTask: Task<Void, Never>?
     /// True while a frame grab or the annotator window is up, so a second
@@ -270,9 +266,6 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
     private func documentChanged(_ change: VideoEditChange) {
         if change.contains(.segments) || change.contains(.timing) || change.contains(.render) { layoutTimeline() }
         if change.contains(.history) || change.contains(.render) { refreshChrome() }
-        if change.contains(.render) || change.contains(.timing) || change.contains(.segments) {
-            if savedRevision != editorDocument.revision { savedURL = nil }
-        }
     }
 
     private func refreshChrome() {
@@ -954,7 +947,6 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         case 51 where editorDocument.selection != nil, 117 where editorDocument.selection != nil:
             editorDocument.deleteSelection(); return true
         case 53:
-            if let job = activeExportJob { job.cancel(); return true }
             if stage.isCropping { toggleCrop(); return true }
             if editorDocument.selection != nil { editorDocument.select(nil); return true }
             return false
@@ -990,11 +982,13 @@ final class VideoEditorWindowController: NSWindowController, NSWindowDelegate {
         case .redo?: redoAction(); return true
         case nil: break
         }
-        if KeyboardShortcutMatcher.matches(event, character: "s", modifiers: [.command]) { saveVideo(); return true }
-        if KeyboardShortcutMatcher.matches(event, character: "s", modifiers: [.command, .shift]) { saveVideoAs(); return true }
-        // ⇧⌘E repeats the last-used preset; ⌘E opens the export popover.
-        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command, .shift]) { runLastExportAction(); return true }
-        if KeyboardShortcutMatcher.matches(event, character: "e", modifiers: [.command]) { showExportPopover(topBar.exportControl.menuButton); return true }
+        // ⌘S and ⇧⌘E run the last-used preset, ⇧⌘S is Save As…, ⌘E opens the popover.
+        switch EditorExportCommand.command(for: event) {
+        case .runLastPreset?: runLastExportAction(); return true
+        case .saveAs?: saveAsAction(); return true
+        case .showPopover?: showExportPopover(topBar.exportControl.menuButton); return true
+        case nil: break
+        }
         // Per-preset shortcuts (⌃⌘1–3 by default), matched by character.
         let modifiers = KeyboardShortcutMatcher.modifiers(in: event)
         if modifiers.contains(.command) || modifiers.contains(.control),
@@ -1208,14 +1202,10 @@ extension VideoEditorWindowController {
         case "undo": undoAction()
         case "redo": redoAction()
         case "timeline-zoom": timeline.zoom(by: CGFloat(number(0)), around: timeline.x(for: playback.currentSourceTime))
-        case "export":
-            var settings = exportSettings
-            settings.format = args.first == "gif" ? .gif : .mp4
-            if args.count > 2, let quality = VideoQuality(rawValue: args[2]) { settings.quality = quality }
-            exportSettings = settings
-            let url = URL(fileURLWithPath: args.count > 1 ? args[1] : NSTemporaryDirectory() + "/probe-export.mp4")
-            try? FileManager.default.removeItem(at: url)
-            probeExport(to: url)
+        case "export-popover":
+            // Opens the real popover; nothing is exported until a preset is run.
+            showExportPopover(nil)
+            return "export-popover open=\(PopoverHelper.isVisible)"
         case "state":
             let p = doc.project
             func r(_ a: Double, _ b: Double) -> String { String(format: "%.2f-%.2f", a, b) }
@@ -1266,21 +1256,6 @@ extension VideoEditorWindowController {
             let p = NSPoint(x: number(0), y: content.bounds.height - number(1))
             let view = content.hitTest(p)
             return "hit \(view.map { String(describing: type(of: $0)) } ?? "nil") \((view as? NSButton)?.title ?? "")"
-        case "export-panel":
-            let panel = VideoExportPanel(settings: exportSettings, controller: self)
-            panel.frame.size = panel.fittingSize
-            panel.layoutSubtreeIfNeeded()
-            let host = NSView(frame: panel.bounds)
-            host.wantsLayer = true
-            host.layer?.backgroundColor = NSColor(white: 0.16, alpha: 1).cgColor
-            host.appearance = NSAppearance(named: .darkAqua)
-            host.addSubview(panel)
-            guard let rep = host.bitmapImageRepForCachingDisplay(in: host.bounds) else { return "no rep" }
-            host.cacheDisplay(in: host.bounds, to: rep)
-            let dir = ProcessInfo.processInfo.environment["PROBE_OUT"] ?? NSTemporaryDirectory()
-            let url = URL(fileURLWithPath: dir).appendingPathComponent("export-panel.png")
-            try? rep.representation(using: .png, properties: [:])?.write(to: url)
-            return "export-panel \(url.path) \(panel.fittingSize)"
         case "quit": window?.close(); NSApp.terminate(nil)
         default: return "unknown \(command)"
         }
@@ -1319,25 +1294,6 @@ extension VideoEditorWindowController {
             results.append(String(describing: type(of: target as Any)))
         }
         return "mouse on \(results.first ?? "nil")"
-    }
-
-    private func probeExport(to url: URL) {
-        let settings = exportSettings
-        do {
-            if settings.format == .gif {
-                let request = try exporter.gifRequest(settings, outputURL: url)
-                startExport(status: "GIF", title: url.lastPathComponent, operation: { c, p in
-                    try await GIFExporter.export(request, cancellation: c, progress: p)
-                }, completion: { result in print("export-finished \(url.path) \(result)") })
-            } else {
-                let job = try exporter.mp4Job(settings, outputURL: url)
-                startExport(status: "MP4", title: url.lastPathComponent, operation: { _, p in
-                    try await job.export(to: url) { p($0) }
-                }, completion: { result in print("export-finished \(url.path) \(result)") })
-            }
-        } catch {
-            print("export-failed \(error)")
-        }
     }
 
     /// Renders the window's layer tree plus the current preview frame.

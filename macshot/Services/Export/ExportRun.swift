@@ -230,6 +230,7 @@ final class ExportRun {
             try save.commit(overwritingExisting: overwrites, beforePublish: { try cancellation.beginPublication() })
         }
         result.localFile = destination
+        env.localFilePublished(destination)
         // Save As is a one-off copy: it must not move the file the preset's
         // next run overwrites.
         if saveAs == nil, let described = ExportFileRecord.describing(destination) {

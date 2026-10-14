@@ -1,8 +1,8 @@
 import AVFoundation
 
-/// Resolved export settings for one run. The legacy fields (format, scale,
-/// quality, gifFPS) still persist through the loose keys below until Phase 6;
-/// the preset-derived fields are per-run only.
+/// Resolved export settings for one run, built from an `ExportPreset` (plus
+/// Adjust overrides) by `ExportPreset.resolvedSettings`. A pure value: nothing
+/// here is persisted.
 struct VideoExportSettings: Equatable {
     enum Format: String { case mp4, gif }
     var format: Format = .mp4
@@ -11,10 +11,8 @@ struct VideoExportSettings: Equatable {
     var quality: VideoQuality = .high
     var gifFPS: Int = 15
 
-    // Resolved per-run fields, built from an `ExportPreset` (+ overrides) by
-    // `ExportPreset.resolvedSettings`. Not persisted. `VideoEditorExporter`
-    // reads codec/fpsCap/explicitBitrate/captions/muted for MP4 output;
-    // Phase 2 wires gifFit.
+    // `VideoEditorExporter` reads codec/fpsCap/explicitBitrate/captions/muted
+    // for MP4 output and gifFit for GIF auto-fit.
     /// Video codec for MP4 output. A source that already matches it is
     /// copied untouched when nothing else is edited.
     var codec: VideoCodec = .h264
@@ -30,45 +28,6 @@ struct VideoExportSettings: Equatable {
     /// Drop the audio tracks from the output.
     var muted: Bool = false
     var gifFit: GIFFitSettings = .default
-
-    static let scaleKey = "lastExportScale"
-    static let qualityKey = "lastExportQuality"
-    static let gifFPSKey = "gifExportFPS"
-    static let formatKey = "videoEditorExportFormat"
-    static let lastDirectoryKey = "lastExportDestinationDirectory"
-
-    /// The folder Quick Export (⇧⌘E) writes to without prompting: wherever
-    /// the last successful Save/Save As/Quick Export actually wrote. Sandbox
-    /// is disabled in this fork (see CLAUDE.md), so a plain path is enough —
-    /// no security-scoped bookmark needed.
-    static func lastDirectory(defaults: UserDefaults = .standard) -> URL? {
-        guard let path = defaults.string(forKey: lastDirectoryKey) else { return nil }
-        return URL(fileURLWithPath: path, isDirectory: true)
-    }
-
-    static func setLastDirectory(_ url: URL, defaults: UserDefaults = .standard) {
-        defaults.set(url.path, forKey: lastDirectoryKey)
-    }
-
-    static func load(defaults: UserDefaults = .standard) -> VideoExportSettings {
-        var settings = VideoExportSettings()
-        let scale = defaults.object(forKey: scaleKey) as? Double ?? 1
-        settings.scale = scale.isFinite && scale > 0 && scale <= 1 ? CGFloat(scale) : 1
-        if let raw = defaults.string(forKey: qualityKey), let quality = VideoQuality(rawValue: raw) {
-            settings.quality = quality
-        }
-        let fps = defaults.integer(forKey: gifFPSKey)
-        settings.gifFPS = fps == 0 ? 15 : min(30, max(5, fps))
-        if let raw = defaults.string(forKey: formatKey), let format = Format(rawValue: raw) { settings.format = format }
-        return settings
-    }
-
-    func save(defaults: UserDefaults = .standard) {
-        defaults.set(Double(scale), forKey: Self.scaleKey)
-        defaults.set(quality.rawValue, forKey: Self.qualityKey)
-        defaults.set(gifFPS, forKey: Self.gifFPSKey)
-        defaults.set(format.rawValue, forKey: Self.formatKey)
-    }
 }
 
 /// Builds export jobs from an immutable copy of the project, so edits made
@@ -225,7 +184,7 @@ final class VideoEditorExporter {
     }
 
     /// GIF export at an explicit cadence and canvas long edge (in pixels), for
-    /// GIF auto-fit rungs. Independent of the persisted `VideoExportSettings`;
+    /// GIF auto-fit rungs. Independent of the preset's own `VideoExportSettings`;
     /// the long edge is clamped to the native canvas (never upscaled).
     func gifRequest(fps: Int, longEdge: Int, outputURL: URL) throws -> GIFExporter.Request {
         guard let native = nativeCanvasSize, native.width > 0, native.height > 0 else { throw ExportError.invalidSetup }
