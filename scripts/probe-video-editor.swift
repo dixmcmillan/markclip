@@ -1,30 +1,21 @@
-// Used by probe-video-editor.sh. All editor, timeline, compositor, export,
-// source-ownership and progress code is compiled directly from macshot/.
-// Only unrelated app services, colors and localization are stubbed here.
+// Used by probe-video-editor.sh. The probe compiles the whole macshot/ tree
+// (minus main.swift), so the editor, timeline, compositor, export queue,
+// source-ownership and progress code are the production code. Only the app
+// delegate is replaced: `ProbeAppDelegate` subclasses the real `AppDelegate`
+// (so `NSApp.delegate as? AppDelegate` keeps working) but skips launch
+// (no menu bar, hotkeys or welcome window) and reports failures on stdout.
 import Cocoa
 enum ProbeInput {
     static var directory: URL { Bundle.main.bundleURL.deletingLastPathComponent() }
     static var url: URL { directory.appendingPathComponent("input.mp4") }
 }
-func L(_ value: String) -> String { value }
-enum ToolbarLayout {
-    static var bgColor: NSColor { NSColor(srgbRed: 0.12, green: 0.12, blue: 0.12, alpha: 1) }
-    static var iconColor: NSColor { .white }
-    static var accentColor: NSColor { .systemBlue }
-    static var appearance: NSAppearance { NSAppearance(named: .darkAqua)! }
-}
-enum SaveDirectoryAccess {
-    static func resolveRecordingDirectoryIfAccessible() -> URL? { ProbeInput.directory }
-    static func recordingDirectoryHint() -> URL? { resolveRecordingDirectoryIfAccessible() }
-    static func stopAccessing(url: URL) {}
-}
-@MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
+@MainActor final class ProbeAppDelegate: AppDelegate {
     private let termination = ApplicationTerminationCoordinator()
     private var audioMerge: AudioMergeController?
     private var completionCount = 0
-    func returnFocusIfNeeded() {}
-    func showFailureToast(_ text: String) { log(["error": text]) }
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    override func returnFocusIfNeeded() {}
+    override func showFailureToast(_ text: String) { log(["error": text]) }
+    override func applicationDidFinishLaunching(_ notification: Notification) {
         let menu = NSMenu()
         let appItem = NSMenuItem()
         menu.addItem(appItem)
@@ -82,7 +73,7 @@ enum SaveDirectoryAccess {
         data.append(10)
         FileHandle.standardOutput.write(data)
     }
-    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+    override func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         termination.request(hasActiveWork: MediaExportCoordinator.shared.hasActiveJobs,
             drain: { await MediaExportCoordinator.shared.waitUntilIdle() }, terminate: { sender.terminate(nil) })
     }
@@ -90,7 +81,7 @@ enum SaveDirectoryAccess {
 @main struct Main {
     @MainActor static func main() {
         let app = NSApplication.shared
-        let delegate = AppDelegate()
+        let delegate = ProbeAppDelegate()
         app.delegate = delegate
         app.setActivationPolicy(.regular)
         app.run()
