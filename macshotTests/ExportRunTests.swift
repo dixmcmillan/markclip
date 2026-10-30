@@ -468,4 +468,68 @@ final class ExportRunTests: XCTestCase {
         XCTAssertEqual(overall, overall.sorted(), "Overall progress never goes backwards")
         XCTAssertEqual(try XCTUnwrap(overall.last), 1, accuracy: 0.0001)
     }
+
+    // MARK: TrainWithDixon
+
+    private func trainWithDixonPreset(captions: ExportCaptionsMode = .soft, alsoSave: Bool = true) -> ExportPreset {
+        ExportPreset(name: "TrainWithDixon", format: .h264, captions: captions, destination: .trainWithDixon,
+                     alsoSaveLocally: alsoSave)
+    }
+
+    private func environment(managed: ExportManagedUploadService?, cloudflare: ExportRemoteService? = nil) -> ExportEnvironment {
+        var env = environment(remote: .some(cloudflare))
+        env.trainWithDixon = { managed }
+        return env
+    }
+
+    func testTrainWithDixonUploadsThroughCoachOSWithoutCloudflare() async throws {
+        let managed = FakeManagedRemote(remote: remote)
+        let preset = trainWithDixonPreset()
+        renderer.vtt = "WEBVTT\n\n00:00.000 --> 00:01.000\nHi\n"
+        let result = await run(preset, env: environment(managed: managed))
+
+        XCTAssertTrue(result.succeeded, result.failure?.message ?? "")
+        XCTAssertEqual(managed.titles, ["My Clip"], "The project name is the Coach OS title")
+        XCTAssertEqual(remote.uploadedBytes, [renderer.bytes])
+        XCTAssertEqual(remote.calls, ["uploadStream"], "No caption track is sent: Coach OS adds captions to ready assets itself")
+        XCTAssertEqual(result.remoteKind, .trainWithDixon)
+        XCTAssertEqual(result.remoteID, "media-upload-reservation:1")
+        XCTAssertNotNil(result.captionsSidecar, "Soft captions still land beside the local copy")
+        let record = try XCTUnwrap(records.record(for: preset.id))
+        XCTAssertEqual(record.remoteKind, .trainWithDixon)
+        XCTAssertEqual(record.state, .processing)
+        XCTAssertTrue(record.needsStatusPolling)
+    }
+
+    func testTrainWithDixonReuploadNeverQueuesTheOldAssetForDeletion() async throws {
+        let managed = FakeManagedRemote(remote: remote)
+        let preset = trainWithDixonPreset()
+        _ = await run(preset, env: environment(managed: managed))
+        _ = await run(preset, env: environment(managed: managed))
+        let record = try XCTUnwrap(records.record(for: preset.id))
+        XCTAssertEqual(record.remoteID, "media-upload-reservation:2")
+        XCTAssertEqual(record.pendingDeleteUIDs, [])
+    }
+
+    func testTrainWithDixonNeedsACoachOSAddressNotACloudflareAccount() async {
+        let unconfigured = await run(trainWithDixonPreset(), env: environment(managed: nil, cloudflare: remote))
+        XCTAssertEqual(unconfigured.failure?.message, ExportRunError.coachOSNotConfigured.errorDescription)
+        XCTAssertTrue(renderer.requests.isEmpty)
+
+        let withoutCloudflare = await run(trainWithDixonPreset(), env: environment(managed: FakeManagedRemote(remote: remote)))
+        XCTAssertTrue(withoutCloudflare.succeeded)
+    }
+
+    func testTrainWithDixonRefusesGIFAndOfflineBuilds() async {
+        var gif = ExportOverrides()
+        gif.format = .gif
+        let mismatch = await run(trainWithDixonPreset(), overrides: gif, env: environment(managed: FakeManagedRemote(remote: remote)))
+        XCTAssertEqual(mismatch.failure?.stage, .preparing)
+
+        var offline = environment(offline: true)
+        offline.trainWithDixon = { FakeManagedRemote() }
+        let result = await run(trainWithDixonPreset(), env: offline)
+        XCTAssertEqual(result.failure?.message, ExportRunError.networkDestinationUnavailable.errorDescription)
+        XCTAssertTrue(renderer.requests.isEmpty)
+    }
 }

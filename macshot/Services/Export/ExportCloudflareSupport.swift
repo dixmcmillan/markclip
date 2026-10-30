@@ -22,3 +22,17 @@ enum ExportCloudflareSupport {
     /// Whether this build has Cloudflare at all.
     static var isAvailable: Bool { !BuildVariant.isOffline }
 }
+
+/// The TrainWithDixon (Coach OS) facts the export UI needs, behind the OFFLINE
+/// fence: is an address saved, and where its Media page is.
+enum ExportCoachOSSupport {
+    static var isConfigured: Bool { mediaPageURL != nil }
+
+    static var mediaPageURL: URL? {
+        #if OFFLINE
+        return nil
+        #else
+        return CoachOSSettings.mediaPageURL()
+        #endif
+    }
+}

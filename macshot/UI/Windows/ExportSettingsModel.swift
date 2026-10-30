@@ -73,7 +73,7 @@ enum GIFFitField: CaseIterable {
 /// Free of AppKit so the editing rules are unit-tested directly.
 @MainActor
 final class ExportSettingsModel {
-    enum DestinationKind: Equatable { case folder, stream, images }
+    enum DestinationKind: Equatable { case folder, stream, images, trainWithDixon }
 
     private let defaults: UserDefaults
     private let offline: Bool
@@ -92,7 +92,7 @@ final class ExportSettingsModel {
     var selected: ExportPreset? { presets.first { $0.id == selectedID } }
 
     /// Destinations this build offers (folders only under OFFLINE).
-    var availableDestinations: [DestinationKind] { offline ? [.folder] : [.folder, .stream, .images] }
+    var availableDestinations: [DestinationKind] { offline ? [.folder] : [.folder, .stream, .images, .trainWithDixon] }
 
     func reload() {
         presets = ExportPresetStore.visiblePresets(defaults: defaults, offline: offline)
@@ -167,12 +167,12 @@ final class ExportSettingsModel {
     }
 
     /// Changing the format keeps the destination coherent: Images only takes
-    /// GIFs, Stream only takes video.
+    /// GIFs, Stream and TrainWithDixon only take video.
     func setFormat(_ id: UUID, _ format: ExportFormat) {
         update(id) { preset in
             preset.format = format
             if format.isGIF {
-                if preset.destination == .stream { preset.destination = .images }
+                if preset.destination == .stream || preset.destination == .trainWithDixon { preset.destination = .images }
                 preset.audio = .mute
             } else if preset.destination == .images {
                 preset.destination = .stream
@@ -194,6 +194,9 @@ final class ExportSettingsModel {
             case .images:
                 preset.destination = .images
                 if !preset.format.isGIF { preset.format = .gif; preset.audio = .mute }
+            case .trainWithDixon:
+                preset.destination = .trainWithDixon
+                if preset.format.isGIF { preset.format = .h264; preset.audio = .keep }
             }
         }
     }
@@ -227,7 +230,8 @@ final class ExportSettingsModel {
     /// preset imported or edited by hand), else nil.
     func compatibilityNote(for preset: ExportPreset) -> String? {
         switch preset.destination {
-        case .stream where preset.format.isGIF: return L("Stream takes video. Use H.264 or HEVC.")
+        case .stream where preset.format.isGIF, .trainWithDixon where preset.format.isGIF:
+            return L("Stream takes video. Use H.264 or HEVC.")
         case .images where !preset.format.isGIF: return L("Images takes GIFs. Use the GIF format.")
         default: return nil
         }

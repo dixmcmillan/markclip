@@ -68,7 +68,7 @@ final class ExportPopoverModelTests: XCTestCase {
     func testOfflineHidesStreamAndImagesPresets() {
         let model = model(offline: true)
         XCTAssertEqual(model.presets.map(\.name), ["Archive"])
-        XCTAssertFalse(model.needsCloudflareSetup)
+        XCTAssertFalse(model.needsUploadSetup)
     }
 
     func testCustomPresetsAppearAfterTheBuiltIns() {
@@ -173,18 +173,18 @@ final class ExportPopoverModelTests: XCTestCase {
     func testUploadPresetsNeedACloudflareAccountToExportButNotToSaveAs() {
         let unconfigured = model(configured: false)
         unconfigured.select(ExportPresetStore.streamID)
-        XCTAssertTrue(unconfigured.needsCloudflareSetup)
+        XCTAssertTrue(unconfigured.needsUploadSetup)
         XCTAssertFalse(unconfigured.canExport)
         XCTAssertTrue(unconfigured.canSaveAs, "Save As writes a local file")
         unconfigured.select(ExportPresetStore.loopID)
-        XCTAssertTrue(unconfigured.needsCloudflareSetup)
+        XCTAssertTrue(unconfigured.needsUploadSetup)
         unconfigured.select(ExportPresetStore.archiveID)
-        XCTAssertFalse(unconfigured.needsCloudflareSetup)
+        XCTAssertFalse(unconfigured.needsUploadSetup)
         XCTAssertTrue(unconfigured.canExport)
 
         let configured = model(configured: true)
         configured.select(ExportPresetStore.streamID)
-        XCTAssertFalse(configured.needsCloudflareSetup)
+        XCTAssertFalse(configured.needsUploadSetup)
         XCTAssertTrue(configured.canExport)
     }
 

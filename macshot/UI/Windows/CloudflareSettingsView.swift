@@ -23,11 +23,29 @@ final class CloudflareSettingsModel {
     }
 
     private let account: CloudflareAccount
+    private let defaults: UserDefaults
     private(set) var testOutcome: TestOutcome?
+    /// False after the last Coach OS address typed couldn't be used.
+    private(set) var coachOSAddressValid = true
     var onChange: (() -> Void)?
 
-    init(account: CloudflareAccount = .shared) {
+    init(account: CloudflareAccount = .shared, defaults: UserDefaults = .standard) {
         self.account = account
+        self.defaults = defaults
+    }
+
+    // MARK: TrainWithDixon
+
+    /// The saved Coach OS address, for the field.
+    var coachOSAddress: String { CoachOSSettings.baseURL(defaults: defaults)?.absoluteString ?? "" }
+
+    /// Saves the Coach OS address (empty clears it). An unusable one is
+    /// rejected and the saved address stays.
+    @discardableResult
+    func saveCoachOSAddress(_ text: String) -> Bool {
+        coachOSAddressValid = CoachOSSettings.save(text, defaults: defaults)
+        onChange?()
+        return coachOSAddressValid
     }
 
     /// The saved account ID, for the field.
@@ -81,6 +99,9 @@ final class CloudflareSettingsView: NSView {
     let model: CloudflareSettingsModel
 
     private let accountField = NSTextField()
+    private let coachOSField = NSTextField()
+    private let coachOSStatusLabel = NSTextField(labelWithString: "")
+    private let coachOSSaveButton = NSButton()
     private let tokenField = NSSecureTextField()
     private let statusLabel = NSTextField(labelWithString: "")
     private let resultLabel = NSTextField(wrappingLabelWithString: "")
@@ -95,6 +116,7 @@ final class CloudflareSettingsView: NSView {
         translatesAutoresizingMaskIntoConstraints = false
         build()
         accountField.stringValue = model.accountID
+        coachOSField.stringValue = model.coachOSAddress
         model.onChange = { [weak self] in self?.refresh() }
         refresh()
     }
@@ -107,6 +129,9 @@ final class CloudflareSettingsView: NSView {
         if window != nil, accountField.currentEditor() == nil {
             accountField.stringValue = model.accountID
             refresh()
+        }
+        if window != nil, coachOSField.currentEditor() == nil {
+            coachOSField.stringValue = model.coachOSAddress
         }
     }
 
@@ -168,6 +193,34 @@ final class CloudflareSettingsView: NSView {
         resultLabel.font = .systemFont(ofSize: 11)
         resultLabel.preferredMaxLayoutWidth = 400
         stack.addArrangedSubview(indented(resultLabel))
+        stack.setCustomSpacing(24, after: stack.arrangedSubviews.last!)
+
+        let coachHeader = NSTextField(labelWithString: L("TrainWithDixon").uppercased())
+        coachHeader.font = .systemFont(ofSize: 10, weight: .semibold)
+        coachHeader.textColor = .secondaryLabelColor
+        stack.addArrangedSubview(coachHeader)
+        stack.setCustomSpacing(10, after: coachHeader)
+
+        coachOSField.placeholderString = "https://coachos.example.ts.net"
+        coachOSField.font = .monospacedSystemFont(ofSize: 11, weight: .regular)
+        coachOSField.setAccessibilityLabel(L("Coach OS address:"))
+        stack.addArrangedSubview(row(L("Coach OS address:"), coachOSField))
+
+        let coachNote = NSTextField(wrappingLabelWithString:
+            L("The TrainWithDixon destination uploads through Coach OS, so videos arrive Managed with signed delivery. Coach OS holds the credentials; Markclip stores only this address."))
+        coachNote.font = .systemFont(ofSize: 10)
+        coachNote.textColor = .secondaryLabelColor
+        stack.addArrangedSubview(indented(coachNote))
+
+        coachOSSaveButton.title = L("Save")
+        coachOSSaveButton.bezelStyle = .rounded
+        coachOSSaveButton.target = self
+        coachOSSaveButton.action = #selector(saveCoachOS)
+        coachOSStatusLabel.font = .systemFont(ofSize: 11)
+        let coachButtons = NSStackView(views: [coachOSSaveButton, coachOSStatusLabel])
+        coachButtons.orientation = .horizontal
+        coachButtons.spacing = 8
+        stack.addArrangedSubview(indented(coachButtons))
     }
 
     private static let labelWidth: CGFloat = 130
@@ -234,11 +287,26 @@ final class CloudflareSettingsView: NSView {
             testButton.isEnabled = true
         }
         resultLabel.isHidden = resultLabel.stringValue.isEmpty
+
+        if !model.coachOSAddressValid {
+            coachOSStatusLabel.stringValue = L("Enter an http or https address with no path.")
+            coachOSStatusLabel.textColor = .systemRed
+        } else {
+            coachOSStatusLabel.stringValue = model.coachOSAddress.isEmpty ? L("Not set up") : L("Saved")
+            coachOSStatusLabel.textColor = .secondaryLabelColor
+        }
     }
 
     @objc private func save() {
         model.save(accountID: accountField.stringValue, tokenInput: tokenField.stringValue)
         tokenField.stringValue = ""
+        NotificationCenter.default.post(name: .exportPresetsChanged, object: nil)
+    }
+
+    @objc private func saveCoachOS() {
+        if model.saveCoachOSAddress(coachOSField.stringValue) {
+            coachOSField.stringValue = model.coachOSAddress
+        }
         NotificationCenter.default.post(name: .exportPresetsChanged, object: nil)
     }
 
@@ -264,5 +332,8 @@ final class CloudflareSettingsView: NSView {
     var fields: (account: NSTextField, token: NSSecureTextField) { (accountField, tokenField) }
     var buttons: (save: NSButton, clear: NSButton, test: NSButton) { (saveButton, clearButton, testButton) }
     var resultText: String { resultLabel.stringValue }
+    var coachOS: (field: NSTextField, save: NSButton, status: String) {
+        (coachOSField, coachOSSaveButton, coachOSStatusLabel.stringValue)
+    }
 }
 #endif

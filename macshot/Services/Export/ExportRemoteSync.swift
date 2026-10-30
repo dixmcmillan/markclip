@@ -2,8 +2,8 @@ import Foundation
 
 /// Keeps the records of uploaded videos honest after a run is over:
 ///
-/// - polls Stream every few seconds (while the app runs) until a processing
-///   video is ready or failed;
+/// - polls Stream (directly, or through Coach OS for TrainWithDixon) every few
+///   seconds while the app runs, until a processing video is ready or failed;
 /// - once the newest video is ready, deletes the ones it replaces
 ///   (`pendingDeleteUIDs`), and retries a delete that failed earlier;
 /// - on request (`refreshAll`, called when the export popover opens) does one
@@ -16,6 +16,7 @@ import Foundation
 final class ExportRemoteSync {
     private let records: ExportRecordStore
     private let remote: () -> ExportRemoteService?
+    private let trainWithDixon: () -> ExportManagedUploadService?
     private let clock: ExportClock
     private let interval: Double
     /// Consecutive polling passes that hit a network error before the loop
@@ -31,9 +32,11 @@ final class ExportRemoteSync {
     var onChange: (() -> Void)?
 
     init(records: ExportRecordStore, remote: @escaping () -> ExportRemoteService?,
+         trainWithDixon: @escaping () -> ExportManagedUploadService? = { nil },
          clock: ExportClock = SystemExportClock(), interval: Double = 5) {
         self.records = records
         self.remote = remote
+        self.trainWithDixon = trainWithDixon
         self.clock = clock
         self.interval = interval
     }
@@ -63,7 +66,7 @@ final class ExportRemoteSync {
     /// Starts the poll loop when a Stream video is processing. No-op if it is
     /// already running or there is nothing to poll.
     func startPollingIfNeeded() {
-        guard pollTask == nil, needsPolling, remote() != nil else { return }
+        guard pollTask == nil, needsPolling else { return }
         // Deliberately strong: polling continues after the editor that started
         // it closes, and ends by itself when nothing is processing.
         pollTask = Task {
@@ -88,8 +91,24 @@ final class ExportRemoteSync {
         await pollTask?.value
     }
 
+    /// Something is processing and the service that can check it is set up.
     private var needsPolling: Bool {
-        records.records.presets.values.contains { $0.needsStatusPolling }
+        records.records.presets.values.contains { $0.needsStatusPolling && statusCheck(for: $0.remoteKind) != nil }
+    }
+
+    /// How to ask about a processing upload of `kind`; nil when its service
+    /// isn't available.
+    private func statusCheck(for kind: ExportRemoteKind?) -> ((String) async throws -> ExportRemoteStatus)? {
+        switch kind {
+        case .stream:
+            guard let service = remote() else { return nil }
+            return { try await service.streamStatus(uid: $0) }
+        case .trainWithDixon:
+            guard let service = trainWithDixon() else { return nil }
+            return { try await service.uploadStatus(reservationID: $0) }
+        case .images, nil:
+            return nil
+        }
     }
 
     private func pollPass() async -> (keepGoing: Bool, networkError: Bool) {
@@ -107,11 +126,11 @@ final class ExportRemoteSync {
     /// pending deletes if the video is ready.
     @discardableResult
     private func refresh(key: String) async -> RefreshOutcome {
-        guard let service = remote(), let record = records.record(forKey: key) else { return .unchanged }
+        guard let record = records.record(forKey: key) else { return .unchanged }
         var outcome = RefreshOutcome.unchanged
-        if record.needsStatusPolling, let uid = record.remoteID {
+        if record.needsStatusPolling, let uid = record.remoteID, let check = statusCheck(for: record.remoteKind) {
             do {
-                let status = try await service.streamStatus(uid: uid)
+                let status = try await check(uid)
                 // A newer upload may have replaced this one while we waited.
                 guard records.record(forKey: key)?.remoteID == uid else { return .unchanged }
                 switch status {
@@ -130,14 +149,16 @@ final class ExportRemoteSync {
                     outcome = .updated
                 case .missing:
                     processingPercent[key] = nil
-                    records.update(key: key) { $0.state = .failed; $0.errorText = "The video was removed from Stream." }
+                    let text = record.remoteKind == .trainWithDixon
+                        ? "Coach OS no longer has this upload." : "The video was removed from Stream."
+                    records.update(key: key) { $0.state = .failed; $0.errorText = text }
                     outcome = .updated
                 }
             } catch {
                 return .networkError
             }
         }
-        if await deletePending(key: key, service: service) { outcome = .updated }
+        if let service = remote(), await deletePending(key: key, service: service) { outcome = .updated }
         if outcome == .updated { onChange?() }
         return outcome
     }

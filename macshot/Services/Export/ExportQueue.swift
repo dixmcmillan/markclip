@@ -68,6 +68,7 @@ final class ExportQueue {
         self.environment = environment
         self.makeRun = makeRun
         sync = ExportRemoteSync(records: environment.records, remote: environment.remote,
+                                trainWithDixon: environment.trainWithDixon,
                                 clock: environment.clock, interval: environment.pollInterval)
         sync.activePresetIDs = { [weak self] in self?.currentRun.map { [$0.presetID] } ?? [] }
         sync.onChange = { [weak self] in self?.notifyRecordsChanged() }

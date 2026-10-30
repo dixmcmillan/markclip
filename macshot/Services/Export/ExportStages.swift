@@ -35,6 +35,8 @@ nonisolated enum ExportRunError: LocalizedError, Equatable {
     case networkDestinationUnavailable
     /// Stream/Images selected but no Cloudflare account is configured.
     case cloudflareNotConfigured
+    /// TrainWithDixon selected but no Coach OS address is saved.
+    case coachOSNotConfigured
     /// Images only takes GIFs; Stream only takes video.
     case formatMismatch(String)
     case folderUnavailable(String)
@@ -43,6 +45,7 @@ nonisolated enum ExportRunError: LocalizedError, Equatable {
         switch self {
         case .networkDestinationUnavailable: return "Cloudflare uploads aren't available in the offline build."
         case .cloudflareNotConfigured: return "Cloudflare isn't set up yet. Add your account ID and API token in Settings."
+        case .coachOSNotConfigured: return "TrainWithDixon isn't set up yet. Add the Coach OS address in Settings."
         case .formatMismatch(let detail): return detail
         case .folderUnavailable(let path): return "The export folder \(path) couldn't be created."
         }
@@ -132,6 +135,16 @@ nonisolated protocol ExportRemoteService: Sendable {
     func deleteStream(uid: String) async throws
 }
 
+/// TrainWithDixon's managed upload (through Coach OS) as the run sees it.
+/// `CoachOSExportService` (below the `#if !OFFLINE` fence) is the only
+/// production implementation.
+nonisolated protocol ExportManagedUploadService: Sendable {
+    /// Uploads a video; returns the Coach OS reservation id.
+    func uploadVideo(fileURL: URL, title: String, progress: @escaping @Sendable (Double) -> Void) async throws -> String
+    /// Where the upload is: processing until Coach OS has a ready, managed asset.
+    func uploadStatus(reservationID: String) async throws -> ExportRemoteStatus
+}
+
 // MARK: - Clock
 
 /// Injectable sleep, so polling tests don't wait five real seconds.
@@ -159,6 +172,8 @@ struct ExportEnvironment {
     /// Nil when Cloudflare isn't usable (OFFLINE, or no account). Looked up
     /// per run so credentials entered later are picked up.
     var remote: () -> ExportRemoteService?
+    /// Nil when TrainWithDixon isn't usable (OFFLINE, or no Coach OS address).
+    var trainWithDixon: () -> ExportManagedUploadService? = { nil }
     /// Folder for the local copy of a Stream/Images preset with "also save
     /// locally". Defaults to the Archive preset's folder.
     var localFolderForUploads: () -> URL

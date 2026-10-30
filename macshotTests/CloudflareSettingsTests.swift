@@ -149,5 +149,28 @@ final class CloudflareSettingsTests: XCTestCase {
         XCTAssertTrue(shown, view.resultText)
         XCTAssertEqual(view.fields.token.stringValue, "")
     }
+
+    // MARK: TrainWithDixon
+
+    func testCoachOSAddressIsSavedFromTheViewAndBadInputIsRejected() throws {
+        let suite = "cf-settings-coachos-" + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let model = CloudflareSettingsModel(account: CloudflareAccount(store: InMemorySecretStore()), defaults: defaults)
+        let view = CloudflareSettingsView(model: model)
+        XCTAssertEqual(view.coachOS.status, L("Not set up"))
+
+        view.coachOS.field.stringValue = "https://coachos.example.ts.net/"
+        view.coachOS.save.performClick(nil)
+        XCTAssertEqual(defaults.string(forKey: CoachOSSettings.baseURLKey), "https://coachos.example.ts.net")
+        XCTAssertEqual(view.coachOS.field.stringValue, "https://coachos.example.ts.net")
+        XCTAssertEqual(view.coachOS.status, L("Saved"))
+
+        view.coachOS.field.stringValue = "coachos/media"
+        view.coachOS.save.performClick(nil)
+        XCTAssertEqual(view.coachOS.status, L("Enter an http or https address with no path."))
+        XCTAssertEqual(defaults.string(forKey: CoachOSSettings.baseURLKey), "https://coachos.example.ts.net",
+                       "a bad address keeps the saved one")
+    }
 }
 #endif

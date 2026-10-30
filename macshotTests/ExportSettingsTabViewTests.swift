@@ -70,9 +70,10 @@ final class ExportSettingsTabViewTests: XCTestCase {
         XCTAssertEqual(view.formControls.destination.titleOfSelectedItem, L("Folder on this Mac"))
     }
 
-    func testNormalBuildOffersAllThreeDestinations() {
+    func testNormalBuildOffersAllFourDestinations() {
         let view = makeView()
-        XCTAssertEqual(view.formControls.destination.numberOfItems, 3)
+        XCTAssertEqual(view.formControls.destination.numberOfItems, 4)
+        XCTAssertEqual(view.formControls.destination.itemTitles.last, L("TrainWithDixon"))
     }
 
     func testEditsFromTheModelRefreshTheForm() {

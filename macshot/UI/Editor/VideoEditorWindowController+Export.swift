@@ -29,6 +29,13 @@ extension VideoEditorWindowController {
                 #endif
             },
             localFolderForUploads: { ExportEnvironment.defaultLocalFolderForUploads() })
+        environment.trainWithDixon = {
+            #if OFFLINE
+            return nil
+            #else
+            return CoachOSExportService.make()
+            #endif
+        }
         // Saving over a disposable input (or a recording's original) must make
         // that path the user's, so closing the editor never deletes it.
         environment.localFilePublished = { source.didSave(at: $0) }

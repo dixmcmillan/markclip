@@ -1032,3 +1032,12 @@
 "Uploaded to Stream" = "Uploaded to Stream";
 "Uploading…" = "Uploading…";
 "Use ⌘ or ⌃ in the shortcut." = "Use ⌘ or ⌃ in the shortcut.";
+"Coach OS address:" = "Coach OS address:";
+"Enter an http or https address with no path." = "Enter an http or https address with no path.";
+"Set up TrainWithDixon in Settings" = "Set up TrainWithDixon in Settings";
+"The TrainWithDixon destination uploads through Coach OS, so videos arrive Managed with signed delivery. Coach OS holds the credentials; Markclip stores only this address." = "The TrainWithDixon destination uploads through Coach OS, so videos arrive Managed with signed delivery. Coach OS holds the credentials; Markclip stores only this address.";
+"This destination uploads through Coach OS, whose address isn't set yet." = "This destination uploads through Coach OS, whose address isn't set yet.";
+"This preset uploads to TrainWithDixon, which isn't set up yet." = "This preset uploads to TrainWithDixon, which isn't set up yet.";
+"TrainWithDixon" = "TrainWithDixon";
+"TrainWithDixon · also saved locally" = "TrainWithDixon · also saved locally";
+"Uploaded to TrainWithDixon" = "Uploaded to TrainWithDixon";

@@ -60,6 +60,8 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
     private let dashboardButton = ExportPopoverView.linkButton(L("Open in dashboard"))
     private let retryButton = ExportPopoverView.linkButton(L("Retry"))
     private let setupStack = NSStackView()
+    private var setupLabel = NSTextField()
+    private var setupButton = NSButton()
     private let adjustButton = NSButton()
     private let adjustStack = NSStackView()
     private var formatRow: InlineSegmentRow!
@@ -153,13 +155,13 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
         card.stack.spacing = 4
         add(card)
 
-        // Cloudflare setup notice
+        // Upload setup notice (Cloudflare or TrainWithDixon)
         setupStack.orientation = .vertical
         setupStack.alignment = .leading
         setupStack.spacing = 4
-        let setupLabel = Self.wrapping(L("This preset uploads to Cloudflare, which isn't set up yet."), size: 11.5,
+        setupLabel = Self.wrapping(L("This preset uploads to Cloudflare, which isn't set up yet."), size: 11.5,
                                        color: VideoEditorStyle.textSecondary)
-        let setupButton = Self.linkButton(L("Set up Cloudflare in Settings"))
+        setupButton = Self.linkButton(L("Set up Cloudflare in Settings"))
         setupButton.target = self
         setupButton.action = #selector(openCloudflareSettings)
         setupStack.addArrangedSubview(setupLabel)
@@ -330,7 +332,13 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
         detailLabel.stringValue = detail
         detailLabel.isHidden = detail.isEmpty
 
-        setupStack.isHidden = !model.needsCloudflareSetup
+        setupStack.isHidden = !model.needsUploadSetup
+        let setup = model.uploadSetupText
+        setupLabel.stringValue = setup.message
+        if setupButton.title != setup.link {
+            setupButton.title = setup.link
+            Self.styleLink(setupButton)
+        }
         statusLine = records.flatMap { model.statusLine(records: $0, processingPercent: queue?.sync.processingPercent ?? [:]) }
         statusStack.isHidden = statusLine == nil
         if let line = statusLine {
@@ -351,7 +359,7 @@ final class ExportPopoverView: NSView, NSTextFieldDelegate {
         exportButton.title = busy ? L("Add to Queue") : L("Export")
         exportButton.isEnabled = model.canExport
         saveAsButton.isEnabled = model.canSaveAs
-        exportButton.toolTip = model.needsCloudflareSetup ? L("Set up Cloudflare in Settings") : nil
+        exportButton.toolTip = model.needsUploadSetup ? model.uploadSetupText.link : nil
         if resize { resizeToFit() }
     }
 

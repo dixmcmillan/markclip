@@ -98,6 +98,7 @@ final class ExportRun {
         var localFolder: URL?
         var wantsVTT: Bool
         var remote: ExportRemoteService?
+        var managed: ExportManagedUploadService?
         /// Save As: the exact file to write. Skips numbering, uploads and records.
         var saveAs: URL?
     }
@@ -111,7 +112,7 @@ final class ExportRun {
             let url = target.pathExtension.lowercased() == ext
                 ? target : target.deletingPathExtension().appendingPathExtension(ext)
             return Plan(settings: settings, upload: nil, localFolder: url.deletingLastPathComponent(),
-                        wantsVTT: effective.captions == .soft, remote: nil, saveAs: url)
+                        wantsVTT: effective.captions == .soft, remote: nil, managed: nil, saveAs: url)
         }
         var upload: ExportRemoteKind?
         var localFolder: URL?
@@ -123,14 +124,21 @@ final class ExportRun {
             localFolder = folder
         case .stream: upload = .stream
         case .images: upload = .images
+        case .trainWithDixon: upload = .trainWithDixon
         }
         var remote: ExportRemoteService?
+        var managed: ExportManagedUploadService?
         if let upload {
             if env.offline { throw ExportRunError.networkDestinationUnavailable }
-            guard let service = env.remote() else { throw ExportRunError.cloudflareNotConfigured }
-            remote = service
+            if upload == .trainWithDixon {
+                guard let service = env.trainWithDixon() else { throw ExportRunError.coachOSNotConfigured }
+                managed = service
+            } else {
+                guard let service = env.remote() else { throw ExportRunError.cloudflareNotConfigured }
+                remote = service
+            }
             switch upload {
-            case .stream where effective.format.isGIF:
+            case .stream where effective.format.isGIF, .trainWithDixon where effective.format.isGIF:
                 throw ExportRunError.formatMismatch("Stream takes video. Use an H.264 or HEVC preset, or the Loop preset for a GIF.")
             case .images where !effective.format.isGIF:
                 throw ExportRunError.formatMismatch("Images takes GIFs. Use a GIF preset, or the Stream preset for video.")
@@ -139,7 +147,8 @@ final class ExportRun {
             if effective.alsoSaveLocally { localFolder = env.localFolderForUploads() }
         }
         let wantsVTT = effective.captions == .soft && (upload == .stream || localFolder != nil)
-        return Plan(settings: settings, upload: upload, localFolder: localFolder, wantsVTT: wantsVTT, remote: remote)
+        return Plan(settings: settings, upload: upload, localFolder: localFolder, wantsVTT: wantsVTT,
+                    remote: remote, managed: managed)
     }
 
     private func pipeline(cancellation: MediaExportCancellation, report: @escaping @Sendable (Double) -> Void) async throws {
@@ -192,11 +201,13 @@ final class ExportRun {
             }
 
             // Upload (always from the staged/rendered file, not the published copy)
-            if let kind = plan.upload, let remote = plan.remote {
+            // TrainWithDixon gets no caption track from here: Coach OS only adds
+            // captions to a ready managed asset, through its own caption flow.
+            if let kind = plan.upload {
                 enter(.uploading, report: report)
                 try checkCancelled(cancellation)
-                try await upload(kind, file: rendered, remote: remote, report: report)
-                if kind == .stream, let vttURL, let uid = result.remoteID {
+                try await upload(kind, file: rendered, plan: plan, report: report)
+                if kind == .stream, let remote = plan.remote, let vttURL, let uid = result.remoteID {
                     enter(.captions, report: report)
                     try await uploadCaptions(uid: uid, vtt: vttURL, remote: remote)
                 }
@@ -249,19 +260,23 @@ final class ExportRun {
 
     // MARK: Upload
 
-    private func upload(_ kind: ExportRemoteKind, file: URL, remote: ExportRemoteService,
+    private func upload(_ kind: ExportRemoteKind, file: URL, plan: Plan,
                         report: @escaping @Sendable (Double) -> Void) async throws {
         let before = env.records.record(for: preset.id)
         env.records.update(preset.id) { $0.state = .uploading; $0.errorText = nil }
         let progress = stageProgress(.uploading, report: report)
         let remoteID: String
         do {
-            switch kind {
-            case .stream:
+            switch (kind, plan.remote, plan.managed) {
+            case (.stream, let remote?, _):
                 remoteID = try await remote.uploadStream(fileURL: file, name: env.projectName,
                                                          requireSignedURLs: effective.requireSignedURLs, progress: progress)
-            case .images:
+            case (.images, let remote?, _):
                 remoteID = try await remote.uploadImage(fileURL: file, name: env.projectName, progress: progress)
+            case (.trainWithDixon, _, let managed?):
+                remoteID = try await managed.uploadVideo(fileURL: file, title: env.projectName, progress: progress)
+            default:
+                throw kind == .trainWithDixon ? ExportRunError.coachOSNotConfigured : ExportRunError.cloudflareNotConfigured
             }
         } catch {
             if Self.isCancellation(error) || cancelRequested || Task.isCancelled {
@@ -274,6 +289,8 @@ final class ExportRun {
         }
         let now = env.now()
         env.records.update(preset.id) { record in
+            // TrainWithDixon uploads are never deleted from here: Coach OS owns
+            // managed assets, and one may already be on an Exercise.
             if kind == .stream, record.remoteKind == .stream, let previous = record.remoteID, previous != remoteID,
                !record.pendingDeleteUIDs.contains(previous) {
                 // Replaced only once the new video is ready (`ExportRemoteSync`).
@@ -282,7 +299,7 @@ final class ExportRun {
             record.remoteKind = kind
             record.remoteID = remoteID
             record.uploadedAt = now
-            record.state = kind == .stream ? .processing : .ready
+            record.state = kind == .images ? .ready : .processing
             record.errorText = nil
             record.captionsLanguage = nil
         }

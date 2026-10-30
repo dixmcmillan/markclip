@@ -473,7 +473,7 @@ final class ExportPresetTests: XCTestCase {
     }
 
     func testDestinationRoundTrips() throws {
-        let cases: [ExportDestination] = [.stream, .images, .folder(bookmark: nil, path: "/a"), .folder(bookmark: Data([9, 8]), path: "/b")]
+        let cases: [ExportDestination] = [.stream, .images, .trainWithDixon, .folder(bookmark: nil, path: "/a"), .folder(bookmark: Data([9, 8]), path: "/b")]
         for destination in cases {
             let data = try JSONEncoder().encode([destination])
             XCTAssertEqual(try JSONDecoder().decode([ExportDestination].self, from: data), [destination])
