@@ -174,6 +174,16 @@ final class CoachOSClientTests: XCTestCase {
         XCTAssertEqual(CloudflareFixtureProtocol.requests("HEAD").count, 1)
     }
 
+    func testALongOutageKeepsResumingTheSameReservation() async throws {
+        let (file, data) = try writeFile(600 * kib)
+        server.patchFailures = [nil, 0, 0, 0, 0, 0, 0, 0]   // seven drops in a row on one chunk
+        _ = try await client().upload(fileURL: file, title: "Clip", durationSeconds: nil)
+
+        XCTAssertEqual(server.bytes(at: 0), data)
+        XCTAssertEqual(server.reservationsCreated, 1)
+        XCTAssertEqual(server.urls.count, 1)
+    }
+
     func testExpiredURLRestartsThroughUploadAttemptsOnTheSameReservation() async throws {
         let (file, data) = try writeFile(600 * kib)
         server.expireURLsOnFirstPatch = [0]

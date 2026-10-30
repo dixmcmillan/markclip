@@ -109,6 +109,10 @@ nonisolated struct CoachOSClient: Sendable {
 
     let baseURL: URL
     let chunkSize: Int
+    /// Consecutive failures tolerated before giving up. With the doubling
+    /// back-off (capped at 30 s) the default rides out about three minutes
+    /// offline, so a dropped Wi-Fi resumes this reservation instead of failing
+    /// the run (a retried run re-renders and needs a new reservation).
     let maxResumeAttempts: Int
     /// Fresh upload URLs one upload may ask for after its first one dies.
     let maxUploadAttempts: Int
@@ -120,7 +124,7 @@ nonisolated struct CoachOSClient: Sendable {
          session: URLSession = CloudflareAPI.makeSession(),
          chunkSize: Int = CloudflareTus.recommendedChunkSize,
          minimumChunkSize: Int = CloudflareTus.minimumChunkSize,
-         maxResumeAttempts: Int = 3,
+         maxResumeAttempts: Int = 10,
          maxUploadAttempts: Int = 2,
          retryDelay: TimeInterval = 1,
          makeKey: @escaping @Sendable (String) -> String = { "command:markclip-\($0):\(UUID().uuidString.lowercased())" }) {
@@ -454,7 +458,8 @@ nonisolated struct CoachOSClient: Sendable {
 
     private func pause(attempt: Int) async throws {
         guard retryDelay > 0 else { return try Self.checkCancelled() }
-        do { try await Task.sleep(nanoseconds: UInt64(retryDelay * Double(attempt) * 1_000_000_000)) }
+        let seconds = min(30, retryDelay * pow(2, Double(attempt - 1)))
+        do { try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000)) }
         catch { throw CoachOSError.wrap(error) }
     }
 }
