@@ -24,7 +24,12 @@ struct ExportToastContent: Equatable {
             if let captions = result.captionsError {
                 detail.append(String(format: L("Captions weren't added: %@"), captions))
             }
-            let title = kind == .stream ? L("Uploaded to Stream") : L("Uploaded to Images")
+            let title: String
+            switch kind {
+            case .stream: title = L("Uploaded to Stream")
+            case .images: title = L("Uploaded to Images")
+            case .trainWithDixon: title = L("Uploaded to TrainWithDixon")
+            }
             return ExportToastContent(
                 kind: .notice, title: title, detail: detail.joined(separator: " · "),
                 dashboardURL: ExportStatusLine.dashboardURL(kind: kind, remoteID: result.remoteID, accountID: accountID))

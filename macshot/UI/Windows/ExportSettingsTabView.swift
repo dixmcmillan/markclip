@@ -289,15 +289,16 @@ final class ExportSettingsTabView: NSView, NSTableViewDataSource, NSTableViewDel
         case .folder: return L("Folder on this Mac")
         case .stream: return L("Cloudflare Stream")
         case .images: return L("Cloudflare Images")
+        case .trainWithDixon: return L("TrainWithDixon")
         }
     }
 
     private static func tag(for kind: ExportSettingsModel.DestinationKind) -> Int {
-        switch kind { case .folder: return 0; case .stream: return 1; case .images: return 2 }
+        switch kind { case .folder: return 0; case .stream: return 1; case .images: return 2; case .trainWithDixon: return 3 }
     }
 
     private func kind(forTag tag: Int) -> ExportSettingsModel.DestinationKind {
-        switch tag { case 1: return .stream; case 2: return .images; default: return .folder }
+        switch tag { case 1: return .stream; case 2: return .images; case 3: return .trainWithDixon; default: return .folder }
     }
 
     @discardableResult
@@ -379,6 +380,7 @@ final class ExportSettingsTabView: NSView, NSTableViewDataSource, NSTableViewDel
         case .folder: kind = .folder
         case .stream: kind = .stream
         case .images: kind = .images
+        case .trainWithDixon: kind = .trainWithDixon
         }
         destinationPopup.selectItem(withTag: Self.tag(for: kind))
         folderLabel.stringValue = ExportPresetDescription.destination(for: preset)
@@ -394,7 +396,15 @@ final class ExportSettingsTabView: NSView, NSTableViewDataSource, NSTableViewDel
         show("bitrate", !isGIF)
         show("audio", !isGIF)
         show("folder", kind == .folder)
-        show("cloudflare", uploads && !ExportCloudflareSupport.isConfigured)
+        if kind == .trainWithDixon {
+            cloudflareNote.stringValue = L("This destination uploads through Coach OS, whose address isn't set yet.")
+            cloudflareButton.title = L("Set up TrainWithDixon in Settings")
+            show("cloudflare", !ExportCoachOSSupport.isConfigured)
+        } else {
+            cloudflareNote.stringValue = L("This destination uploads to Cloudflare, which isn't set up yet.")
+            cloudflareButton.title = L("Set up Cloudflare in Settings")
+            show("cloudflare", uploads && !ExportCloudflareSupport.isConfigured)
+        }
         show("saveLocally", uploads)
         show("signed", kind == .stream)
         let showFit = isGIF && kind == .images

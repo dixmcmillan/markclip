@@ -169,4 +169,51 @@ final class ExportRemoteSyncTests: XCTestCase {
         XCTAssertEqual(records.record(for: presetID)?.state, .processing)
         XCTAssertFalse(remote.calls.contains { $0.hasPrefix("delete") })
     }
+
+    // MARK: TrainWithDixon
+
+    func testTrainWithDixonUploadsArePolledThroughCoachOSEvenWithoutCloudflare() async {
+        let managed = FakeManagedRemote(remote: remote)
+        records.update(presetID) {
+            $0.remoteKind = .trainWithDixon
+            $0.remoteID = "media-upload-reservation:1"
+            $0.state = .processing
+        }
+        remote.script(statuses: [.processing(percent: 30), .ready], for: "media-upload-reservation:1")
+        let sync = ExportRemoteSync(records: records, remote: { nil }, trainWithDixon: { managed },
+                                    clock: clock, interval: 5)
+        sync.startPollingIfNeeded()
+        XCTAssertTrue(sync.isPolling)
+        await sync.waitForPolling()
+
+        XCTAssertEqual(remote.calls, ["status:media-upload-reservation:1", "status:media-upload-reservation:1"])
+        XCTAssertEqual(records.record(for: presetID)?.state, .ready)
+    }
+
+    func testTrainWithDixonUploadsAreNotPolledWithoutACoachOSAddress() async {
+        records.update(presetID) {
+            $0.remoteKind = .trainWithDixon
+            $0.remoteID = "media-upload-reservation:1"
+            $0.state = .processing
+        }
+        let sync = makeSync()
+        sync.startPollingIfNeeded()
+        XCTAssertFalse(sync.isPolling, "The Cloudflare service never checks a Coach OS reservation")
+        XCTAssertTrue(remote.calls.isEmpty)
+    }
+
+    func testMissingTrainWithDixonUploadSaysCoachOSLostIt() async {
+        let managed = FakeManagedRemote(remote: remote)
+        records.update(presetID) {
+            $0.remoteKind = .trainWithDixon
+            $0.remoteID = "media-upload-reservation:1"
+            $0.state = .processing
+        }
+        remote.script(statuses: [.missing], for: "media-upload-reservation:1")
+        let sync = ExportRemoteSync(records: records, remote: { nil }, trainWithDixon: { managed },
+                                    clock: clock, interval: 5)
+        await sync.refreshAll()
+        XCTAssertEqual(records.record(for: presetID)?.state, .failed)
+        XCTAssertEqual(records.record(for: presetID)?.errorText, "Coach OS no longer has this upload.")
+    }
 }

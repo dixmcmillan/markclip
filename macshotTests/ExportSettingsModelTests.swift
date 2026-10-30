@@ -182,6 +182,18 @@ final class ExportSettingsModelTests: XCTestCase {
         XCTAssertEqual(reread(id)?.alsoSaveLocally, false, "'also save locally' only means something for uploads")
     }
 
+    func testTrainWithDixonTakesVideoOnly() {
+        let model = model()
+        let id = model.addPreset().id
+        model.setDestination(id, .images)
+        model.setDestination(id, .trainWithDixon)
+        XCTAssertEqual(reread(id)?.destination, .trainWithDixon)
+        XCTAssertEqual(reread(id)?.format, .h264)
+        XCTAssertEqual(reread(id)?.audio, .keep)
+        model.setFormat(id, .gif)
+        XCTAssertEqual(reread(id)?.destination, .images, "a GIF can't go to TrainWithDixon")
+    }
+
     func testChoosingFolderAgainKeepsTheChosenFolder() {
         let model = model()
         let id = model.addPreset().id
@@ -208,7 +220,9 @@ final class ExportSettingsModelTests: XCTestCase {
         let id = model.addPreset().id
         model.setDestination(id, .stream)
         XCTAssertTrue(ExportPresetStore.preset(id: id, defaults: defaults)?.destination.isFolder == true, "stream is refused under OFFLINE")
-        XCTAssertEqual(self.model().availableDestinations, [.folder, .stream, .images])
+        model.setDestination(id, .trainWithDixon)
+        XCTAssertTrue(ExportPresetStore.preset(id: id, defaults: defaults)?.destination.isFolder == true, "TrainWithDixon is refused under OFFLINE")
+        XCTAssertEqual(self.model().availableDestinations, [.folder, .stream, .images, .trainWithDixon])
     }
 
     // MARK: GIF fit budget

@@ -50,6 +50,8 @@ nonisolated struct ExportFileRecord: Codable, Equatable, Sendable {
 
 nonisolated enum ExportRemoteKind: String, Codable, Sendable {
     case stream, images
+    /// Stream through Coach OS; the remote id is the Coach OS reservation id.
+    case trainWithDixon
 }
 
 nonisolated enum ExportUploadState: String, Codable, Sendable {
@@ -66,7 +68,7 @@ nonisolated enum ExportUploadState: String, Codable, Sendable {
 nonisolated struct ExportRecord: Codable, Equatable, Sendable {
     var localFile: ExportFileRecord?
     var remoteKind: ExportRemoteKind?
-    /// Stream UID or Images id of the latest upload.
+    /// Stream UID, Images id or Coach OS reservation id of the latest upload.
     var remoteID: String?
     var uploadedAt: Date?
     var state: ExportUploadState?
@@ -132,8 +134,10 @@ nonisolated struct ExportRecord: Codable, Equatable, Sendable {
         try c.encodeIfPresent(fitSummary, forKey: .fitSummary)
     }
 
-    /// A Stream video that must be polled until it is playable.
-    var needsStatusPolling: Bool { remoteKind == .stream && state == .processing && remoteID != nil }
+    /// A Stream video (direct or through Coach OS) that must be polled until it is playable.
+    var needsStatusPolling: Bool {
+        (remoteKind == .stream || remoteKind == .trainWithDixon) && state == .processing && remoteID != nil
+    }
 }
 
 /// The whole sidecar: records keyed by preset id (`UUID.uuidString`).

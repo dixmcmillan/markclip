@@ -164,3 +164,31 @@ final class FakeRemote: ExportRemoteService, @unchecked Sendable {
         if fail { throw Failure(message: "delete failed") }
     }
 }
+
+/// TrainWithDixon (Coach OS) over a `FakeRemote`: uploads and status checks
+/// show up in `remote.calls` as `uploadStream` and `status:<reservation id>`,
+/// and use its scripted statuses and failures.
+final class FakeManagedRemote: ExportManagedUploadService, @unchecked Sendable {
+    let remote: FakeRemote
+    private let lock = NSLock()
+    private var _titles: [String] = []
+    private var _ids: [String]
+
+    init(remote: FakeRemote = FakeRemote(), ids: [String] = ["media-upload-reservation:1", "media-upload-reservation:2"]) {
+        self.remote = remote
+        _ids = ids
+    }
+
+    var titles: [String] { lock.lock(); defer { lock.unlock() }; return _titles }
+
+    func uploadVideo(fileURL: URL, title: String, progress: @escaping @Sendable (Double) -> Void) async throws -> String {
+        lock.lock(); _titles.append(title); lock.unlock()
+        _ = try await remote.uploadStream(fileURL: fileURL, name: title, requireSignedURLs: true, progress: progress)
+        lock.lock(); defer { lock.unlock() }
+        return _ids.isEmpty ? "media-upload-reservation:extra" : _ids.removeFirst()
+    }
+
+    func uploadStatus(reservationID: String) async throws -> ExportRemoteStatus {
+        try await remote.streamStatus(uid: reservationID)
+    }
+}

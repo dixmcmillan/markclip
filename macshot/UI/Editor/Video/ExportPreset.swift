@@ -73,6 +73,9 @@ enum ExportDestination: Codable, Equatable, Sendable {
     case stream
     /// Cloudflare Images (short loops). Unavailable in the OFFLINE build.
     case images
+    /// TrainWithDixon: Stream through Coach OS's managed upload, so the video
+    /// lands Managed with signed delivery. Unavailable in the OFFLINE build.
+    case trainWithDixon
 
     /// `~/Movies/Markclip Archive`.
     static var defaultArchivePath: String {
@@ -92,7 +95,7 @@ enum ExportDestination: Codable, Equatable, Sendable {
 
     var isFolder: Bool { if case .folder = self { return true } else { return false } }
 
-    /// Stream and Images need the Cloudflare uploader, which the OFFLINE
+    /// Stream, Images and TrainWithDixon need an uploader, which the OFFLINE
     /// build compiles out.
     var requiresNetwork: Bool { !isFolder }
 
@@ -117,6 +120,7 @@ enum ExportDestination: Codable, Equatable, Sendable {
         switch c.decode(.kind, or: "folder") {
         case "stream": self = .stream
         case "images": self = .images
+        case "trainWithDixon": self = .trainWithDixon
         default:
             // Unknown/future kinds fall back to a local folder: the safe
             // destination that never uploads anything.
@@ -135,6 +139,7 @@ enum ExportDestination: Codable, Equatable, Sendable {
             try c.encode(path, forKey: .path)
         case .stream: try c.encode("stream", forKey: .kind)
         case .images: try c.encode("images", forKey: .kind)
+        case .trainWithDixon: try c.encode("trainWithDixon", forKey: .kind)
         }
     }
 }

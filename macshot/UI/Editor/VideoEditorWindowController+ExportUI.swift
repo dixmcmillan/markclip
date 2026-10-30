@@ -93,7 +93,8 @@ extension VideoEditorWindowController {
                 self.map { VideoRenderPlanner.outputDuration(project: $0.editorDocument.project) } ?? 0
             },
             cloudflareConfigured: { ExportCloudflareSupport.isConfigured },
-            cloudflareAccountID: { ExportCloudflareSupport.accountID })
+            cloudflareAccountID: { ExportCloudflareSupport.accountID },
+            coachOSConfigured: { ExportCoachOSSupport.isConfigured })
     }
 
     // MARK: Save As…

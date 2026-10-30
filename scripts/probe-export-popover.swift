@@ -179,6 +179,12 @@ final class WaitingRenderer: ExportRenderer {
             guard let view = settingsView, let i = Int(args.first ?? ""), view.model.presets.indices.contains(i) else { return "bad select" }
             view.model.select(view.model.presets[i].id); return "ok settings-select \(view.model.selected?.name ?? "")"
         case "settings-add": _ = settingsView?.model.addPreset(); return "ok settings-add"
+        case "settings-destination":
+            // settings-destination folder|stream|images|trainWithDixon: re-points the selected preset.
+            let kinds: [String: ExportSettingsModel.DestinationKind] = ["folder": .folder, "stream": .stream,
+                                                                       "images": .images, "trainWithDixon": .trainWithDixon]
+            guard let model = settingsView?.model, let id = model.selectedID, let kind = kinds[args.first ?? ""] else { return "bad destination" }
+            model.setDestination(id, kind); return "ok settings-destination \(args[0])"
         case "snapshot-settings":
             guard let content = settingsWindow?.contentView else { return "no settings window" }
             return write(content, name: args.first ?? "settings")

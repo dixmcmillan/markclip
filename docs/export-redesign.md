@@ -74,6 +74,22 @@ Full preset editing lives in a new Settings ▸ Export tab.
 - **Removed entirely:** Google Drive, S3 and imgbb, for both video and screenshot uploads (decided 2026-10-13: screenshot upload isn't part of this workflow). Cloudflare is the only upload provider, and it is used for video export only.
 - **No system notifications.** Jobs are single and usually under a minute, so the existing toasts are enough.
 
+### TrainWithDixon destination (issue #11)
+
+A direct Stream upload lands in TrainWithDixon's Coach OS as **Discovered** and **Public**, and Coach OS can't attach those to an Exercise. The TrainWithDixon destination uploads through Coach OS's managed Stream flow instead (`CoachOSClient`), so the video arrives **Managed** with signed delivery:
+
+1. `POST /api/media-stream-upload-reservations` reserves the upload. The body holds the title (the project name), filename, type, size, duration and a `sha256:` fingerprint. The reply is a reservation id plus a one-time tus `uploadUrl` that already exists and is signed-only.
+2. tus HEAD/PATCH to that URL carries no credentials. A dropped connection resumes from the server's offset on the same URL.
+3. If the URL is gone (404/410), `POST …/{id}/upload-attempts` returns a fresh one on the same reservation. Stream starts that upload over at 0, but it is still one reservation and one Coach OS asset.
+4. `ExportRemoteSync` polls `POST …/{id}/reconcile` until ready. Every poll uses a fresh `commandKey`; a reused key only replays the old answer.
+
+Rules:
+- Retries of one intent reuse its `commandKey`. A create retried after a lost reply gets a replay without a URL, so the client asks for an upload attempt.
+- Only the Coach OS address is stored (`coachOSBaseURL`, Settings ▸ Cloudflare). There is no default, because this repo is public.
+- Captions aren't uploaded. Coach OS adds caption tracks only to ready managed assets, through its own caption flow. Soft captions still produce the local `.vtt` sidecar.
+- A re-export creates a new managed asset and never deletes the previous one. Coach OS owns its lifecycle, and the old asset may already be on an Exercise.
+- An upload interrupted by Quit is not resumed on next launch. Its reservation expires on the Coach OS side (abandoned after 24 h).
+
 ### Local files
 
 - Files are named after the project.

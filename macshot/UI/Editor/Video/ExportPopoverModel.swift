@@ -58,7 +58,7 @@ enum ExportPresetDescription {
         }
     }
 
-    /// Where the result goes: a folder path, or the Cloudflare product.
+    /// Where the result goes: a folder path, the Cloudflare product, or TrainWithDixon.
     static func destination(for preset: ExportPreset) -> String {
         switch preset.destination {
         case let .folder(_, path):
@@ -67,6 +67,8 @@ enum ExportPresetDescription {
             return preset.alsoSaveLocally ? L("Cloudflare Stream · also saved locally") : L("Cloudflare Stream")
         case .images:
             return preset.alsoSaveLocally ? L("Cloudflare Images · also saved locally") : L("Cloudflare Images")
+        case .trainWithDixon:
+            return preset.alsoSaveLocally ? L("TrainWithDixon · also saved locally") : L("TrainWithDixon")
         }
     }
 
@@ -196,8 +198,11 @@ struct ExportStatusLine: Equatable {
     }
 
     /// The Cloudflare dashboard page for an upload. Stream has a page per
-    /// video; Images only has the library.
-    static func dashboardURL(kind: ExportRemoteKind?, remoteID: String?, accountID: String?) -> URL? {
+    /// video; Images only has the library. TrainWithDixon uploads open the
+    /// Coach OS Media page.
+    static func dashboardURL(kind: ExportRemoteKind?, remoteID: String?, accountID: String?,
+                             coachOSMediaURL: URL? = ExportCoachOSSupport.mediaPageURL) -> URL? {
+        if kind == .trainWithDixon { return coachOSMediaURL }
         guard let kind, let accountID = accountID?.trimmingCharacters(in: .whitespacesAndNewlines), !accountID.isEmpty,
               accountID.allSatisfy({ $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" }) else { return nil }
         switch kind {
@@ -206,6 +211,8 @@ struct ExportStatusLine: Equatable {
             return URL(string: "https://dash.cloudflare.com/\(accountID)/stream/videos/\(remoteID)")
         case .images:
             return URL(string: "https://dash.cloudflare.com/\(accountID)/images/images")
+        case .trainWithDixon:
+            return nil
         }
     }
 }
@@ -259,6 +266,8 @@ final class ExportPopoverModel {
         /// False under OFFLINE, and when no account is saved.
         var cloudflareConfigured: () -> Bool
         var cloudflareAccountID: () -> String?
+        /// False under OFFLINE, and when no Coach OS address is saved.
+        var coachOSConfigured: () -> Bool
         var now: () -> Date
 
         init(nativeSize: @escaping () -> CGSize? = { nil },
@@ -267,6 +276,7 @@ final class ExportPopoverModel {
              outputDuration: @escaping () -> Double = { 0 },
              cloudflareConfigured: @escaping () -> Bool = { false },
              cloudflareAccountID: @escaping () -> String? = { nil },
+             coachOSConfigured: @escaping () -> Bool = { false },
              now: @escaping () -> Date = { Date() }) {
             self.nativeSize = nativeSize
             self.outputSize = outputSize
@@ -274,6 +284,7 @@ final class ExportPopoverModel {
             self.outputDuration = outputDuration
             self.cloudflareConfigured = cloudflareConfigured
             self.cloudflareAccountID = cloudflareAccountID
+            self.coachOSConfigured = coachOSConfigured
             self.now = now
         }
     }
@@ -369,15 +380,28 @@ final class ExportPopoverModel {
 
     // MARK: Availability
 
-    /// Stream/Images need a Cloudflare account. Under OFFLINE they are hidden
-    /// instead, so this is only ever true in the normal build.
-    var needsCloudflareSetup: Bool {
-        effectivePreset.destination.requiresNetwork && !environment.cloudflareConfigured()
+    /// Stream/Images need a Cloudflare account, TrainWithDixon a Coach OS
+    /// address. Under OFFLINE they are hidden instead, so this is only ever
+    /// true in the normal build.
+    var needsUploadSetup: Bool {
+        switch effectivePreset.destination {
+        case .folder: return false
+        case .stream, .images: return !environment.cloudflareConfigured()
+        case .trainWithDixon: return !environment.coachOSConfigured()
+        }
+    }
+
+    /// Why Export is unavailable, and the Settings link, when `needsUploadSetup`.
+    var uploadSetupText: (message: String, link: String) {
+        if effectivePreset.destination == .trainWithDixon {
+            return (L("This preset uploads to TrainWithDixon, which isn't set up yet."), L("Set up TrainWithDixon in Settings"))
+        }
+        return (L("This preset uploads to Cloudflare, which isn't set up yet."), L("Set up Cloudflare in Settings"))
     }
 
     /// Whether Export / Save As are allowed right now (valid fields; Save As
-    /// doesn't need Cloudflare, Export does when the destination uploads).
-    var canExport: Bool { bitrateError == nil && !needsCloudflareSetup }
+    /// doesn't need an upload service, Export does when the destination uploads).
+    var canExport: Bool { bitrateError == nil && !needsUploadSetup }
     var canSaveAs: Bool { bitrateError == nil }
 
     // MARK: Text
